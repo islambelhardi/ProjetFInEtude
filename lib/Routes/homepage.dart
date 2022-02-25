@@ -6,7 +6,7 @@ import 'package:projet_fin_etude/Widgets/betweenrows.dart';
 import 'package:projet_fin_etude/Widgets/headerwidget.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({ Key? key }) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -15,18 +15,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white10,
-        body: ListView(
-          children:[
-            HeaderWidget(),
-            BetweenRow(),
-            AnnouncesRow(),
-            BetweenRow(),
-            AnnouncesRow(),
-          ],
-        ),
+    return Scaffold(
+      backgroundColor: Colors.white10,
+      body: ListView(
+        children: [
+          HeaderWidget(),
+          BetweenRow(),
+          AnnouncesRow(),
+          BetweenRow(),
+          AnnouncesRow(),
+        ],
       ),
     );
   }

@@ -83,7 +83,8 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                   width: double.infinity,
                   height: 400,
                   child: GestureDetector(
-                      onHorizontalDragEnd: _ondragend,
+                      // onHorizontalDragEnd: _ondragend,
+                      onHorizontalDragUpdate: _ondragstart,
                       child: announceImages[index]),
                 ),
                 // carousel indicator
@@ -153,11 +154,22 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
     );
   }
 
-  void _ondragend(DragEndDetails details) {
-    setState(() {
+
+
+  void _ondragstart(DragUpdateDetails details) {
+    if(details.primaryDelta!>6.0){
+      setState(() {
+      if(index>=1){
+        index = index -1;
+      }
+    });
+    }else{
+      setState(() {
       if (index < announceImages.length - 1) {
         index = index + 1;
       }
     });
+    }
+    
   }
 }

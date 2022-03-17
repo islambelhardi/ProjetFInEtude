@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 class AnnounceDetails extends StatefulWidget {
   const AnnounceDetails({Key? key}) : super(key: key);
 
@@ -20,7 +21,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
   bool _hasCallSupport = false;
   Future<void>? _launched;
   String _phone = '066472612';
-   @override
+  @override
   void initState() {
     super.initState();
     // Check for phone call support.
@@ -30,6 +31,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
       });
     });
   }
+
   Future<void> _makePhoneCall(String phoneNumber) async {
     // Use `Uri` to ensure that `phoneNumber` is properly URL-encoded.
     // Just using 'tel:$phoneNumber' would create invalid URLs in some cases,
@@ -38,9 +40,10 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
     final Uri launchUri = Uri(
       scheme: 'tel',
       path: phoneNumber,
-   );
+    );
     await launch(launchUri.toString());
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,9 +75,10 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
       ),
       body: Center(
         child: ListView(
+          padding: EdgeInsets.symmetric(horizontal: 10),
           children: [
             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
                   height: 20,
@@ -88,23 +92,25 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                       child: announceImages[index]),
                 ),
                 // carousel indicator
-                Container(
-                  child:Row(
+                Padding(
+                  padding: const EdgeInsets.only(left:137,top: 10),
+                  child: Row(
                     children: List.generate(announceImages.length, (indexDots) {
                       return Container(
                         margin: const EdgeInsets.only(right: 2),
                         height: 2,
-                        width: index == indexDots?25:8,
+                        width: index == indexDots ? 25 : 8,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: index == indexDots?Colors.blue:Colors.blue.withOpacity(0.5)
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: index == indexDots
+                                ? Colors.blue
+                                : Colors.blue.withOpacity(0.5)),
                       );
                     }),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 50, top: 10, bottom: 10),
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
                   child: Text(
                     'House in Le Toquet-Paris Plage',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -115,6 +121,9 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                   thickness: 1,
                   indent: 50,
                   endIndent: 50,
+                ),
+                SizedBox(
+                  height: 500,
                 ),
                 Divider(
                   height: 20,
@@ -130,46 +139,41 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(0.0),
         height: 70,
-        color: Colors.red,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child:
-                ElevatedButton(
-                onPressed: _hasCallSupport
-                    ? () => setState(() {
-                          _launched = _makePhoneCall(_phone);
-                        })
-                    : null,
-                child: _hasCallSupport
-                    ? const Text('Make phone call')
-                    : const Text('Calling not supported'),
-              ),
-            )
-          ],
+        color: Colors.white,
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundImage: AssetImage('Assets/images/avatar.png'),
+          ),
+          title: Text('Agency'),
+          subtitle: Text('SARL Mobilier'),
+          trailing: IconButton(
+            iconSize: 30,
+            color: Colors.blue,
+            icon: Icon(Icons.phone),
+            onPressed: _hasCallSupport
+                ? () => setState(() {
+                      _launched = _makePhoneCall(_phone);
+                    })
+                : null,
+          ),
         ),
       ),
     );
   }
 
-
-
   void _ondragstart(DragUpdateDetails details) {
-    if(details.primaryDelta!>6.0){
+    if (details.primaryDelta! > 6.0) {
       setState(() {
-      if(index>=1){
-        index = index -1;
-      }
-    });
-    }else{
+        if (index >= 1) {
+          index = index - 1;
+        }
+      });
+    } else {
       setState(() {
-      if (index < announceImages.length - 1) {
-        index = index + 1;
-      }
-    });
+        if (index < announceImages.length - 1) {
+          index = index + 1;
+        }
+      });
     }
-    
   }
 }

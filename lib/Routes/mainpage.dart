@@ -34,14 +34,14 @@ class _MainPageState extends State<MainPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return  Scaffold(
         body: Center(
           // to display the selected page of the navigationbar
            child: _widgetOptions.elementAt(_selectedIndex),
         ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white,
           items: [
             BottomNavigationBarItem(
               icon: const Icon(Icons.home),
@@ -52,7 +52,7 @@ class _MainPageState extends State<MainPage> {
               label: 'Favorite',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.map_outlined),
+              icon: Icon( Icons.search_outlined,),
               label: 'Search',
             ),
             BottomNavigationBarItem(
@@ -67,7 +67,7 @@ class _MainPageState extends State<MainPage> {
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
         ),
-      ),
+      
     );
   }
 }

@@ -15,6 +15,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
     return Container(
       margin: EdgeInsets.fromLTRB(10, 15, 10,0),
       child: Card(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Column(
           children: [
             Image.asset('Assets/images/banner.jpg', )
@@ -24,7 +25,6 @@ class _HeaderWidgetState extends State<HeaderWidget> {
           borderRadius: BorderRadius.circular(10),
           ),
       ),
-
     );
   }
 }

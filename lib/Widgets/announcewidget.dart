@@ -12,7 +12,7 @@ class AnnounceWidget extends StatefulWidget {
 
 class _AnnounceWidgetState extends State<AnnounceWidget> {
   bool isfavorite= false ;
-  Icon favorite = Icon(Icons.favorite_border_outlined);
+  Icon favorite = Icon(Icons.favorite_rounded,color: Colors.white,);
   //when u click the announce widget the announcedtails shows up
   void _gotoAnnounceDetails(BuildContext context){
     Navigator.push(context,     MaterialPageRoute<void>(

@@ -21,9 +21,9 @@ class _FavoritePageState extends State<FavoritePage> {
   Widget build(BuildContext context) {
     bool isloged = true;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xfff8f9fa),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xfff8f9fa),
         title: Text(
           'Wishlists',
           style: TextStyle(color: Colors.black),

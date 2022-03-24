@@ -14,7 +14,7 @@ class _AnnouncesRowState extends State<AnnouncesRow> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 250,
+      height: 350,
       child: ListView(
         padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
         scrollDirection: Axis.horizontal,

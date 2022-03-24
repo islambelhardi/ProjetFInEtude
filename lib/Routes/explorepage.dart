@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:projet_fin_etude/Widgets/announcesrow.dart';
-import 'package:projet_fin_etude/Widgets/betweenrows.dart';
+import 'package:projet_fin_etude/Widgets/sectiontitle.dart';
 import 'package:projet_fin_etude/Widgets/headerwidget.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,15 +16,17 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: ListView(
-        children: [
-          HeaderWidget(),
-          BetweenRow(),
-          AnnouncesRow(),
-          BetweenRow(),
-          AnnouncesRow(),
-        ],
+      backgroundColor: Color(0xfff8f9fa),
+      body: Container(
+        child: ListView(
+          children: [
+            HeaderWidget(),
+            Sectiontitle(),
+            AnnouncesRow(),
+            Sectiontitle(),
+            AnnouncesRow(),
+          ],
+        ),
       ),
     );
   }

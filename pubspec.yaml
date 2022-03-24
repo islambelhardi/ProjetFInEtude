@@ -38,7 +38,11 @@ dependencies:
   external_app_launcher: ^2.0.2
   url_launcher: ^6.0.20
   http: ^0.13.4
-
+  google_maps_flutter: ^2.1.1
+  location: ^4.2.0
+  geolocator: ^8.2.0
+  geocoding: ^2.0.2
+  geocode: ^1.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

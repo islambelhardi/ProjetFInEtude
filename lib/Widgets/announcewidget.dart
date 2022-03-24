@@ -4,21 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:projet_fin_etude/Widgets/announcedetails.dart';
 
 class AnnounceWidget extends StatefulWidget {
-  const AnnounceWidget({ Key? key }) : super(key: key);
+  const AnnounceWidget({Key? key}) : super(key: key);
 
   @override
   _AnnounceWidgetState createState() => _AnnounceWidgetState();
 }
 
 class _AnnounceWidgetState extends State<AnnounceWidget> {
-  bool isfavorite= false ;
-  Icon favorite = Icon(Icons.favorite_rounded,color: Colors.white,);
+  bool isfavorite = false;
+  Icon favorite = Icon(
+    Icons.favorite_rounded,
+    color: Colors.white,
+  );
   //when u click the announce widget the announcedtails shows up
-  void _gotoAnnounceDetails(BuildContext context){
-    Navigator.push(context,     MaterialPageRoute<void>(
-      builder: (BuildContext context) => const AnnounceDetails(),
-    ),);
+  void _gotoAnnounceDetails(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => const AnnounceDetails(),
+      ),
+    );
   }
+
   @override
   Widget build(BuildContext context) {
     return Hero(
@@ -26,62 +33,177 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
       child: GestureDetector(
         onTap: () => _gotoAnnounceDetails(context),
         child: Container(
-          width: 250,
+          height: 600,
+          width: 280,
           margin: EdgeInsets.only(right: 10),
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              spreadRadius: 3.0,
-              blurRadius: 5.0)
-              ],
+                  color: Colors.grey.withOpacity(0.1),
+                  spreadRadius: 3.0,
+                  blurRadius: 5.0)
+            ],
             borderRadius: BorderRadius.circular(10),
-            color: Colors.white
+            color: Colors.white,
           ),
           child: Card(
+            color: Colors.white,
             elevation: 0,
-            child:Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:[
-                Stack(
-                alignment: AlignmentDirectional.topEnd,
+            child: Container(
+              height: 500,
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: Image.asset('Assets/images/house.jfif'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(0),
-                    child: IconButton(icon : favorite,splashColor: Colors.transparent,highlightColor: Colors.transparent, color: Colors.grey,onPressed: (){
-                      // to change the icon if u liked it or dislike it
-                      setState(() { 
-                        if(isfavorite == true){
-                          isfavorite =false;
-                          favorite = Icon(Icons.favorite_border_outlined);
-                        }else{
-                          isfavorite = true;
-                          favorite = Icon(Icons.favorite,color: Colors.red,);
-                        }
-                      });
-                    },),
-                  ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 6, top: 5,),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Stack(
+                    alignment: AlignmentDirectional.topCenter,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 3),
-                        child: Text('Okinawa Summer House', style: TextStyle( fontWeight: FontWeight.bold),),
+                        padding: const EdgeInsets.all(6.0),
+                        child: Image.asset('Assets/images/house.jfif'),
                       ),
-                      Text('NYC   .  200m²   .  F3  ')
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height: 30,
+                              width: 100,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Colors.grey.withOpacity(0.5)),
+                              child: Text(
+                                'For Rent',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Color(0xff023e8a),
+                                    fontWeight: FontWeight.w800),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(0),
+                            child: IconButton(
+                              icon: favorite,
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              color: Colors.grey,
+                              onPressed: () {
+                                // to change the icon if u liked it or dislike it
+                                setState(() {
+                                  if (isfavorite == true) {
+                                    isfavorite = false;
+                                    favorite =
+                                        Icon(Icons.favorite_border_outlined);
+                                  } else {
+                                    isfavorite = true;
+                                    favorite = Icon(
+                                      Icons.favorite,
+                                      color: Colors.red,
+                                    );
+                                  }
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                ),
-              ], 
-            ), 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'House in Le Toquet-Paris Plage',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'DZD 300 Million',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          color: Colors.black45,
+                        ),
+                        Text(
+                          'Newcastle,Calofornia',
+                          style: TextStyle(color: Colors.black45),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.bed_outlined,
+                          color: Colors.blue,),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Bed Room',style: TextStyle(color: Color(0Xffa8dadc)),),
+                              Text('2'),
+                            ],
+                          ),
+                        ],
+                      ),
+                      // Row(
+                      //   children: [
+                      //     Icon(
+                      //       Icons.bathtub,
+                      //       color: Colors.blue,
+                      //     ),
+                      //     Column(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         Text('Bath Room', style: TextStyle(color: Color(0Xffa8dadc)),),
+                      //         Text('1'),
+                      //       ],
+                      //     ),
+                      //   ],
+                      // ),
+                      Row(
+                        children: [
+                          Icon(Icons.close_fullscreen,
+                          color: Colors.blue,),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Area',style: TextStyle(color: Color(0Xffa8dadc)),),
+                              Text('200 m²'),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
           ),
         ),
       ),

@@ -7,7 +7,7 @@ import 'package:projet_fin_etude/Routes/profilepage.dart';
 import 'package:projet_fin_etude/Routes/searchpage.dart';
 
 
-import 'homepage.dart';
+import 'explorepage.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({ Key? key }) : super(key: key);
@@ -18,11 +18,15 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
     int _selectedIndex = 0;
+    Icon home = Icon(Icons.search);
+    Icon favorite = Icon(Icons.favorite);
+    Icon inbox= Icon(Icons.chat_bubble);
+    Icon profile= Icon(Icons.person);
   // List of widgets the Navigationbar contains 
   static const List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     FavoritePage(),
-    SearchPage(),
+    //SearchPage(),
     MessagesPage(),
     ProfilePage()
   ];
@@ -41,26 +45,28 @@ class _MainPageState extends State<MainPage> {
         ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
+          selectedItemColor: Colors.black,
           backgroundColor: Colors.white,
           items: [
             BottomNavigationBarItem(
-              icon: const Icon(Icons.home),
-              label: 'Home',
+              icon: _selectedIndex==0 ? home :const Icon(Icons.search),
+              label: 'Explore ',
+              
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.favorite_border_outlined),
+              icon: _selectedIndex==1 ? favorite :Icon(Icons.favorite_border_outlined),
               label: 'Favorite',
             ),
+            // BottomNavigationBarItem(
+            //   icon: Icon( Icons.search_outlined,),
+            //   label: 'Search',
+            // ),
             BottomNavigationBarItem(
-              icon: Icon( Icons.search_outlined,),
-              label: 'Search',
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.mail),
+              icon: _selectedIndex==2 ? inbox :const Icon(Icons.chat_bubble_outline),
               label: 'Messages',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person),
+              icon: _selectedIndex==3 ? profile :Icon(Icons.person_outlined),
               label: 'Profile',
             )
           ],

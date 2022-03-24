@@ -1,7 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class AnnounceDetails extends StatefulWidget {
   const AnnounceDetails({Key? key}) : super(key: key);
@@ -15,23 +20,20 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
     Image.asset('Assets/images/banner.jfif'),
     Image.asset('Assets/images/banner.jpg'),
     Image.asset('Assets/images/house.jfif'),
-    Image.asset('Assets/images/house.png')
+    Image.asset('Assets/images/house.png'),
+    Image.asset('Assets/images/banner.jfif'),
+    Image.asset('Assets/images/banner.jpg'),
+    Image.asset('Assets/images/house.jfif'),
+    Image.asset('Assets/images/house.png'),
+    Image.asset('Assets/images/banner.jfif'),
+    Image.asset('Assets/images/banner.jpg'),
+    Image.asset('Assets/images/house.jfif'),
+    Image.asset('Assets/images/house.png'),
   ];
   int index = 0;
   bool _hasCallSupport = false;
   Future<void>? _launched;
   String _phone = '066472612';
-  @override
-  void initState() {
-    super.initState();
-    // Check for phone call support.
-    canLaunch('tel:123').then((bool result) {
-      setState(() {
-        _hasCallSupport = result;
-      });
-    });
-  }
-
   Future<void> _makePhoneCall(String phoneNumber) async {
     // Use `Uri` to ensure that `phoneNumber` is properly URL-encoded.
     // Just using 'tel:$phoneNumber' would create invalid URLs in some cases,
@@ -44,12 +46,77 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
     await launch(launchUri.toString());
   }
 
+  //=================
+  //map things
+  //==============
+  late Position cl;
+  late CameraPosition _kGooglePlex;
+  late Set<Marker> mymarker;
+  var lat;
+  var lang;
+  var place;
+  var country;
+  late List<Placemark> placemarks;
+
+  Future getposition() async {
+    bool services;
+    LocationPermission per;
+
+    services = await Geolocator.isLocationServiceEnabled();
+    per = await Geolocator.checkPermission();
+    if (per == LocationPermission.denied) {
+      per = await Geolocator.requestPermission();
+    }
+    return per;
+  }
+
+  Future<void> getLatAndLang() async {
+    cl = await Geolocator.getCurrentPosition().then((value) => value);
+
+    lat = cl.latitude;
+    lang = cl.longitude;
+
+    _kGooglePlex = CameraPosition(
+      target: LatLng(lat, lang),
+      zoom: 14.4746,
+    );
+    mymarker = {
+      Marker(
+        markerId: MarkerId('1'),
+        position: LatLng(lat, lang),
+      )
+    };
+    placemarks = await placemarkFromCoordinates(lat, lang);
+    place = placemarks[0].locality;
+    country = placemarks[0].country;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Check for phone call support.
+    canLaunch('tel:123').then((bool result) {
+      setState(() {
+        _hasCallSupport = result;
+      });
+    });
+    getposition();
+    getLatAndLang();
+  }
+
+  Completer<GoogleMapController> _controller = Completer();
+  //======================
+  // end map thing
+  //=======================
+
   @override
   Widget build(BuildContext context) {
+    var devicedata = MediaQuery.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xfff8f9fa),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xfff8f9fa),
         elevation: 0,
         centerTitle: true,
         title: const Text(
@@ -83,17 +150,41 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                 SizedBox(
                   height: 20,
                 ),
+                // Container(
+                //   child: PageView.builder(
+                //         itemCount: announceImages.length,
+                //         pageSnapping: true,
+                //         itemBuilder: (context, i) {
+                //           return Container(
+                //               margin: EdgeInsets.all(10),
+                //               child: announceImages[i]);
+                //         }),
+                // ),
                 Container(
-                  width: double.infinity,
-                  height: 400,
-                  child: GestureDetector(
-                      // onHorizontalDragEnd: _ondragend,
-                      onHorizontalDragUpdate: _ondragstart,
-                      child: announceImages[index]),
-                ),
+                    width: double.infinity,
+                    height: devicedata.size.height * 0.5,
+                    child: PageView.builder(
+                      itemCount: announceImages.length,
+                      pageSnapping: true,
+                      itemBuilder: (context, index) {
+                        return Container(
+                            margin: EdgeInsets.all(10),
+                            child: announceImages[index]);
+                      },
+                      onPageChanged: (index) => setState(() {
+                        this.index = index;
+                      }),
+                    )),
+                // Container(
+                //   width: double.infinity,
+                //   height: 400,
+                //   child: GestureDetector(
+                //       // onHorizontalDragEnd: _ondragend,
+                //       // onHorizontalDragUpdate: _ondragstart,
+                //       child: announceImages[index]),
+                // ),
                 // carousel indicator
-                Padding(
-                  padding: const EdgeInsets.only(left:137,top: 10),
+                Center(
                   child: Row(
                     children: List.generate(announceImages.length, (indexDots) {
                       return Container(
@@ -116,20 +207,64 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                 ),
-                Divider(
-                  height: 20,
-                  thickness: 1,
-                  indent: 50,
-                  endIndent: 50,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: Container(
+                    height: 60,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Wrap(
+                          spacing: 40,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Icon(
+                                  Icons.bed,
+                                ),
+                                Text('4 Bedrooms')
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Icon(
+                                  Icons.bed,
+                                ),
+                                Text('200 sqft')
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                SizedBox(
-                  height: 500,
-                ),
-                Divider(
-                  height: 20,
-                  thickness: 1,
-                  indent: 50,
-                  endIndent: 50,
+                // Divider(
+                //   height: 20,
+                //   thickness: 1,
+                //   indent: 50,
+                //   endIndent: 50,
+                // ),
+                // Divider(
+                //   height: 20,
+                //   thickness: 1,
+                //   indent: 50,
+                //   endIndent: 50,
+                // ),
+                Container(
+                  margin: EdgeInsets.all(20),
+                  width: double.infinity,
+                  height: devicedata.size.height * 0.5,
+                  child: GoogleMap(
+                    markers: mymarker,
+                    mapType: MapType.normal,
+                    initialCameraPosition: _kGooglePlex,
+                    onMapCreated: (GoogleMapController controller) {
+                      _controller.complete(controller);
+                    },
+                  ),
                 ),
               ],
             ),
@@ -139,7 +274,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(0.0),
         height: 70,
-        color: Colors.white,
+        color: Color(0xfff8f9fa),
         child: ListTile(
           leading: CircleAvatar(
             backgroundImage: AssetImage('Assets/images/avatar.png'),
@@ -161,19 +296,19 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
     );
   }
 
-  void _ondragstart(DragUpdateDetails details) {
-    if (details.primaryDelta! > 6.0) {
-      setState(() {
-        if (index >= 1) {
-          index = index - 1;
-        }
-      });
-    } else {
-      setState(() {
-        if (index < announceImages.length - 1) {
-          index = index + 1;
-        }
-      });
-    }
-  }
+  // void _ondragstart(DragUpdateDetails details) {
+  //   if (details.primaryDelta! > 6.0) {
+  //     setState(() {
+  //       if (index >= 1) {
+  //         index = index - 1;
+  //       }
+  //     });
+  //   } else {
+  //     setState(() {
+  //       if (index < announceImages.length - 1) {
+  //         index = index + 1;
+  //       }
+  //     });
+  //   }
+  // }
 }

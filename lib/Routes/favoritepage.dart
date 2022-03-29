@@ -1,8 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:projet_fin_etude/Routes/loginview.dart';
+
 import 'package:projet_fin_etude/Views/announceHview.dart';
+import 'package:projet_fin_etude/Views/loginview.dart';
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({Key? key}) : super(key: key);
@@ -46,7 +47,7 @@ class _FavoritePageState extends State<FavoritePage> {
                           context,
                           MaterialPageRoute<void>(
                             builder: (BuildContext context) =>
-                                const LoginView(),
+                                LoginView(),
                           )),
                       child: Text('Log in')),
                 ],

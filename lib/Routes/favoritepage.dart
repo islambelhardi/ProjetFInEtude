@@ -24,10 +24,14 @@ class _FavoritePageState extends State<FavoritePage> {
       backgroundColor: Color(0xfff8f9fa),
       appBar: AppBar(
         backgroundColor: Color(0xfff8f9fa),
+        elevation: 0,
         title: Text(
           'Wishlists',
           style: TextStyle(color: Colors.black),
         ),
+        actions: [
+          IconButton(onPressed: (){}, icon: Icon(Icons.sort_outlined , color: Colors.black,)),
+        ],
       ),
       // check if the user is logged if not list of instruction and button of login shows
       body: Center(
@@ -51,7 +55,17 @@ class _FavoritePageState extends State<FavoritePage> {
             //favorite announces
             : ListView(
                 children: [
+                  SizedBox(
+                    height: 10,
+                  ),
                   AnnounceHview(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  AnnounceHview(),
+                  SizedBox(
+                    height: 10,
+                  ),
                   AnnounceHview(),
                 ],
               ),

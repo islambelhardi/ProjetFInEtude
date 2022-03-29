@@ -150,57 +150,44 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                         ),
                         Text(
                           'Newcastle,Calofornia',
-                          style: TextStyle(color: Colors.black45),
+                          style: TextStyle(color: Colors.black87),
                         ),
                       ],
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.bed_outlined,
-                          color: Colors.blue,),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Bed Room',style: TextStyle(color: Color(0Xffa8dadc)),),
-                              Text('2'),
-                            ],
-                          ),
-                        ],
-                      ),
-                      // Row(
-                      //   children: [
-                      //     Icon(
-                      //       Icons.bathtub,
-                      //       color: Colors.blue,
-                      //     ),
-                      //     Column(
-                      //       crossAxisAlignment: CrossAxisAlignment.start,
-                      //       children: [
-                      //         Text('Bath Room', style: TextStyle(color: Color(0Xffa8dadc)),),
-                      //         Text('1'),
-                      //       ],
-                      //     ),
-                      //   ],
-                      // ),
-                      Row(
-                        children: [
-                          Icon(Icons.close_fullscreen,
-                          color: Colors.blue,),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Area',style: TextStyle(color: Color(0Xffa8dadc)),),
-                              Text('200 m²'),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  )
+                  Container(
+                    height: 20,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Wrap(
+                          spacing: 10,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Icon(
+                                  Icons.bed,
+                                  color: Colors.black45,
+                                ),
+                                Text('4 Bedrooms', style: TextStyle(color: Colors.black45),)
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Icon(
+                                  Icons.fullscreen,
+                                  color: Colors.black45,
+                                ),
+                                Text('200 sqft', style: TextStyle(color: Colors.black45),)
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

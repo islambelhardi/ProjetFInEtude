@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:projet_fin_etude/Widgets/maploadingwidget.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -17,9 +18,9 @@ class _SearchPageState extends State<SearchPage> {
   late Position cl;
   late CameraPosition _kGooglePlex;
   late Set<Marker> mymarker;
-  var lat;
-  var lang;
-  var place;
+  late var lat;
+  late  var lang;
+  late var place;
   late List<Placemark> placemarks;
   Future getposition() async {
     bool services;
@@ -51,8 +52,8 @@ class _SearchPageState extends State<SearchPage> {
     };
     placemarks = await placemarkFromCoordinates(lat, lang);
     place = placemarks[0].locality;
-    print(lat);
-    print(lang);
+    // print(lat);
+    // print(lang);
     setState(() {});
   }
 
@@ -60,61 +61,89 @@ class _SearchPageState extends State<SearchPage> {
   void initState() {
     super.initState();
     getposition();
-    getLatAndLang();
+    loadmap();
   }
 
   Completer<GoogleMapController> _controller = Completer();
-
+  List<String> ButtonList = [
+    "Apartment",
+    "House",
+    "Villa",
+    "For Rent",
+    "For Sale"
+  ];
+  bool isloading = true;
+  Future loadmap() async {
+    await getLatAndLang();
+    setState(() {
+      isloading = false;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     var devicedata = MediaQuery.of(context);
     return SafeArea(
-      child: Container(
-        child: _kGooglePlex == null
-            ? CircularProgressIndicator()
-            : Column(
+      child: Scaffold(
+        body: Column(
+          children: [
+            SizedBox(
+              height: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, bottom: 10),
+              child: Row(
                 children: [
-                  SizedBox(
-                    height: 30,
+                  Text(
+                    'Current location',
+                    style: TextStyle(color: Colors.grey),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, bottom: 10),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.location_on,
+                    color: Colors.red,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, bottom: 10),
-                    child: Row(
-                      children: [
-                        Text(
-                          'Current location',
-                          style: TextStyle(color: Colors.grey),
-                        )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, bottom: 10),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.location_on,
-                          color: Colors.red,
-                        ),
-                        Text(
-                          'Algeria , ' + place,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.search),
-                        labelText: 'what are you looking for ? ',
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
+                  Text(
+                    'Algeria , ' + place,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.search),
+                  labelText: 'what are you looking for ? ',
+                ),
+              ),
+            ),
+            Container(
+                height: 50,
+                child: ListView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: ButtonList.length,
+                    itemBuilder: (BuildContext ctxt, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: new OutlinedButton(
+                            style: OutlinedButton.styleFrom(),
+                            onPressed: () {},
+                            child: Text(ButtonList[index])),
+                      );
+                    })),
+            Expanded(
+              child: isloading  ?
+                   MapLoadingWidget()
+                  : Container(
                       margin: EdgeInsets.all(10),
                       width: double.infinity,
                       height: devicedata.size.height * 0.3,
@@ -127,9 +156,9 @@ class _SearchPageState extends State<SearchPage> {
                         },
                       ),
                     ),
-                  ),
-                ],
-              ),
+            ),
+          ],
+        ),
       ),
     );
   }

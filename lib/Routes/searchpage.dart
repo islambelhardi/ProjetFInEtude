@@ -20,7 +20,7 @@ class _SearchPageState extends State<SearchPage> {
   late Set<Marker> mymarker;
   late var lat;
   late  var lang;
-  late var place;
+  // late var place;
   late List<Placemark> placemarks;
   Future getposition() async {
     bool services;
@@ -51,7 +51,7 @@ class _SearchPageState extends State<SearchPage> {
       )
     };
     placemarks = await placemarkFromCoordinates(lat, lang);
-    place = placemarks[0].locality;
+    // place =await placemarks[0].locality;
     // print(lat);
     // print(lang);
     setState(() {});
@@ -109,7 +109,7 @@ class _SearchPageState extends State<SearchPage> {
                     color: Colors.red,
                   ),
                   Text(
-                    'Algeria , ' + place,
+                    'Algeria , ' ,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   )
                 ],

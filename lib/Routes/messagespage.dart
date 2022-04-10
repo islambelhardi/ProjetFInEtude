@@ -10,8 +10,10 @@ class MessagesPage extends StatefulWidget {
 class _MessagesPageState extends State<MessagesPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child:Text('MessagesPage'),
+    return SafeArea(
+      child: Container(
+        child:Text('MessagesPage'),
+      ),
     );
   }
 }

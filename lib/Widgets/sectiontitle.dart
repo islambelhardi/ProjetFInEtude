@@ -2,22 +2,14 @@
 
 import 'package:flutter/material.dart';
 
-class Sectiontitle extends StatefulWidget {
-  const Sectiontitle({Key? key}) : super(key: key);
-  @override
-  _SectiontitleState createState() => _SectiontitleState();
-}
-
-class _SectiontitleState extends State<Sectiontitle> {
-  @override
-  Widget build(BuildContext context) {
+  Widget sectiontitle(title) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Popular',
+            title,
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -36,4 +28,4 @@ class _SectiontitleState extends State<Sectiontitle> {
       ),
     );
   }
-}
+

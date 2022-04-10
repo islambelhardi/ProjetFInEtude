@@ -140,26 +140,12 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
         ),
         // leading:
       ),
-      body: Center(
-        child: ListView(
+      body:  ListView(
           padding: EdgeInsets.symmetric(horizontal: 10),
           children: [
             Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+             crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 20,
-                ),
-                // Container(
-                //   child: PageView.builder(
-                //         itemCount: announceImages.length,
-                //         pageSnapping: true,
-                //         itemBuilder: (context, i) {
-                //           return Container(
-                //               margin: EdgeInsets.all(10),
-                //               child: announceImages[i]);
-                //         }),
-                // ),
                 Container(
                     width: double.infinity,
                     height: devicedata.size.height * 0.5,
@@ -170,20 +156,13 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                         return Container(
                             margin: EdgeInsets.all(10),
                             child: announceImages[index]);
+                            // to display a loading gif while getting photos
+                            // FadeInImage.assetNetwork(placeholder: 'Assets/images/loading.gif', image: 'https://picsum.photos/250?image=9')
                       },
                       onPageChanged: (index) => setState(() {
                         this.index = index;
                       }),
                     )),
-                // Container(
-                //   width: double.infinity,
-                //   height: 400,
-                //   child: GestureDetector(
-                //       // onHorizontalDragEnd: _ondragend,
-                //       // onHorizontalDragUpdate: _ondragstart,
-                //       child: announceImages[index]),
-                // ),
-                // carousel indicator
                 Center(
                   child: Row(
                     children: List.generate(announceImages.length, (indexDots) {
@@ -201,16 +180,9 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: Text(
-                    'House in Le Toquet-Paris Plage',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                ),
-                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Container(
-                    height: 60,
+                    height: 40,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -241,22 +213,17 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                     ),
                   ),
                 ),
-                // Divider(
-                //   height: 20,
-                //   thickness: 1,
-                //   indent: 50,
-                //   endIndent: 50,
-                // ),
-                // Divider(
-                //   height: 20,
-                //   thickness: 1,
-                //   indent: 50,
-                //   endIndent: 50,
-                // ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  child: Text(
+                    'Location',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
                 Container(
                   margin: EdgeInsets.all(20),
                   width: double.infinity,
-                  height: devicedata.size.height * 0.5,
+                  height: devicedata.size.height * 0.2,
                   child: GoogleMap(
                     markers: mymarker,
                     mapType: MapType.normal,
@@ -266,11 +233,40 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                     },
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  child: Text(
+                    'Description',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
+                Placeholder(
+                  fallbackHeight: 150,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  child: Text(
+                    'Details',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
+                Placeholder(
+                  fallbackHeight: 150,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  child: Text(
+                    'Comments',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                ),
+                Placeholder(
+                  fallbackHeight: 150,
+                ),
               ],
             ),
           ],
         ),
-      ),
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(0.0),
         height: 70,
@@ -295,20 +291,4 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
       ),
     );
   }
-
-  // void _ondragstart(DragUpdateDetails details) {
-  //   if (details.primaryDelta! > 6.0) {
-  //     setState(() {
-  //       if (index >= 1) {
-  //         index = index - 1;
-  //       }
-  //     });
-  //   } else {
-  //     setState(() {
-  //       if (index < announceImages.length - 1) {
-  //         index = index + 1;
-  //       }
-  //     });
-  //   }
-  // }
 }

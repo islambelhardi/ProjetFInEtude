@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:projet_fin_etude/Widgets/announcedetails.dart';
 
 class AnnounceWidget extends StatefulWidget {
-  const AnnounceWidget({Key? key}) : super(key: key);
-
+   AnnounceWidget({Key? key}) : super(key: key);
+    late String herotag;
   @override
   _AnnounceWidgetState createState() => _AnnounceWidgetState();
 }
@@ -16,6 +16,7 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
     Icons.favorite_rounded,
     color: Colors.white,
   );
+
   //when u click the announce widget the announcedtails shows up
   void _gotoAnnounceDetails(BuildContext context) {
     Navigator.push(
@@ -29,7 +30,7 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: 'AnnounceDetails',
+      tag: 'herotag',
       child: GestureDetector(
         onTap: () => _gotoAnnounceDetails(context),
         child: Container(

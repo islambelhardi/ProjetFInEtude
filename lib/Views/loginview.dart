@@ -1,9 +1,16 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:projet_fin_etude/Routes/profilepage.dart';
 import 'package:projet_fin_etude/Views/sigupview.dart';
-
-
+import 'package:projet_fin_etude/Controllers/authcontroller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 class LoginView extends StatefulWidget {
-  LoginView({Key? key}) : super(key: key);
+  // LoginView({Key? key}) : super(key: key);
 
   @override
   State<LoginView> createState() => _LoginViewState();
@@ -17,12 +24,76 @@ class _LoginViewState extends State<LoginView> {
     });
   }
 
+  GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
+  
+  final _formKey = GlobalKey<FormState>();
+  String _email = '';
+  String _password = '';
   bool isChecked = false;
+  // the login function
+  Login() async {
+    http.Response response = await AuthController.login(_email, _password);
+    // Map responseMap = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+       print(json.decode(response.body));
+      // showDialog(context: context, builder: (BuildContext dialogcontext){
+      //   return AlertDialog(
+      //     title: Text("Log in successful"),
+      //   );
+      // });
+      var responsebody = jsonDecode(response.body);
+      AuthController.savetoken(responsebody['access token']);
+      print(responsebody['access token']);
+      // Navigator.of(context).pushReplacement(
+      //     MaterialPageRoute(builder: (context) => ProfilePage()));
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>ProfilePage()), (route) => true);
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext dialogcontext) {
+            return AlertDialog(
+              title: Text(json.decode(response.body)),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Retry'),
+                  onPressed: () {
+                    Navigator.of(dialogcontext).pop();
+                  },
+                ),
+              ],
+            );
+          });
+    }
+  }
+
+  Future checklogin() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String? token = await pref.getString("access token");
+    // check if the token is there and not null
+    if (token != null) {
+      // Navigator.of(context).pushReplacement(
+      //     MaterialPageRoute(builder: (context) => ProfilePage()));
+      // (route) => false);
+      // Navigator.of(context).pushReplacement(
+      //     MaterialPageRoute(builder: (context) => ProfilePage()));
+       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>ProfilePage()), (route) =>false);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checklogin();
+  }
+
+  bool isloged = false;
   @override
   Widget build(BuildContext context) {
     var devicedata = MediaQuery.of(context);
+    
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
           child: Padding(
         padding: EdgeInsets.fromLTRB(24.0, 15.0, 24.0, 0),
@@ -47,7 +118,8 @@ class _LoginViewState extends State<LoginView> {
           SizedBox(
             height: 48,
           ),
-          Expanded(
+          Form(
+            key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -59,7 +131,7 @@ class _LoginViewState extends State<LoginView> {
                   child: TextFormField(
                     decoration: InputDecoration(
                       hintText: 'Email',
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ).copyWith(color: Color(0xff94959b)),
@@ -67,6 +139,15 @@ class _LoginViewState extends State<LoginView> {
                         borderSide: BorderSide.none,
                       ),
                     ),
+                    validator: (value) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          EmailValidator.validate(value) == false) {
+                        return 'Please enter a valid email';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) => _email = value,
                   ),
                 ),
                 SizedBox(height: devicedata.size.height * 0.050),
@@ -95,6 +176,7 @@ class _LoginViewState extends State<LoginView> {
                         borderSide: BorderSide.none,
                       ),
                     ),
+                    onChanged: (value) => _password = value,
                   ),
                 ),
                 SizedBox(
@@ -136,7 +218,13 @@ class _LoginViewState extends State<LoginView> {
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                           )),
-                      onPressed: () {},
+                      // if the password and email is valide
+                      onPressed: () => {
+                        if (_formKey.currentState!.validate())
+                          {
+                            Login(),
+                          }
+                      },
                     )),
                 SizedBox(
                   height: 20,
@@ -183,11 +271,15 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignupView()));
-                      },
+                         pushNewScreen(
+                              context,
+                              screen: SignupView(),
+                              withNavBar:
+                                  true, // OPTIONAL VALUE. True by default.
+                              pageTransitionAnimation:
+                                  PageTransitionAnimation.cupertino,
+                            );
+                          },
                       child: Text(
                         'Register',
                         style: TextStyle(

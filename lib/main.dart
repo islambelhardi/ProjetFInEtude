@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projet_fin_etude/Routes/mainpage.dart';
 
+
 void main() {
   runApp(const MyApp());
 }
@@ -14,12 +15,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        // primarySwatch: Colors.orange.shade100,
         indicatorColor: Colors.blue,
         splashColor: Colors.grey,
-        //navigationBarTheme: ,
       ),
-      home: const MainPage(),
+      home: MainPage(),
     );
   }
 }

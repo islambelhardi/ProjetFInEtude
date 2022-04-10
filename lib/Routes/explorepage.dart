@@ -66,9 +66,9 @@ class _HomePageState extends State<HomePage> {
               ),
               SliverList(
                   delegate: SliverChildListDelegate([
-                Sectiontitle(),
+                sectiontitle( 'Popular',),
                 AnnouncesRow(),
-                Sectiontitle(),
+                sectiontitle( 'For Rent',),
                 AnnouncesRow(),
               ]))
             ],

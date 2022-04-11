@@ -46,7 +46,7 @@ class _LoginViewState extends State<LoginView> {
       print(responsebody['access token']);
       // Navigator.of(context).pushReplacement(
       //     MaterialPageRoute(builder: (context) => ProfilePage()));
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>ProfilePage()), (route) => true);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>ProfilePage()), (route) => false);
     } else {
       showDialog(
           context: context,

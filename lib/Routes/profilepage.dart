@@ -21,15 +21,12 @@ class _ProfilePageState extends State<ProfilePage> {
     String? token = await pref.getString("access token");
     http.Response response = await AuthController.logout(token!);
     bool cleared = await pref.clear();
-    print(cleared);
-    // print(json.decode(response.body));
-    Navigator.of(context).pop();
-    // pushNewScreen(
-    //   context,
-    //   screen: LoginView(),
-    //   withNavBar: true, // OPTIONAL VALUE. True by default.
-    //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-    // );
+    pushNewScreen(
+      context,
+      screen: LoginView(),
+      withNavBar: true, // OPTIONAL VALUE. True by default.
+      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+    );
   }
 
   @override

@@ -46,13 +46,13 @@ class _MainPageState extends State<MainPage> {
                 // inactiveColorPrimary: CupertinoColors.systemGrey,
             ),
             PersistentBottomNavBarItem(
-                icon: Icon(Icons.settings),
-                title: ("Settings"),
+                icon: Icon(Icons.message_outlined),
+                title: ("Message"),
                 // activeColorPrimary: CupertinoColors.activeBlue,
                 // inactiveColorPrimary: CupertinoColors.systemGrey,
             ),
             PersistentBottomNavBarItem(
-                icon: Icon(Icons.settings),
+                icon: Icon(Icons.person_outlined),
                 title: ("Settings"),
                 // activeColorPrimary: CupertinoColors.activeBlue,
                 // inactiveColorPrimary: CupertinoColors.systemGrey,

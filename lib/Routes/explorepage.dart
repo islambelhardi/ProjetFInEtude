@@ -1,9 +1,13 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:projet_fin_etude/Controllers/announcecontroller.dart';
+import 'package:projet_fin_etude/Modeks/announce.dart';
 import 'package:projet_fin_etude/Routes/searchpage.dart';
 import 'package:projet_fin_etude/Widgets/announcedetails.dart';
 import 'package:projet_fin_etude/Widgets/announcesrow.dart';
+import 'package:projet_fin_etude/Widgets/announcewidget.dart';
 import 'package:projet_fin_etude/Widgets/sectiontitle.dart';
 import 'package:projet_fin_etude/Widgets/headerwidget.dart';
 
@@ -15,6 +19,42 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getrentannounces();
+    _getsellannounces();
+  }
+
+  var rentinglist = <Announce>[];
+  _getrentannounces() {
+    AnnounceController().getAnnouncesdetails('forrent').then((response) {
+      Iterable list = json.decode(response.body);
+      try {
+        rentinglist = list.map((model) => Announce.fromJson(model)).toList();
+      } catch (e) {
+        print(e);
+      }
+
+      setState(() {});
+    });
+  }
+
+  var sellinglist = <Announce>[];
+  _getsellannounces() {
+    AnnounceController().getAnnouncesdetails('forrent').then((response) {
+      Iterable list = json.decode(response.body);
+      try {
+        sellinglist = list.map((model) => Announce.fromJson(model)).toList();
+      } catch (e) {
+        print(e);
+      }
+
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -66,10 +106,20 @@ class _HomePageState extends State<HomePage> {
               ),
               SliverList(
                   delegate: SliverChildListDelegate([
-                sectiontitle( 'Popular',),
-                AnnouncesRow(),
-                sectiontitle( 'For Rent',),
-                AnnouncesRow(),
+                sectiontitle(
+                  'Popular',
+                ),
+                AnnouncesRow(
+                  announces: sellinglist,
+                ),
+                sectiontitle(
+                  'For Rent',
+                ),
+                AnnouncesRow(announces: rentinglist),
+                sectiontitle(
+                  'For Sale',
+                ),
+                AnnouncesRow(announces: rentinglist),
               ]))
             ],
           )),

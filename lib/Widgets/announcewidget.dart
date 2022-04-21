@@ -1,11 +1,27 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:projet_fin_etude/Controllers/connection.dart';
 import 'package:projet_fin_etude/Widgets/announcedetails.dart';
 
 class AnnounceWidget extends StatefulWidget {
-   AnnounceWidget({Key? key}) : super(key: key);
-    late String herotag;
+  final String title;
+  final String img;
+  final String roomnumber;
+  final String surface;
+  final String dealtype;
+  final String price;
+  AnnounceWidget(
+      {Key? key,
+      required this.title,
+      required this.img,
+      required this.roomnumber,
+      required this.surface,
+      required this.dealtype,
+      required this.price})
+      : super(key: key);
+
+  late String herotag;
   @override
   _AnnounceWidgetState createState() => _AnnounceWidgetState();
 }
@@ -61,7 +77,7 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(6.0),
-                        child: Image.asset('Assets/images/house.jfif'),
+                        child: Image.network(baseUrl+widget.img),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -77,7 +93,7 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                                   borderRadius: BorderRadius.circular(8),
                                   color: Colors.grey.withOpacity(0.5)),
                               child: Text(
-                                'For Rent',
+                                'For'+widget.dealtype,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Color(0xff023e8a),
@@ -121,7 +137,7 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'House in Le Toquet-Paris Plage',
+                            widget.title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             softWrap: true,
@@ -133,7 +149,7 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'DZD 300 Million',
+                          'DZD'+widget.price,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),
@@ -171,7 +187,10 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                                   Icons.bed,
                                   color: Colors.black45,
                                 ),
-                                Text('4 Bedrooms', style: TextStyle(color: Colors.black45),)
+                                Text(
+                                  widget.roomnumber+'Bedrooms',
+                                  style: TextStyle(color: Colors.black45),
+                                )
                               ],
                             ),
                             Row(
@@ -181,7 +200,10 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                                   Icons.fullscreen,
                                   color: Colors.black45,
                                 ),
-                                Text('200 sqft', style: TextStyle(color: Colors.black45),)
+                                Text(
+                                  widget.surface+'m²',
+                                  style: TextStyle(color: Colors.black45),
+                                )
                               ],
                             ),
                           ],

@@ -1,8 +1,12 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names
 
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
+import 'package:projet_fin_etude/Widgets/announcewidget.dart';
+import 'package:projet_fin_etude/Widgets/comment.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -17,18 +21,13 @@ class AnnounceDetails extends StatefulWidget {
 
 class _AnnounceDetailsState extends State<AnnounceDetails> {
   List announceImages = [
-    Image.asset('Assets/images/banner.jfif'),
-    Image.asset('Assets/images/banner.jpg'),
-    Image.asset('Assets/images/house.jfif'),
-    Image.asset('Assets/images/house.png'),
-    Image.asset('Assets/images/banner.jfif'),
-    Image.asset('Assets/images/banner.jpg'),
-    Image.asset('Assets/images/house.jfif'),
-    Image.asset('Assets/images/house.png'),
-    Image.asset('Assets/images/banner.jfif'),
-    Image.asset('Assets/images/banner.jpg'),
-    Image.asset('Assets/images/house.jfif'),
-    Image.asset('Assets/images/house.png'),
+    AssetImage('Assets/images/banner.jpg'),
+    AssetImage('Assets/images/house.jfif'),
+    AssetImage('Assets/images/house.png'),
+    AssetImage('Assets/images/banner.jfif'),
+    AssetImage('Assets/images/banner.jpg'),
+    AssetImage('Assets/images/house.jfif'),
+    AssetImage('Assets/images/house.png'),
   ];
   int index = 0;
   bool _hasCallSupport = false;
@@ -109,6 +108,36 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
   //======================
   // end map thing
   //=======================
+  //alert dialog function
+  TextEditingController _textFieldController = TextEditingController();
+
+  comment_alert(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Add comment'),
+            content: TextField(
+              decoration: InputDecoration(hintText: "Add new comment"),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text('Add'),
+                onPressed: () {},
+              ),
+              FlatButton(
+                child: new Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+//end allert dialog function
+  final controller = PageController(viewportFraction: 1, keepPage: true);
 
   @override
   Widget build(BuildContext context) {
@@ -140,49 +169,58 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
         ),
         // leading:
       ),
-      body:  ListView(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+      body: Center(
+        child: ListView(
+          padding: EdgeInsets.all(8),
           children: [
             Column(
-             crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(
+                  height: 20,
+                ),
                 Container(
                     width: double.infinity,
                     height: devicedata.size.height * 0.5,
                     child: PageView.builder(
-                      itemCount: announceImages.length,
-                      pageSnapping: true,
-                      itemBuilder: (context, index) {
-                        return Container(
-                            margin: EdgeInsets.all(10),
-                            child: announceImages[index]);
-                            // to display a loading gif while getting photos
-                            // FadeInImage.assetNetwork(placeholder: 'Assets/images/loading.gif', image: 'https://picsum.photos/250?image=9')
-                      },
-                      onPageChanged: (index) => setState(() {
-                        this.index = index;
-                      }),
-                    )),
-                Center(
-                  child: Row(
-                    children: List.generate(announceImages.length, (indexDots) {
-                      return Container(
-                        margin: const EdgeInsets.only(right: 2),
-                        height: 2,
-                        width: index == indexDots ? 25 : 8,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: index == indexDots
-                                ? Colors.blue
-                                : Colors.blue.withOpacity(0.5)),
-                      );
-                    }),
+                        controller: controller,
+                        itemCount: announceImages.length,
+                        pageSnapping: true,
+                        itemBuilder: (context, i) {
+                          return Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Image(
+                              image: announceImages[i],
+                              fit: BoxFit.cover,
+                              height: 200,
+                              width: 250,
+                            ),
+                          );
+                        })),
+                SmoothPageIndicator(
+                  controller: controller,
+                  count: announceImages.length,
+                  effect: ScrollingDotsEffect(
+                    activeStrokeWidth: 2.6,
+                    activeDotScale: 1.3,
+                    maxVisibleDots: 5,
+                    radius: 10,
+                    spacing: 7,
+                    dotHeight: 6,
+                    dotWidth: 6,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  child: Text(
+                    'House in Le Toquet-Paris Plage',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Container(
-                    height: 40,
+                    height: 60,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -214,59 +252,92 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: Text(
-                    'Location',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  padding: const EdgeInsets.all(10.0),
+                  child: Container(
+                    width: double.infinity,
+                    height: devicedata.size.height * 0.3,
+                    child: lat == null
+                        ? SizedBox(
+                            height: 16,
+                            width: 16,
+                            child: Center(
+                                child: CircularProgressIndicator(
+                              strokeWidth: 1.5,
+                            )))
+                        : GoogleMap(
+                            markers: mymarker,
+                            mapType: MapType.normal,
+                            initialCameraPosition: _kGooglePlex,
+                            onMapCreated: (GoogleMapController controller) {
+                              _controller.complete(controller);
+                            },
+                          ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.all(20),
-                  width: double.infinity,
-                  height: devicedata.size.height * 0.2,
-                  child: GoogleMap(
-                    markers: mymarker,
-                    mapType: MapType.normal,
-                    initialCameraPosition: _kGooglePlex,
-                    onMapCreated: (GoogleMapController controller) {
-                      _controller.complete(controller);
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: Text(
-                    'Description',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                ),
-                Placeholder(
-                  fallbackHeight: 150,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: Text(
-                    'Details',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                ),
-                Placeholder(
-                  fallbackHeight: 150,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: Text(
-                    'Comments',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                ),
-                Placeholder(
-                  fallbackHeight: 150,
                 ),
               ],
             ),
+            Divider(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Properties Details',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20)),
+                    SizedBox(
+                      height: devicedata.size.width * 0.03,
+                    ),
+                    Text(
+                      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ).copyWith(color: Color(0xff94959b)),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Divider(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: Column(
+                  children: [
+                    Row(children: [
+                      Text('Comments',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20)),
+                    ]),
+                    SizedBox(
+                      height: devicedata.size.width * 0.03,
+                    ),
+                    Comment(),
+                    Container(
+                        width: double.infinity,
+                        height: 50,
+                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white, // Background color
+                          ),
+                          child: const Text('Add new comment +',
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              )),
+                          onPressed: () => comment_alert(context),
+                        )),
+                  ],
+                ),
+              ),
+            )
           ],
         ),
+      ),
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(0.0),
         height: 70,

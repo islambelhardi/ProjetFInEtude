@@ -22,43 +22,47 @@ class _MainPageState extends State<MainPage> {
   Icon inbox = Icon(Icons.chat_bubble);
   Icon profile = Icon(Icons.person);
   List<Widget> _buildScreens() {
-        return [
-         HomePage(),
-        FavoritePage(),
-        MessagesPage(),
-        LoginView(),
-        ];
-    }
-    PersistentTabController _controller =PersistentTabController(initialIndex: 0);
-    List<PersistentBottomNavBarItem> _navBarsItems() {
-        return [
-            PersistentBottomNavBarItem(
-                icon: Icon(Icons.search),
-                title: ("Home"),
-                // activeColorPrimary: Color.activeBlue,
-                // inactiveColorPrimary: CupertinoColors.systemGrey,
-            ),
-            PersistentBottomNavBarItem(
-              inactiveIcon: Icon(Icons.favorite_border_outlined),
-                icon: Icon(Icons.favorite),
-                title: ("Settings"),
-                // activeColorPrimary: CupertinoColors.activeBlue,
-                // inactiveColorPrimary: CupertinoColors.systemGrey,
-            ),
-            PersistentBottomNavBarItem(
-                icon: Icon(Icons.message_outlined),
-                title: ("Message"),
-                // activeColorPrimary: CupertinoColors.activeBlue,
-                // inactiveColorPrimary: CupertinoColors.systemGrey,
-            ),
-            PersistentBottomNavBarItem(
-                icon: Icon(Icons.person_outlined),
-                title: ("Settings"),
-                // activeColorPrimary: CupertinoColors.activeBlue,
-                // inactiveColorPrimary: CupertinoColors.systemGrey,
-            ),
-        ];
-    }
+    return [
+      HomePage(),
+      FavoritePage(),
+      MessagesPage(),
+      LoginView(),
+    ];
+  }
+
+  PersistentTabController _controller =
+      PersistentTabController(initialIndex: 0);
+  List<PersistentBottomNavBarItem> _navBarsItems() {
+    return [
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.search),
+        title: ("Explorer"),
+      ),
+      PersistentBottomNavBarItem(
+        inactiveIcon: Icon(Icons.favorite_border_outlined),
+        icon: Icon(Icons.favorite),
+        title: ("Favorite"),
+        // activeColorPrimary: CupertinoColors.activeBlue,
+        // inactiveColorPrimary: CupertinoColors.systemGrey,
+      ),
+      PersistentBottomNavBarItem(
+        inactiveIcon: Icon(Icons.chat_bubble_outline),
+        icon: Icon(Icons.chat_bubble),
+        title: ("Message"),
+
+        // activeColorPrimary: CupertinoColors.activeBlue,
+        // inactiveColorPrimary: CupertinoColors.systemGrey,
+      ),
+      PersistentBottomNavBarItem(
+        inactiveIcon: Icon(Icons.person_outlined),
+        icon: Icon(Icons.person),
+        title: ("Profile"),
+        // activeColorPrimary: CupertinoColors.activeBlue,
+        // inactiveColorPrimary: CupertinoColors.systemGrey,
+      ),
+    ];
+  }
+
   // List of widgets the Navigationbar contains
   // static List<Widget> _widgetOptions = <Widget>[
   //   HomePage(),
@@ -75,32 +79,37 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return PersistentTabView(
-        context,
-        controller: _controller,
-        screens: _buildScreens(),
-        items: _navBarsItems(),
-        confineInSafeArea: true,
-        backgroundColor: Colors.white, // Default is Colors.white.
-        handleAndroidBackButtonPress: true, // Default is true.
-        resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
-        stateManagement: true, // Default is true.
-        hideNavigationBarWhenKeyboardShows: true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
-        decoration: NavBarDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          colorBehindNavBar: Colors.white,
-        ),
-        popAllScreensOnTapOfSelectedTab: true,
-        popActionScreens: PopActionScreensType.all,
-        itemAnimationProperties: ItemAnimationProperties( // Navigation Bar's items animation properties.
-          duration: Duration(milliseconds: 200),
-          curve: Curves.ease,
-        ),
-        screenTransitionAnimation: ScreenTransitionAnimation( // Screen transition animation on change of selected tab.
-          animateTabTransition: true,
-          curve: Curves.ease,
-          duration: Duration(milliseconds: 200),
-        ),
-        navBarStyle: NavBarStyle.style3, // Choose the nav bar style with this property.
+      context,
+      controller: _controller,
+      screens: _buildScreens(),
+      items: _navBarsItems(),
+      confineInSafeArea: true,
+      backgroundColor: Colors.white, // Default is Colors.white.
+      handleAndroidBackButtonPress: true, // Default is true.
+      resizeToAvoidBottomInset:
+          true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
+      stateManagement: true, // Default is true.
+      hideNavigationBarWhenKeyboardShows:
+          true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
+      decoration: NavBarDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        colorBehindNavBar: Colors.white,
+      ),
+      popAllScreensOnTapOfSelectedTab: true,
+      popActionScreens: PopActionScreensType.all,
+      itemAnimationProperties: ItemAnimationProperties(
+        // Navigation Bar's items animation properties.
+        duration: Duration(milliseconds: 200),
+        curve: Curves.ease,
+      ),
+      screenTransitionAnimation: ScreenTransitionAnimation(
+        // Screen transition animation on change of selected tab.
+        animateTabTransition: true,
+        curve: Curves.ease,
+        duration: Duration(milliseconds: 200),
+      ),
+      navBarStyle:
+          NavBarStyle.style3, // Choose the nav bar style with this property.
     );
     // Scaffold(
     //   body: Center(

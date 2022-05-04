@@ -19,7 +19,7 @@ class _SearchPageState extends State<SearchPage> {
   late CameraPosition _kGooglePlex;
   late Set<Marker> mymarker;
   late var lat;
-  late  var lang;
+  late var lang;
   // late var place;
   late List<Placemark> placemarks;
   Future getposition() async {
@@ -36,7 +36,6 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<void> getLatAndLang() async {
     cl = await Geolocator.getCurrentPosition().then((value) => value);
-
     lat = cl.latitude;
     lang = cl.longitude;
 
@@ -51,9 +50,6 @@ class _SearchPageState extends State<SearchPage> {
       )
     };
     placemarks = await placemarkFromCoordinates(lat, lang);
-    // place =await placemarks[0].locality;
-    // print(lat);
-    // print(lang);
     setState(() {});
   }
 
@@ -67,7 +63,7 @@ class _SearchPageState extends State<SearchPage> {
   Completer<GoogleMapController> _controller = Completer();
   List<String> ButtonList = [
     "Apartment",
-    "House",
+    "Studio",
     "Villa",
     "For Rent",
     "For Sale"
@@ -79,11 +75,13 @@ class _SearchPageState extends State<SearchPage> {
       isloading = false;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     var devicedata = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: Column(
           children: [
             SizedBox(
@@ -92,7 +90,7 @@ class _SearchPageState extends State<SearchPage> {
             Padding(
               padding: const EdgeInsets.only(left: 10, bottom: 10),
               child: Row(
-                children: [
+                children: const [
                   Text(
                     'Current location',
                     style: TextStyle(color: Colors.grey),
@@ -106,23 +104,31 @@ class _SearchPageState extends State<SearchPage> {
                 children: [
                   Icon(
                     Icons.location_on,
-                    color: Colors.red,
+                    color: Colors.lightBlue[300],
                   ),
                   Text(
-                    'Algeria , ' ,
+                    'Algeria , ',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   )
                 ],
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(10),
-              child: TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.search),
-                  labelText: 'what are you looking for ? ',
-                ),
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.search),
+                        labelText: 'what are you looking for ? ',
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: () {}, icon: Icon(Icons.filter_list_rounded)),
+                ],
               ),
             ),
             Container(
@@ -141,8 +147,8 @@ class _SearchPageState extends State<SearchPage> {
                       );
                     })),
             Expanded(
-              child: isloading  ?
-                   MapLoadingWidget()
+              child: isloading
+                  ? MapLoadingWidget()
                   : Container(
                       margin: EdgeInsets.all(10),
                       width: double.infinity,

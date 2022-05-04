@@ -1,38 +1,59 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names
 
 import 'dart:async';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
-
-import 'package:projet_fin_etude/Widgets/announcewidget.dart';
+import 'package:http/http.dart';
+import 'package:projet_fin_etude/Controllers/announcecontroller.dart';
+import 'package:projet_fin_etude/Controllers/connection.dart';
+import 'package:projet_fin_etude/Widgets/announceloading.dart';
 import 'package:projet_fin_etude/Widgets/comment.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_map/flutter_map.dart' as fluttermap;
+import 'package:latlong2/latlong.dart' as latLng;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
 class AnnounceDetails extends StatefulWidget {
-  const AnnounceDetails({Key? key}) : super(key: key);
-
+  final announce_id;
+  const AnnounceDetails({Key? key, required this.announce_id})
+      : super(key: key);
   @override
   _AnnounceDetailsState createState() => _AnnounceDetailsState();
 }
 
 class _AnnounceDetailsState extends State<AnnounceDetails> {
-  List announceImages = [
-    AssetImage('Assets/images/banner.jpg'),
-    AssetImage('Assets/images/house.jfif'),
-    AssetImage('Assets/images/house.png'),
-    AssetImage('Assets/images/banner.jfif'),
-    AssetImage('Assets/images/banner.jpg'),
-    AssetImage('Assets/images/house.jfif'),
-    AssetImage('Assets/images/house.png'),
-  ];
+  dynamic _details;
+  String _phone = '';
+  List announceImages = [];
+  List<Placemark> placemarks1 = [];
+
+  LoadDetails() async {
+    Response response =
+        await AnnounceController().getAnnounce(widget.announce_id);
+
+    setState(() {
+      _details = json.decode(response.body);
+    });
+    // add agency phone number
+    _phone = _details[0]['agency']['phone_number'].toString();
+    placemarks1 = await placemarkFromCoordinates(34.724931, 8.059845);
+    setState(() {
+      placemarks1;
+    });
+    // add the images form response to show it later
+    List images = _details[0]['images'].toList();
+    for (int i = 0; i < images.length; i++) {
+      announceImages.add(images[i]);
+    }
+  }
+
   int index = 0;
   bool _hasCallSupport = false;
   Future<void>? _launched;
-  String _phone = '066472612';
+
   Future<void> _makePhoneCall(String phoneNumber) async {
     // Use `Uri` to ensure that `phoneNumber` is properly URL-encoded.
     // Just using 'tel:$phoneNumber' would create invalid URLs in some cases,
@@ -100,8 +121,9 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
         _hasCallSupport = result;
       });
     });
-    getposition();
-    getLatAndLang();
+    // getposition();
+    // getLatAndLang();
+    LoadDetails();
   }
 
   Completer<GoogleMapController> _controller = Completer();
@@ -142,224 +164,276 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
   @override
   Widget build(BuildContext context) {
     var devicedata = MediaQuery.of(context);
-    return Scaffold(
-      backgroundColor: Color(0xfff8f9fa),
-      appBar: AppBar(
-        backgroundColor: Color(0xfff8f9fa),
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          'Proprety Deatails',
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(
-                Icons.arrow_back_rounded,
-                color: Colors.black,
+    return _details == null
+        ? Announceloading()
+        : Scaffold(
+            backgroundColor: Color(0xfff8f9fa),
+            appBar: AppBar(
+              backgroundColor: Color(0xfff8f9fa),
+              elevation: 0,
+              centerTitle: true,
+              title: const Text(
+                'Proprety Deatails',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
               ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            );
-          },
-        ),
-        // leading:
-      ),
-      body: Center(
-        child: ListView(
-          padding: EdgeInsets.all(8),
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                    width: double.infinity,
-                    height: devicedata.size.height * 0.5,
-                    child: PageView.builder(
+              leading: Builder(
+                builder: (BuildContext context) {
+                  return IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_rounded,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+              ),
+              // leading:
+            ),
+            body: Center(
+              child: ListView(
+                padding: EdgeInsets.all(8),
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: devicedata.size.height * 0.5,
+                        child: PageView.builder(
+                            controller: controller,
+                            itemCount: announceImages.length,
+                            pageSnapping: true,
+                            itemBuilder: (context, i) {
+                              return Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Image(
+                                  image: NetworkImage(
+                                      baseUrl + announceImages[i]['url']),
+                                  fit: BoxFit.cover,
+                                  height: 200,
+                                  width: 250,
+                                ),
+                              );
+                            }),
+                      ),
+                      SmoothPageIndicator(
                         controller: controller,
-                        itemCount: announceImages.length,
-                        pageSnapping: true,
-                        itemBuilder: (context, i) {
-                          return Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Image(
-                              image: announceImages[i],
-                              fit: BoxFit.cover,
-                              height: 200,
-                              width: 250,
-                            ),
-                          );
-                        })),
-                SmoothPageIndicator(
-                  controller: controller,
-                  count: announceImages.length,
-                  effect: ScrollingDotsEffect(
-                    activeStrokeWidth: 2.6,
-                    activeDotScale: 1.3,
-                    maxVisibleDots: 5,
-                    radius: 10,
-                    spacing: 7,
-                    dotHeight: 6,
-                    dotWidth: 6,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: Text(
-                    'House in Le Toquet-Paris Plage',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40),
-                  child: Container(
-                    height: 60,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Wrap(
-                          spacing: 40,
+                        count: announceImages.length,
+                        effect: ScrollingDotsEffect(
+                          activeStrokeWidth: 2.6,
+                          activeDotScale: 1.3,
+                          maxVisibleDots: 5,
+                          radius: 10,
+                          spacing: 7,
+                          dotHeight: 6,
+                          dotWidth: 6,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        child: Text(
+                          _details[0]['title'],
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: Container(
+                          height: 60,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Wrap(
+                                spacing: 40,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: const [
+                                      Icon(
+                                        Icons.bed,
+                                      ),
+                                      Text('4 Bedrooms')
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: const [
+                                      Icon(
+                                        Icons.bed,
+                                      ),
+                                      Text('200m²'),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Icon(
-                                  Icons.bed,
-                                ),
-                                Text('4 Bedrooms')
-                              ],
+                            Text('Location',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 20)),
+                            SizedBox(
+                              height: devicedata.size.width * 0.03,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Icon(
-                                  Icons.bed,
-                                ),
-                                Text('200 sqft')
-                              ],
+                            Container(
+                              width: double.infinity,
+                              height: devicedata.size.height * 0.3,
+                              child: announcemap(context),
                             ),
+                            Text(placemarks1[0].locality! +
+                                ',' +
+                                placemarks1[0].country!)
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Container(
-                    width: double.infinity,
-                    height: devicedata.size.height * 0.3,
-                    child: lat == null
-                        ? SizedBox(
-                            height: 16,
-                            width: 16,
-                            child: Center(
-                                child: CircularProgressIndicator(
-                              strokeWidth: 1.5,
-                            )))
-                        : GoogleMap(
-                            markers: mymarker,
-                            mapType: MapType.normal,
-                            initialCameraPosition: _kGooglePlex,
-                            onMapCreated: (GoogleMapController controller) {
-                              _controller.complete(controller);
-                            },
+                  Divider(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Properties Details',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
                           ),
-                  ),
-                ),
-              ],
-            ),
-            Divider(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Properties Details',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20)),
-                    SizedBox(
-                      height: devicedata.size.width * 0.03,
+                          SizedBox(
+                            height: devicedata.size.width * 0.03,
+                          ),
+                          Text(
+                            _details[0]['description'],
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ).copyWith(color: Color(0xff94959b)),
+                          )
+                        ],
+                      ),
                     ),
-                    Text(
-                      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ).copyWith(color: Color(0xff94959b)),
-                    )
-                  ],
+                  ),
+                  Divider(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      child: Column(
+                        children: [
+                          Row(
+                            children: const [
+                              Text(
+                                'Comments',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 20),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: devicedata.size.width * 0.03,
+                          ),
+                          Comment(),
+                          Container(
+                            width: double.infinity,
+                            height: 50,
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.white, // Background color
+                              ),
+                              child: const Text('Add new comment +',
+                                  style: TextStyle(
+                                    color: Colors.black87,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                  )),
+                              onPressed: () => comment_alert(context),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            bottomNavigationBar: Container(
+              padding: EdgeInsets.all(0.0),
+              height: 70,
+              color: Color(0xfff8f9fa),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundImage:
+                      NetworkImage(baseUrl + _details[0]['agency']['image']),
+                ),
+                title: Text('Agency'),
+                subtitle: Text(_details[0]['agency']['name']),
+                trailing: IconButton(
+                  iconSize: 30,
+                  color: Colors.blue,
+                  icon: Icon(Icons.phone),
+                  onPressed: _hasCallSupport
+                      ? () => setState(() {
+                            _launched = _makePhoneCall(_phone);
+                          })
+                      : null,
                 ),
               ),
             ),
-            Divider(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Column(
-                  children: [
-                    Row(children: [
-                      Text('Comments',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20)),
-                    ]),
-                    SizedBox(
-                      height: devicedata.size.width * 0.03,
-                    ),
-                    Comment(),
-                    Container(
-                        width: double.infinity,
-                        height: 50,
-                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.white, // Background color
-                          ),
-                          child: const Text('Add new comment +',
-                              style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              )),
-                          onPressed: () => comment_alert(context),
-                        )),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.all(0.0),
-        height: 70,
-        color: Color(0xfff8f9fa),
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundImage: AssetImage('Assets/images/avatar.png'),
-          ),
-          title: Text('Agency'),
-          subtitle: Text('SARL Mobilier'),
-          trailing: IconButton(
-            iconSize: 30,
-            color: Colors.blue,
-            icon: Icon(Icons.phone),
-            onPressed: _hasCallSupport
-                ? () => setState(() {
-                      _launched = _makePhoneCall(_phone);
-                    })
-                : null,
-          ),
-        ),
-      ),
-    );
+          );
   }
+}
+
+Widget announcemap(BuildContext context) {
+  final location = latLng.LatLng(34.724931, 8.059845);
+  return Stack(
+    children: [
+      fluttermap.FlutterMap(
+        options: fluttermap.MapOptions(
+          minZoom: 10,
+          maxZoom: 16,
+          zoom: 15,
+          center: location,
+        ),
+        nonRotatedLayers: [
+          fluttermap.TileLayerOptions(
+              urlTemplate:
+                  'https://api.mapbox.com/styles/v1/islambelhardi/cl2mhadco004j14l42s8et3dg/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiaXNsYW1iZWxoYXJkaSIsImEiOiJjbDJtaDFzbnowbjIzM2luazQ4bWd6eDVkIn0.7UfDUhS-W8wqpmjeThO-6Q',
+              additionalOptions: {
+                'accessToken':
+                    'pk.eyJ1IjoiaXNsYW1iZWxoYXJkaSIsImEiOiJjbDJtaDFzbnowbjIzM2luazQ4bWd6eDVkIn0.7UfDUhS-W8wqpmjeThO-6Q',
+                'id': 'mapbox.mapbox-streets-v8',
+              }),
+          fluttermap.MarkerLayerOptions(
+            markers: [
+              fluttermap.Marker(
+                point: location,
+                builder: (_) {
+                  return Container(
+                    child: Image.asset('Assets/images/marker.png'),
+                  );
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    ],
+  );
 }

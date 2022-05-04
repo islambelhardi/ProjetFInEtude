@@ -15,4 +15,18 @@ class AnnounceController {
       print(e);
     }
   }
+  getAnnounce(id)async{
+    var url = Uri.parse(baseUrl + 'api/announce/show?id='+id.toString());
+    http.Response response = await http.get(url);
+    try {
+      if(response.statusCode==200){
+        return response;
+      }else{
+        print('failed to load announce');
+      }
+    } catch (e) {
+      print(e);
+    }
+    print(response.body);
+  }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
 
-
 class Comment extends StatefulWidget {
   Comment({Key? key}) : super(key: key);
 
@@ -32,18 +31,18 @@ class _CommentState extends State<Comment> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         backgroundImage: NetworkImage(
                             'https://scontent.fogx1-1.fna.fbcdn.net/v/t1.6435-9/80389008_464366174489481_380651642795589632_n.jpg?_nc_cat=104&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeE-ASAJ3WrGoRMsG1fMdE2qDD6YTYl6PVMMPphNiXo9UznoV1VEB_WJPVV2Ugw3wnb3YqlK7KkjgpnvwRhlyPDi&_nc_ohc=_i2Q_pptEFMAX9vJt57&_nc_ht=scontent.fogx1-1.fna&oh=00_AT_wMYgjnHaBCIcvC_CA5JRl64K7UWipmIj0BRFvjOM-Pw&oe=62759003'),
                         minRadius: 12,
                         maxRadius: 26,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 8,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: const [
                           Text('Islam belhardi',
                               style: TextStyle(
                                   fontSize: 16,
@@ -56,10 +55,10 @@ class _CommentState extends State<Comment> {
                         ],
                       )
                     ]),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
-                    ReadMoreText(
+                    const ReadMoreText(
                       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don',
                       trimLines: 4,
                       style: TextStyle(
@@ -73,12 +72,6 @@ class _CommentState extends State<Comment> {
                       moreStyle:
                           TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
-                    // Text(
-                    //     'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don',
-                    //     style: TextStyle(
-                    //         fontSize: 16,
-                    //         fontWeight: FontWeight.w400,
-                    //         color: Colors.black87))
                   ],
                 ),
               ),

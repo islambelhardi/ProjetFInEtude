@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:projet_fin_etude/Controllers/connection.dart';
 import 'package:projet_fin_etude/Widgets/announcedetails.dart';
 
 class AnnounceWidget extends StatefulWidget {
+  final AnnounceId;
   final String title;
   final String img;
   final String roomnumber;
@@ -13,6 +15,7 @@ class AnnounceWidget extends StatefulWidget {
   final String price;
   AnnounceWidget(
       {Key? key,
+      required this.AnnounceId,
       required this.title,
       required this.img,
       required this.roomnumber,
@@ -35,18 +38,28 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
 
   //when u click the announce widget the announcedtails shows up
   void _gotoAnnounceDetails(BuildContext context) {
-    Navigator.push(
+    pushNewScreen(
       context,
-      MaterialPageRoute<void>(
-        builder: (BuildContext context) => const AnnounceDetails(),
+      screen: AnnounceDetails(
+        announce_id: widget.AnnounceId,
       ),
+      withNavBar: false, // OPTIONAL VALUE. True by default.
+     pageTransitionAnimation: PageTransitionAnimation.cupertino,
     );
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute<void>(
+    //     builder: (BuildContext context) => AnnounceDetails(
+    //       announce_id: widget.AnnounceId,
+    //     ),
+    //   ),
+    // );
   }
 
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: 'herotag',
+      tag: widget.AnnounceId,
       child: GestureDetector(
         onTap: () => _gotoAnnounceDetails(context),
         child: Container(
@@ -77,7 +90,7 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(6.0),
-                        child: Image.network(baseUrl+widget.img),
+                        child: Image.network(baseUrl + widget.img),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -93,7 +106,7 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                                   borderRadius: BorderRadius.circular(8),
                                   color: Colors.grey.withOpacity(0.5)),
                               child: Text(
-                                'For'+widget.dealtype,
+                                'For' + widget.dealtype,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Color(0xff023e8a),
@@ -149,7 +162,7 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'DZD'+widget.price,
+                          'DZD ' + widget.price + ' Millions',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),
@@ -188,7 +201,7 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                                   color: Colors.black45,
                                 ),
                                 Text(
-                                  widget.roomnumber+'Bedrooms',
+                                  widget.roomnumber + 'Bedrooms',
                                   style: TextStyle(color: Colors.black45),
                                 )
                               ],
@@ -201,7 +214,7 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                                   color: Colors.black45,
                                 ),
                                 Text(
-                                  widget.surface+'m²',
+                                  widget.surface + 'm²',
                                   style: TextStyle(color: Colors.black45),
                                 )
                               ],

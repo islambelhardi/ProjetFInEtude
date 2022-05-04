@@ -6,6 +6,7 @@ import 'package:projet_fin_etude/Routes/messagespage.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:projet_fin_etude/Views/loginview.dart';
 import 'package:projet_fin_etude/Views/sigupview.dart';
+import 'package:projet_fin_etude/custom_icon_icons.dart';
 import 'explorepage.dart';
 
 class MainPage extends StatefulWidget {
@@ -35,47 +36,35 @@ class _MainPageState extends State<MainPage> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.search),
+        icon: Icon(Icons.search_outlined),
         title: ("Explorer"),
+        activeColorPrimary: Colors.blue,
+        inactiveColorPrimary: Colors.black87,
       ),
       PersistentBottomNavBarItem(
-        inactiveIcon: Icon(Icons.favorite_border_outlined),
+        inactiveIcon: Icon(Icons.favorite_border_rounded),
         icon: Icon(Icons.favorite),
         title: ("Favorite"),
-        // activeColorPrimary: CupertinoColors.activeBlue,
-        // inactiveColorPrimary: CupertinoColors.systemGrey,
+        activeColorPrimary: Colors.blue,
+        inactiveColorPrimary: Colors.black87,
       ),
       PersistentBottomNavBarItem(
         inactiveIcon: Icon(Icons.chat_bubble_outline),
         icon: Icon(Icons.chat_bubble),
         title: ("Message"),
-
-        // activeColorPrimary: CupertinoColors.activeBlue,
-        // inactiveColorPrimary: CupertinoColors.systemGrey,
+        activeColorPrimary: Colors.blue,
+        inactiveColorPrimary: Colors.black87,
       ),
       PersistentBottomNavBarItem(
-        inactiveIcon: Icon(Icons.person_outlined),
-        icon: Icon(Icons.person),
+        inactiveIcon: Icon(Icons.person_outline_rounded),
+        icon: Icon(Icons.person_rounded),
         title: ("Profile"),
-        // activeColorPrimary: CupertinoColors.activeBlue,
-        // inactiveColorPrimary: CupertinoColors.systemGrey,
+        activeColorPrimary: Colors.blue,
+        inactiveColorPrimary: Colors.black87,
       ),
     ];
   }
 
-  // List of widgets the Navigationbar contains
-  // static List<Widget> _widgetOptions = <Widget>[
-  //   HomePage(),
-  //   FavoritePage(),
-  //   MessagesPage(),
-  //   LoginView(),
-  // ];
-  // method to change to the selected widget
-  // void _onItemTapped(int index) {
-  //   setState(() {
-  //     _selectedIndex = index;
-  //   });
-  // }
   @override
   Widget build(BuildContext context) {
     return PersistentTabView(
@@ -84,7 +73,7 @@ class _MainPageState extends State<MainPage> {
       screens: _buildScreens(),
       items: _navBarsItems(),
       confineInSafeArea: true,
-      backgroundColor: Colors.white, // Default is Colors.white.
+      backgroundColor: Color(0xfff8f9fa), // Default is Colors.white.
       handleAndroidBackButtonPress: true, // Default is true.
       resizeToAvoidBottomInset:
           true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
@@ -93,7 +82,7 @@ class _MainPageState extends State<MainPage> {
           true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
       decoration: NavBarDecoration(
         borderRadius: BorderRadius.circular(10.0),
-        colorBehindNavBar: Colors.white,
+        colorBehindNavBar: Colors.transparent,
       ),
       popAllScreensOnTapOfSelectedTab: true,
       popActionScreens: PopActionScreensType.all,
@@ -109,42 +98,7 @@ class _MainPageState extends State<MainPage> {
         duration: Duration(milliseconds: 200),
       ),
       navBarStyle:
-          NavBarStyle.style3, // Choose the nav bar style with this property.
+          NavBarStyle.style6, // Choose the nav bar style with this property.
     );
-    // Scaffold(
-    //   body: Center(
-    //     // to display the selected page of the navigationbar
-    //     child: _widgetOptions.elementAt(_selectedIndex),
-    //   ),
-    //   bottomNavigationBar: BottomNavigationBar(
-    //     type: BottomNavigationBarType.fixed,
-    //     selectedItemColor: Colors.black,
-    //     backgroundColor: Colors.white,
-    //     items: [
-    //       BottomNavigationBarItem(
-    //         icon: _selectedIndex == 0 ? home : const Icon(Icons.search),
-    //         label: 'Explore ',
-    //       ),
-    //       BottomNavigationBarItem(
-    //         icon: _selectedIndex == 1
-    //             ? favorite
-    //             : Icon(Icons.favorite_border_outlined),
-    //         label: 'Favorite',
-    //       ),
-    //       BottomNavigationBarItem(
-    //         icon: _selectedIndex == 2
-    //             ? inbox
-    //             : const Icon(Icons.chat_bubble_outline),
-    //         label: 'Messages',
-    //       ),
-    //       BottomNavigationBarItem(
-    //         icon: _selectedIndex == 3 ? profile : Icon(Icons.person_outlined),
-    //         label: 'Profile',
-    //       )
-    //     ],
-    //     currentIndex: _selectedIndex,
-    //     onTap: _onItemTapped,
-    //   ),
-    // );
   }
 }

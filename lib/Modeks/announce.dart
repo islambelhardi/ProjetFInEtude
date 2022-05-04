@@ -1,5 +1,5 @@
 class Announce {
-  int id;
+  dynamic id;
   String title;
   String description;
   String dealtype;

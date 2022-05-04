@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
 
   var sellinglist = <Announce>[];
   _getsellannounces() {
-    AnnounceController().getAnnouncesdetails('forrent').then((response) {
+    AnnounceController().getAnnouncesdetails('forsell').then((response) {
       Iterable list = json.decode(response.body);
       try {
         sellinglist = list.map((model) => Announce.fromJson(model)).toList();
@@ -60,68 +60,69 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Scaffold(
           backgroundColor: Color(0xfff8f9fa),
-          body: CustomScrollView(
-            slivers: [
-              // app bar that shows a banner and search button
-              SliverAppBar(
-                // backgroundColor: Colors.black,
-                backgroundColor: Color(0xfff8f9fa),
-                expandedHeight: 295,
-                toolbarHeight: 80,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Image.asset('Assets/images/Discover.png'),
+          body: RefreshIndicator(
+            onRefresh: () async{
+              _getrentannounces();
+              _getsellannounces();
+              throw'null';
+            },
+            child: CustomScrollView(
+              slivers: [
+                // app bar that shows a banner and search button
+                SliverAppBar(
+                  // backgroundColor: Colors.black,
+                  backgroundColor: Color(0xfff8f9fa),
+                  expandedHeight: 295,
+                  toolbarHeight: 80,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Image.asset('Assets/images/Discover.png'),
+                  ),
+                  pinned: true,
+                  elevation: 0,
+                  centerTitle: true,
+                  // made the title a search button
+                  title: Padding(
+                    padding: const EdgeInsets.only(top: 40, bottom: 40),
+                    child: ElevatedButton.icon(
+                        icon: Icon(
+                          Icons.search,
+                          color: Colors.black,
+                        ),
+                        label: Text(
+                          'What are you looking for ?',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(vertical: 0),
+                          elevation: 0.5,
+                          primary: Colors.white,
+                          fixedSize: Size(400, 40),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          // backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                        ),
+                        onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (BuildContext context) =>
+                                    const SearchPage(),
+                              ),
+                            )),
+                  ),
                 ),
-                pinned: true,
-                elevation: 0,
-                centerTitle: true,
-                // made the title a search button
-                title: Padding(
-                  padding: const EdgeInsets.only(top: 40, bottom: 40),
-                  child: ElevatedButton.icon(
-                      icon: Icon(
-                        Icons.search,
-                        color: Colors.black,
-                      ),
-                      label: Text(
-                        'What are you looking for ?',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 0),
-                        elevation: 0.5,
-                        primary: Colors.white,
-                        fixedSize: Size(400, 40),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        // backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                      ),
-                      onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute<void>(
-                              builder: (BuildContext context) =>
-                                  const SearchPage(),
-                            ),
-                          )),
-                ),
-              ),
-              SliverList(
-                  delegate: SliverChildListDelegate([
-                sectiontitle(
-                  'Popular',
-                ),
-                AnnouncesRow(
-                  announces: sellinglist,
-                ),
-                sectiontitle(
-                  'For Rent',
-                ),
-                AnnouncesRow(announces: rentinglist),
-                sectiontitle(
-                  'For Sale',
-                ),
-                AnnouncesRow(announces: rentinglist),
-              ]))
-            ],
+                SliverList(
+                    delegate: SliverChildListDelegate([
+                  sectiontitle(
+                    'For Rent',
+                  ),
+                  AnnouncesRow(announces: rentinglist),
+                  sectiontitle(
+                    'For Sale',
+                  ),
+                  AnnouncesRow(announces: sellinglist),
+                ]))
+              ],
+            ),
           )),
     );
   }

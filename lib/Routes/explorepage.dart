@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:projet_fin_etude/Routes/maps_search.dart';
 import 'package:projet_fin_etude/Routes/searchpage.dart';
 import 'package:projet_fin_etude/Widgets/announcedetails.dart';
 import 'package:projet_fin_etude/Widgets/announcesrow.dart';
@@ -58,8 +59,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () => Navigator.push(
                             context,
                             MaterialPageRoute<void>(
-                              builder: (BuildContext context) =>
-                                  const SearchPage(),
+                              builder: (BuildContext context) => SearchPage(),
                             ),
                           )),
                 ),
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                 AnnouncesRow(),
                 SizedBox(
                   height: 30,
-                )
+                ),
               ]))
             ],
           )),

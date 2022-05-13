@@ -120,30 +120,15 @@ class _SearchPageState extends State<SearchPage> {
                 ],
               ),
             ),
-            // Padding(
-            //   padding: EdgeInsets.all(10),
-            //   child: TextField(
-            //     decoration: InputDecoration(
-            //       border: OutlineInputBorder(),
-            //       prefixIcon: Icon(Icons.search),
-            //       labelText: 'what are you looking for ? ',
-            //     ),
-            //   ),
-            // ),
-            SearchLocation(
-              apiKey: "AIzaSyD0MLw5kYq9egZ-e1JWF4NDRQjaaH1oHwc",
-              // The language of the autocompletion
-              language: 'en',
-              //Search only work for this specific country
-              country: 'BD',
-              onSelected: (Place place) async {
-                final geolocation = await place.geolocation;
-                final GoogleMapController controller = await _controller.future;
-                controller.animateCamera(
-                    CameraUpdate.newLatLng(geolocation?.coordinates));
-
-                // Will animate the GoogleMap camera, taking us to the selected position with an appropriate zoom
-              },
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.search),
+                  labelText: 'what are you looking for ? ',
+                ),
+              ),
             ),
             Container(
                 height: 50,

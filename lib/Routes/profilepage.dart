@@ -1,8 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:projet_fin_etude/Routes/edit_profile_page.dart';
 import 'package:projet_fin_etude/Routes/mainpage.dart';
 import 'package:projet_fin_etude/Controllers/authcontroller.dart';
 import 'package:projet_fin_etude/Views/loginview.dart';
@@ -45,7 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Center(
                       child: CircleAvatar(
                         backgroundImage: NetworkImage(
-                            'https://scontent.fogx1-2.fna.fbcdn.net/v/t39.30808-6/230343407_1439909299727515_7988115582448082082_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeFHu2J1N3AKQO0mMETWDqYBTLDW3V8kRbZMsNbdXyRFtnm3xfWvVvKeNA0_KSLHsv_fGjMeEHE3qITSpBsjifJc&_nc_ohc=fzkfEiCMLJUAX_qTi3p&tn=eoS-ofEnYkm8WG9a&_nc_ht=scontent.fogx1-2.fna&oh=00_AT8YXlLUoIj4SB9VCoHPyBzDy3BfU43xkWC5ZwkamcUmUw&oe=624CA209'),
+                            'https://scontent.fogx1-1.fna.fbcdn.net/v/t1.6435-9/80389008_464366174489481_380651642795589632_n.jpg?_nc_cat=104&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeE-ASAJ3WrGoRMsG1fMdE2qDD6YTYl6PVMMPphNiXo9UznoV1VEB_WJPVV2Ugw3wnb3YqlK7KkjgpnvwRhlyPDi&_nc_ohc=Ez67yqI-_qsAX_0uz8q&_nc_ht=scontent.fogx1-1.fna&oh=00_AT_WW1siVeEO_a4WEC56NWJ2nYRoYYYgHmb9CYDl1hFUQg&oe=62895683'),
                         minRadius: 12,
                         maxRadius: 36,
                       ),
@@ -65,7 +68,10 @@ class _ProfilePageState extends State<ProfilePage> {
               Divider(
                 color: Colors.black26,
               ),
-              _profilelist(Icons.person, ("Personal Data"), () {}),
+              _profilelist(Icons.person, ("Personal Data"), () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => EditProfilePage()));
+              }),
               _profilelist(Icons.settings, ("Settings"), () {}),
               _profilelist(
                   Icons.settings_input_antenna_sharp, ("E-Statement"), () {}),

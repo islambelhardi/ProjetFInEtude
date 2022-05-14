@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 class LoginView extends StatefulWidget {
-  // LoginView({Key? key}) : super(key: key);
+  const LoginView({Key? key}) : super(key: key);
 
   @override
   State<LoginView> createState() => _LoginViewState();
@@ -30,23 +30,26 @@ class _LoginViewState extends State<LoginView> {
   String _email = '';
   String _password = '';
   bool isChecked = false;
+  Map user={};
   // the login function
   Login() async {
     http.Response response = await AuthController.login(_email, _password);
     // Map responseMap = jsonDecode(response.body);
     if (response.statusCode == 200) {
-       print(json.decode(response.body));
+      //  print(json.decode(response.body));
       // showDialog(context: context, builder: (BuildContext dialogcontext){
       //   return AlertDialog(
       //     title: Text("Log in successful"),
       //   );
       // });
       var responsebody = jsonDecode(response.body);
+      user = responsebody['user'];
       AuthController.savetoken(responsebody['access token']);
-      print(responsebody['access token']);
+      print(user);
+      // print(responsebody['access token']);
       // Navigator.of(context).pushReplacement(
       //     MaterialPageRoute(builder: (context) => ProfilePage()));
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>ProfilePage()), (route) => false);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>ProfilePage(user: user,)), (route) => false);
     } else {
       showDialog(
           context: context,
@@ -76,7 +79,7 @@ class _LoginViewState extends State<LoginView> {
       // (route) => false);
       // Navigator.of(context).pushReplacement(
       //     MaterialPageRoute(builder: (context) => ProfilePage()));
-       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>ProfilePage()), (route) =>false);
+       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>ProfilePage(user: user,)), (route) =>false);
     }
   }
 

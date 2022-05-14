@@ -3,13 +3,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:projet_fin_etude/Controllers/announcecontroller.dart';
-import 'package:projet_fin_etude/Modeks/announce.dart';
+import 'package:projet_fin_etude/Models/announce.dart';
 import 'package:projet_fin_etude/Routes/searchpage.dart';
-import 'package:projet_fin_etude/Widgets/announcedetails.dart';
+
 import 'package:projet_fin_etude/Widgets/announcesrow.dart';
-import 'package:projet_fin_etude/Widgets/announcewidget.dart';
+
 import 'package:projet_fin_etude/Widgets/sectiontitle.dart';
-import 'package:projet_fin_etude/Widgets/headerwidget.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          backgroundColor: Color(0xfff8f9fa),
+          backgroundColor: Color.fromRGBO(255, 255, 255, 1),
           body: RefreshIndicator(
             onRefresh: () async{
               _getrentannounces();

@@ -46,14 +46,6 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
       withNavBar: false, // OPTIONAL VALUE. True by default.
      pageTransitionAnimation: PageTransitionAnimation.cupertino,
     );
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute<void>(
-    //     builder: (BuildContext context) => AnnounceDetails(
-    //       announce_id: widget.AnnounceId,
-    //     ),
-    //   ),
-    // );
   }
 
   @override

@@ -1,5 +1,6 @@
 class Announce {
   dynamic id;
+  String img;
   String title;
   String description;
   String dealtype;
@@ -10,6 +11,7 @@ class Announce {
   int viewsnumber;
   Announce(
       this.id,
+      this.img,
       this.title,
       this.description,
       this.dealtype,
@@ -20,6 +22,7 @@ class Announce {
       this.price);
   Announce.fromJson(Map json)
       : id = json['id'],
+        img=json['img'],
         title = json['title'],
         description = json['description'],
         dealtype = json['dealtype'],

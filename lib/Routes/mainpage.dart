@@ -2,11 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:projet_fin_etude/Routes/favoritepage.dart';
-import 'package:projet_fin_etude/Routes/messagespage.dart';
+
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:projet_fin_etude/Views/loginview.dart';
-import 'package:projet_fin_etude/Views/sigupview.dart';
-import 'package:projet_fin_etude/custom_icon_icons.dart';
+
 import 'explorepage.dart';
 
 class MainPage extends StatefulWidget {
@@ -17,50 +16,45 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
-  Icon home = Icon(Icons.search);
-  Icon favorite = Icon(Icons.favorite);
-  Icon inbox = Icon(Icons.chat_bubble);
-  Icon profile = Icon(Icons.person);
   List<Widget> _buildScreens() {
     return [
       HomePage(),
       FavoritePage(),
-      MessagesPage(),
+      
       LoginView(),
     ];
   }
 
-  PersistentTabController _controller =
+  final PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.search_outlined),
+        inactiveIcon: Icon(Icons.home_rounded),
+        icon: Icon(
+          Icons.home_rounded,
+        ),
         title: ("Explorer"),
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.black87,
+        activeColorPrimary: Color.fromRGBO(255, 255, 255, 1),
+        inactiveColorPrimary: Color.fromRGBO(204, 219, 220, 1),
       ),
       PersistentBottomNavBarItem(
-        inactiveIcon: Icon(Icons.favorite_border_rounded),
-        icon: Icon(Icons.favorite),
+        inactiveIcon: Icon(Icons.favorite_outline_rounded),
+        icon: Icon(Icons.favorite_rounded),
         title: ("Favorite"),
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.black87,
+        activeColorPrimary: Color.fromRGBO(255, 255, 255, 1),
+        inactiveColorPrimary: Color.fromRGBO(204, 219, 220, 1),
       ),
+      
       PersistentBottomNavBarItem(
-        inactiveIcon: Icon(Icons.chat_bubble_outline),
-        icon: Icon(Icons.chat_bubble),
-        title: ("Message"),
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.black87,
-      ),
-      PersistentBottomNavBarItem(
-        inactiveIcon: Icon(Icons.person_outline_rounded),
+        inactiveIcon: Icon(
+          Icons.person_outline_rounded,
+          size: 28,
+        ),
         icon: Icon(Icons.person_rounded),
         title: ("Profile"),
-        activeColorPrimary: Colors.blue,
-        inactiveColorPrimary: Colors.black87,
+        activeColorPrimary: Color.fromRGBO(255, 255, 255, 1),
+        inactiveColorPrimary: Color.fromRGBO(204, 219, 220, 1),
       ),
     ];
   }
@@ -73,13 +67,11 @@ class _MainPageState extends State<MainPage> {
       screens: _buildScreens(),
       items: _navBarsItems(),
       confineInSafeArea: true,
-      backgroundColor: Color(0xfff8f9fa), // Default is Colors.white.
-      handleAndroidBackButtonPress: true, // Default is true.
-      resizeToAvoidBottomInset:
-          true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
-      stateManagement: true, // Default is true.
-      hideNavigationBarWhenKeyboardShows:
-          true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
+      backgroundColor: Color.fromRGBO(20, 33, 61, 1),
+      handleAndroidBackButtonPress: true,
+      resizeToAvoidBottomInset: true,
+      stateManagement: true,
+      hideNavigationBarWhenKeyboardShows: true,
       decoration: NavBarDecoration(
         borderRadius: BorderRadius.circular(10.0),
         colorBehindNavBar: Colors.transparent,
@@ -98,7 +90,7 @@ class _MainPageState extends State<MainPage> {
         duration: Duration(milliseconds: 200),
       ),
       navBarStyle:
-          NavBarStyle.style6, // Choose the nav bar style with this property.
+          NavBarStyle.style8, // Choose the nav bar style with this property.
     );
   }
 }

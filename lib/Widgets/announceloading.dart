@@ -58,6 +58,16 @@ class _AnnounceloadingState extends State<Announceloading> {
           const SizedBox(
             height: 20,
           ),
+          Shimmer.fromColors(
+            child: Container(
+              color: Colors.black,
+              width: devicedata.size.width * 0.6,
+              height: devicedata.size.height * 0.03,
+              padding: const EdgeInsets.all(10.0),
+            ),
+            baseColor: Colors.grey[400]!,
+            highlightColor: Colors.grey[300]!,
+          ),
         ],
       ),
       bottomNavigationBar: Container(

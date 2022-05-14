@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:projet_fin_etude/Modeks/announce.dart';
+import 'package:projet_fin_etude/Models/announce.dart';
 import 'package:projet_fin_etude/Widgets/announcewidget.dart';
 
 class AnnouncesRow extends StatelessWidget {
@@ -21,7 +21,7 @@ class AnnouncesRow extends StatelessWidget {
               return AnnounceWidget(
                 AnnounceId: announces[index].id,
                 title: announces[index].title,
-                img: 'Announcesimages/1827782094.jpg',
+                img: announces[index].img,
                 roomnumber: announces[index].roomnumber.toString(),
                 surface: announces[index].surface.toString(),
                 dealtype: announces[index].dealtype,

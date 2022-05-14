@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:projet_fin_etude/Widgets/maploadingwidget.dart';
+import 'package:projet_fin_etude/custom_icon_icons.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -127,7 +128,7 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   ),
                   IconButton(
-                      onPressed: () {}, icon: Icon(Icons.filter_list_rounded)),
+                      onPressed: () {}, icon: Icon(CustomIcon.settings , size: 18,)),
                 ],
               ),
             ),
@@ -140,7 +141,7 @@ class _SearchPageState extends State<SearchPage> {
                     itemBuilder: (BuildContext ctxt, int index) {
                       return Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: new OutlinedButton(
+                        child: OutlinedButton(
                             style: OutlinedButton.styleFrom(),
                             onPressed: () {},
                             child: Text(ButtonList[index])),

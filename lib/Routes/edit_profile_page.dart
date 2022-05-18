@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison
+// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, unnecessary_new
 
 import 'dart:io';
 
@@ -13,21 +13,6 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  // File _profilePicFile = File('');
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
-
-  // // A simple usage of EditableImage.
-  // // This method gets called when trying to change an image.
-  // void _directUpdateImage(File? file) async {
-  //   if (file == null) return;
-
-  //   _profilePicFile = file;
-  //   setState(() {});
-  // }
   PickedFile? _imageFile;
   final ImagePicker _picker = ImagePicker();
   void takePhoto(ImageSource source) async {
@@ -40,6 +25,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   bool showPassword = false;
+  //start form contoller
+  TextEditingController full_name = new TextEditingController();
+  TextEditingController email = new TextEditingController();
+  TextEditingController password = new TextEditingController();
+  TextEditingController phone = new TextEditingController();
+
+  //end form controller
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,48 +72,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
             SizedBox(
               height: 15,
             ),
-            Center(child: imageProfile()
-
-                // EditableImage(
-                //   // Define the method that will run on the change process of the image.
-                //   onChange: (file) => _directUpdateImage(file),
-
-                //   // Define the source of the image.
-                //   image: _profilePicFile.existsSync()
-                //       ? Image.file(_profilePicFile, fit: BoxFit.cover)
-                //       : null,
-
-                //   // Define the size of EditableImage.
-                //   size: 150.0,
-
-                //   // Define the Theme of image picker.
-                //   imagePickerTheme: ThemeData(
-
-                //     // Define the default brightness and colors.
-                //     primaryColor: Colors.white,
-                //     shadowColor: Colors.transparent,
-                //     backgroundColor: Colors.white70,
-
-                //     // Define the default font family.
-                //     fontFamily: 'Georgia',
-                //   ),
-
-                //   // Define the border of the image if needed.
-                //   imageBorder:
-                //       Border.all(color: Colors.blue.shade900, width: 2.0),
-
-                //   // Define the border of the icon if needed.
-                //   editIconBorder:
-                //       Border.all(color: Colors.blue.shade900, width: 2.0),
-                // ),
-                ),
+            Center(child: imageProfile()),
             SizedBox(
               height: 35,
             ),
-            buildTextField("Full Name", "Islam belhardi", false),
-            buildTextField("E-mail", "tbessi@gmail.com", false),
-            buildTextField("Password", "********", true),
-            buildTextField("Phone", "0659035919", false),
+            buildTextField("Full Name", "Islam belhardi", false, full_name),
+            buildTextField("E-mail", "tbessi@gmail.com", false, email),
+            buildTextField("Password", "********", true, password),
+            buildTextField("Phone", "0659035919", false, phone),
             SizedBox(
               height: 25,
             ),
@@ -140,7 +98,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           color: Colors.black)),
                 ),
                 RaisedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    print(full_name);
+                    print(phone);
+                  },
                   color: Colors.blue.shade900,
                   padding: EdgeInsets.symmetric(horizontal: 50),
                   elevation: 2,
@@ -163,8 +124,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget buildTextField(
-      String labelText, String placeholder, bool isPasswordTextField) {
+  Widget buildTextField(String labelText, String placeholder,
+      bool isPasswordTextField, TextEditingController mycontroller) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Padding(
         padding: const EdgeInsets.all(8),
@@ -180,6 +141,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           borderRadius: BorderRadius.circular(6.0),
         ),
         child: TextFormField(
+          controller: mycontroller,
           obscureText: isPasswordTextField ? showPassword : false,
           decoration: InputDecoration(
             suffixIcon: isPasswordTextField

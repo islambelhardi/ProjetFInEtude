@@ -57,6 +57,10 @@ dependencies:
   place_picker: ^0.9.20-nullsafety
   google_maps_webservice: ^0.0.20-nullsafety.5
   google_maps_place_picker_mb: ^2.0.0-mb.17
+  csc_picker: ^0.2.6
+  country_state_city_picker: ^1.2.8
+  get: ^4.6.3
+  easy_localization: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -83,6 +87,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - Assets/images/
+    - Assets/translations/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

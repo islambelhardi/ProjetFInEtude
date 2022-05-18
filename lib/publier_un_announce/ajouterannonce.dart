@@ -2,11 +2,20 @@
 
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:projet_fin_etude/Routes/explorepage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:projet_fin_etude/Widgets/keys.dart';
 import 'package:projet_fin_etude/Widgets/placepicker.dart';
+import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:io' show Platform;
+
+// Your api key storage.
+
+import '../Widgets/state_picker.dart';
 
 class First_page_publier extends StatefulWidget {
   First_page_publier({Key? key}) : super(key: key);
@@ -24,19 +33,6 @@ class _First_page_publierState extends State<First_page_publier> {
       DropdownMenuItem(child: Text("Appartement"), value: "Appartement"),
     ];
     return menuItems;
-  }
-
-  List<DropdownMenuItem<String>> get dropdownItems2 {
-    List<DropdownMenuItem<String>> menuItems2 = [
-      DropdownMenuItem(child: Text("1"), value: "1"),
-      DropdownMenuItem(child: Text("2"), value: "2"),
-      DropdownMenuItem(child: Text("3"), value: "3"),
-      DropdownMenuItem(child: Text("4"), value: "4"),
-      DropdownMenuItem(child: Text("5"), value: "5"),
-      DropdownMenuItem(child: Text("6"), value: "6"),
-      DropdownMenuItem(child: Text("7"), value: "7"),
-    ];
-    return menuItems2;
   }
 
   String selectedValue = "Villa";
@@ -147,6 +143,84 @@ class _First_page_publierState extends State<First_page_publier> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8),
+                      child: Text("Place",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black87)),
+                    ),
+                    Row(children: [
+                      Container(
+                        width: 300,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          borderRadius: BorderRadius.circular(6.0),
+                        ),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            hintText: 'Villa on palm hbb',
+                            hintStyle: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ).copyWith(color: Color(0xff94959b)),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                          validator: (value) {},
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      GestureDetector(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            borderRadius: BorderRadius.circular(6.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Icon(
+                              Icons.location_on,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return PlacePicker(
+                                  apiKey: APIKeys.androidApiKey,
+                                  hintText: "Find a place ...",
+                                  searchingText: "Please wait ...",
+                                  selectText: "Select place",
+                                  outsideOfPickAreaText: "Place not in area",
+                                  initialPosition: PickerDemo.kInitialPosition,
+                                  useCurrentLocation: true,
+                                  selectInitialPosition: true,
+                                  usePinPointingSearch: true,
+                                  usePlaceDetailSearch: true,
+                                  zoomGesturesEnabled: true,
+                                  zoomControlsEnabled: true,
+                                  onPlacePicked: (PickResult result) {
+                                    print("==================");
+
+                                    print("==================");
+                                  },
+                                  onMapTypeChanged: (MapType mapType) {
+                                    print(
+                                        "Map type changed to ${mapType.toString()}");
+                                  },
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ]),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Text("Descreption",
                           style: TextStyle(
                               fontSize: 16,
@@ -215,7 +289,7 @@ class _First_page_publierState extends State<First_page_publier> {
                           fillColor: Color.fromARGB(255, 255, 255, 255),
                         ),
                         validator: (value) =>
-                            value == null ? "Select a country" : null,
+                            value == null ? "Select a category" : null,
                         dropdownColor: Color.fromARGB(255, 255, 255, 255),
                         value: selectedValue,
                         onChanged: (String? newValue) {
@@ -312,10 +386,8 @@ class _First_page_publierState extends State<First_page_publier> {
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.white)),
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        PickerDemo()));
+                              onPressed: () async {
+                                await context.setLocale(Locale('ar'));
                               },
                             )),
                       ],

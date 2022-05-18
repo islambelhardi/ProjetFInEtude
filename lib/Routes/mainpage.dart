@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:projet_fin_etude/Routes/favoritepage.dart';
 import 'package:projet_fin_etude/Routes/messagespage.dart';
@@ -8,7 +9,8 @@ import 'package:projet_fin_etude/Routes/profilepage.dart';
 
 import 'package:projet_fin_etude/Views/loginview.dart';
 import 'package:projet_fin_etude/Views/sigupview.dart';
-import 'package:projet_fin_etude/publier_un_announce/first_page_form.dart';
+import 'package:projet_fin_etude/publier_un_announce/ajouterannonce.dart';
+import 'package:projet_fin_etude/translations/local_keys.g.dart';
 import 'explorepage.dart';
 
 class MainPage extends StatefulWidget {
@@ -39,26 +41,26 @@ class _MainPageState extends State<MainPage> {
     return [
       PersistentBottomNavBarItem(
         icon: Icon(Icons.search),
-        title: ("Home"),
+        title: (LocaleKeys.Home.tr()),
         // activeColorPrimary: Color.activeBlue,
         // inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         inactiveIcon: Icon(Icons.favorite_border_outlined),
         icon: Icon(Icons.favorite),
-        title: ("Settings"),
+        title: (LocaleKeys.Setting.tr()),
         // activeColorPrimary: CupertinoColors.activeBlue,
         // inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.message_outlined),
-        title: ("Message"),
+        title: (LocaleKeys.message.tr()),
         // activeColorPrimary: CupertinoColors.activeBlue,
         // inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.person_outlined),
-        title: ("Settings"),
+        title: (LocaleKeys.Favorite.tr()),
         // activeColorPrimary: CupertinoColors.activeBlue,
         // inactiveColorPrimary: CupertinoColors.systemGrey,
       ),

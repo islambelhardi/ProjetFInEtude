@@ -1,12 +1,13 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:projet_fin_etude/Routes/maps_search.dart';
 import 'package:projet_fin_etude/Routes/searchpage.dart';
 import 'package:projet_fin_etude/Widgets/announcedetails.dart';
 import 'package:projet_fin_etude/Widgets/announcesrow.dart';
 import 'package:projet_fin_etude/Widgets/sectiontitle.dart';
 import 'package:projet_fin_etude/Widgets/headerwidget.dart';
+import 'package:projet_fin_etude/translations/local_keys.g.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -44,7 +45,7 @@ class _HomePageState extends State<HomePage> {
                         color: Colors.black,
                       ),
                       label: Text(
-                        'What are you looking for ?',
+                        LocaleKeys.what.tr(),
                         style: TextStyle(color: Colors.black),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -67,11 +68,11 @@ class _HomePageState extends State<HomePage> {
               SliverList(
                   delegate: SliverChildListDelegate([
                 sectiontitle(
-                  'Popular',
+                  LocaleKeys.Popular.tr(),
                 ),
                 AnnouncesRow(),
                 sectiontitle(
-                  'For Rent',
+                  LocaleKeys.For_rent.tr(),
                 ),
                 AnnouncesRow(),
                 SizedBox(

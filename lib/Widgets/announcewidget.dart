@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:projet_fin_etude/Widgets/announcedetails.dart';
+import 'package:projet_fin_etude/translations/local_keys.g.dart';
 
 class AnnounceWidget extends StatefulWidget {
-   AnnounceWidget({Key? key}) : super(key: key);
-    late String herotag;
+  AnnounceWidget({Key? key}) : super(key: key);
+  late String herotag;
   @override
   _AnnounceWidgetState createState() => _AnnounceWidgetState();
 }
@@ -77,7 +79,7 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                                   borderRadius: BorderRadius.circular(8),
                                   color: Colors.grey.withOpacity(0.5)),
                               child: Text(
-                                'For Rent',
+                                LocaleKeys.For_rent.tr(),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Color(0xff023e8a),
@@ -171,7 +173,10 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                                   Icons.bed,
                                   color: Colors.black45,
                                 ),
-                                Text('4 Bedrooms', style: TextStyle(color: Colors.black45),)
+                                Text(
+                                  LocaleKeys.Badroom.tr(),
+                                  style: TextStyle(color: Colors.black45),
+                                )
                               ],
                             ),
                             Row(
@@ -181,7 +186,10 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                                   Icons.fullscreen,
                                   color: Colors.black45,
                                 ),
-                                Text('200 sqft', style: TextStyle(color: Colors.black45),)
+                                Text(
+                                  '200 sqft',
+                                  style: TextStyle(color: Colors.black45),
+                                )
                               ],
                             ),
                           ],

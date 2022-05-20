@@ -9,6 +9,7 @@ import 'package:projet_fin_etude/Controllers/authcontroller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
 
@@ -25,31 +26,30 @@ class _LoginViewState extends State<LoginView> {
   }
 
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
-  
+
   final _formKey = GlobalKey<FormState>();
   String _email = '';
   String _password = '';
   bool isChecked = false;
-  Map user={};
+  Map user = {};
+  String userdetails = '';
   // the login function
   Login() async {
     http.Response response = await AuthController.login(_email, _password);
-    // Map responseMap = jsonDecode(response.body);
+    SharedPreferences pref = await SharedPreferences.getInstance();
     if (response.statusCode == 200) {
-      //  print(json.decode(response.body));
-      // showDialog(context: context, builder: (BuildContext dialogcontext){
-      //   return AlertDialog(
-      //     title: Text("Log in successful"),
-      //   );
-      // });
       var responsebody = jsonDecode(response.body);
       user = responsebody['user'];
+      userdetails = jsonEncode(responsebody['user']);
+      pref.setString('user', userdetails);
       AuthController.savetoken(responsebody['access token']);
-      print(user);
-      // print(responsebody['access token']);
-      // Navigator.of(context).pushReplacement(
-      //     MaterialPageRoute(builder: (context) => ProfilePage()));
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>ProfilePage(user: user,)), (route) => false);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProfilePage(
+                    user: user,
+                  )),
+          (route) => false);
     } else {
       showDialog(
           context: context,
@@ -68,18 +68,23 @@ class _LoginViewState extends State<LoginView> {
           });
     }
   }
-
+  bool isloged = false;
   Future checklogin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String? token = await pref.getString("access token");
     // check if the token is there and not null
     if (token != null) {
-      // Navigator.of(context).pushReplacement(
-      //     MaterialPageRoute(builder: (context) => ProfilePage()));
-      // (route) => false);
-      // Navigator.of(context).pushReplacement(
-      //     MaterialPageRoute(builder: (context) => ProfilePage()));
-       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>ProfilePage(user: user,)), (route) =>false);
+      String? encodedMap = pref.getString('user');
+      user = jsonDecode(encodedMap!);
+      isloged=true;
+      setState(() {});
+      // Navigator.pushAndRemoveUntil(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) => ProfilePage(
+      //               user: user,
+      //             )),
+      //     (route) => false);
     }
   }
 
@@ -87,15 +92,15 @@ class _LoginViewState extends State<LoginView> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    // var box = Hive.box('localbox');
     checklogin();
   }
 
-  bool isloged = false;
+
   @override
   Widget build(BuildContext context) {
     var devicedata = MediaQuery.of(context);
-    
-    return Scaffold(
+    return isloged? ProfilePage(user: user): Scaffold(
       resizeToAvoidBottomInset: true,
       body: SafeArea(
           child: Padding(
@@ -121,6 +126,7 @@ class _LoginViewState extends State<LoginView> {
           SizedBox(
             height: 48,
           ),
+          ElevatedButton(onPressed: () async {}, child: Text('test hive')),
           Form(
             key: _formKey,
             child: Column(
@@ -274,15 +280,14 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                         pushNewScreen(
-                              context,
-                              screen: SignupView(),
-                              withNavBar:
-                                  true, // OPTIONAL VALUE. True by default.
-                              pageTransitionAnimation:
-                                  PageTransitionAnimation.cupertino,
-                            );
-                          },
+                        pushNewScreen(
+                          context,
+                          screen: SignupView(),
+                          withNavBar: true, // OPTIONAL VALUE. True by default.
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino,
+                        );
+                      },
                       child: Text(
                         'Register',
                         style: TextStyle(

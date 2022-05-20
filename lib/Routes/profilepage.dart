@@ -65,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: Colors.black26,
               ),
               _profilelist(Icons.person, ("Edit Profile"), () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> EditProfilePage(user: widget.user,)));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> EditProfilePage()));
               }),
               _profilelist(Icons.settings, ("Settings"), () {}),
               _profilelist(

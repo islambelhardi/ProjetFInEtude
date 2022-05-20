@@ -5,11 +5,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:projet_fin_etude/Controllers/announcecontroller.dart';
+import 'package:projet_fin_etude/Controllers/authcontroller.dart';
 import 'package:projet_fin_etude/Controllers/connection.dart';
 import 'package:projet_fin_etude/Models/comment.dart';
+import 'package:projet_fin_etude/Views/loginview.dart';
 import 'package:projet_fin_etude/Widgets/announceloading.dart';
 import 'package:projet_fin_etude/Widgets/commentwidget.dart';
 import 'package:readmore/readmore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -52,12 +55,15 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
     }
     setState(() {});
   }
-  var comments=[];
-  loadComments()async{
+
+  var comments = [];
+  loadComments() async {
     await LoadDetails();
     try {
-      comments =_details.elementAt(0)['comments'].map((model)=>Comment.fromJson(model)).toList();
-
+      comments = _details
+          .elementAt(0)['comments']
+          .map((model) => Comment.fromJson(model))
+          .toList();
     } catch (e) {
       print(e);
     }
@@ -66,6 +72,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
       print(comment.username);
     }
   }
+
   int index = 0;
   bool _hasCallSupport = false;
   Future<void>? _launched;
@@ -129,7 +136,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
   // }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     // Check for phone call support.
     canLaunch('tel:123').then((bool result) {
@@ -160,12 +167,12 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
               decoration: InputDecoration(hintText: "Add new comment"),
             ),
             actions: <Widget>[
-              new FlatButton(
-                child: new Text('Add'),
+              ElevatedButton(
+                child: const Text('Add'),
                 onPressed: () {},
               ),
-              FlatButton(
-                child: new Text('Cancel'),
+              ElevatedButton(
+                child: const Text('Cancel'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -176,14 +183,22 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
   }
 
 //end allert dialog function
-  final controller = PageController(viewportFraction: 1, keepPage: true);
+  
+  void _closeEndDrawer() {
+    Navigator.of(context).pop();
+  }
 
+  final controller = PageController(viewportFraction: 1, keepPage: true);
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
   @override
   Widget build(BuildContext context) {
     var devicedata = MediaQuery.of(context);
     return _details == null
         ? Announceloading()
         : Scaffold(
+            drawerEnableOpenDragGesture: false,
+            endDrawer: customdrawer(BuildContext, _closeEndDrawer),
+            key: _key,
             backgroundColor: Colors.white,
             appBar: AppBar(
               backgroundColor: Colors.white,
@@ -210,258 +225,283 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
               ),
               // leading:
             ),
-            body: Center(
-              child: ListView(
-                padding: EdgeInsets.all(8),
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        width: double.infinity,
-                        height: devicedata.size.height * 0.5,
-                        child: PageView.builder(
-                            controller: controller,
-                            itemCount: announceImages.length,
-                            pageSnapping: true,
-                            itemBuilder: (context, i) {
-                              return Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Image(
-                                  image: NetworkImage(
-                                      baseUrl + announceImages[i]['url']),
-                                  fit: BoxFit.cover,
-                                  height: 200,
-                                  width: 250,
-                                ),
-                              );
-                            }),
-                      ),
-                      ElevatedButton(
-                          onPressed: () {
-                            loadComments();
-                          },
-                          child: Text('location')),
-                      SmoothPageIndicator(
-                        controller: controller,
-                        count: announceImages.length,
-                        effect: ScrollingDotsEffect(
-                          activeStrokeWidth: 2.6,
-                          activeDotScale: 1.3,
-                          maxVisibleDots: 5,
-                          radius: 10,
-                          spacing: 7,
-                          dotHeight: 6,
-                          dotWidth: 6,
+            body: Builder(builder: (ctx) {
+              return Center(
+                child: ListView(
+                  padding: EdgeInsets.all(8),
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 20,
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: Text(
-                          _details.elementAt(0)['title'],
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
+                        Container(
+                          width: double.infinity,
+                          height: devicedata.size.height * 0.5,
+                          child: PageView.builder(
+                              controller: controller,
+                              itemCount: announceImages.length,
+                              pageSnapping: true,
+                              itemBuilder: (context, i) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Image(
+                                    image: NetworkImage(
+                                        baseUrl + announceImages[i]['url']),
+                                    fit: BoxFit.cover,
+                                    height: 200,
+                                    width: 250,
+                                  ),
+                                );
+                              }),
                         ),
-                      ),
-                      Container(
-                        height: 60,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Wrap(
-                              spacing: 40,
-                              children: [
-                                Column(
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundColor: Colors.black12,
-                                      radius: 20,
-                                      child: Icon(
-                                        Icons.bed,
-                                        color: Colors.black54,
-                                        size: 30,
-                                      ),
-                                    ),
-                                    Text(_details.elementAt(0)['roomnumber'].toString() +
-                                        'Bedroom'),
-                                  ],
-                                ),
-                                Column(
-                                  children: const [
-                                    CircleAvatar(
-                                      backgroundColor: Colors.black12,
-                                      radius: 20,
-                                      child: Icon(
-                                        Icons.bathtub_outlined,
-                                        color: Colors.black54,
-                                        size: 30,
-                                      ),
-                                    ),
-                                    Text('1 Bathroom'),
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundColor: Colors.black12,
-                                      radius: 20,
-                                      child: Icon(
-                                        Icons.fullscreen,
-                                        color: Colors.black54,
-                                        size: 30,
-                                      ),
-                                    ),
-                                    Text(_details.elementAt(0)['surface'].toString() +
-                                        'm²'),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
+                        ElevatedButton(
+                            onPressed: () async {
+                              String? token = await AuthController.checklogin();
+                              print(token);
+                            },
+                            child: Text('location')),
+                        SmoothPageIndicator(
+                          controller: controller,
+                          count: announceImages.length,
+                          effect: ScrollingDotsEffect(
+                            activeStrokeWidth: 2.6,
+                            activeDotScale: 1.3,
+                            maxVisibleDots: 5,
+                            radius: 10,
+                            spacing: 7,
+                            dotHeight: 6,
+                            dotWidth: 6,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          child: Text(
+                            _details.elementAt(0)['title'],
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                        ),
+                        Container(
+                          height: 60,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Wrap(
+                                spacing: 40,
+                                children: [
+                                  Column(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor: Colors.black12,
+                                        radius: 20,
+                                        child: Icon(
+                                          Icons.bed,
+                                          color: Colors.black54,
+                                          size: 30,
+                                        ),
+                                      ),
+                                      Text(_details
+                                              .elementAt(0)['roomnumber']
+                                              .toString() +
+                                          'Bedroom'),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: const [
+                                      CircleAvatar(
+                                        backgroundColor: Colors.black12,
+                                        radius: 20,
+                                        child: Icon(
+                                          Icons.bathtub_outlined,
+                                          color: Colors.black54,
+                                          size: 30,
+                                        ),
+                                      ),
+                                      Text('1 Bathroom'),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor: Colors.black12,
+                                        radius: 20,
+                                        child: Icon(
+                                          Icons.fullscreen,
+                                          color: Colors.black54,
+                                          size: 30,
+                                        ),
+                                      ),
+                                      Text(_details
+                                              .elementAt(0)['surface']
+                                              .toString() +
+                                          'm²'),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Location',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20)),
+                              SizedBox(
+                                height: devicedata.size.width * 0.03,
+                              ),
+                              Container(
+                                width: double.infinity,
+                                height: devicedata.size.height * 0.3,
+                                child: announcemap(context, place),
+                              ),
+                              Container(
+                                child: placemarks1.isEmpty
+                                    ? Text('')
+                                    : Text(placemarks1[0].locality! +
+                                        ',' +
+                                        placemarks1[0].country!),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Divider(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Location',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20)),
+                            Text(
+                              'Details',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            ),
                             SizedBox(
                               height: devicedata.size.width * 0.03,
                             ),
-                            Container(
-                              width: double.infinity,
-                              height: devicedata.size.height * 0.3,
-                              child: announcemap(context, place),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Type'),
+                                Text(_details.elementAt(0)['propretytype'])
+                              ],
                             ),
-                            Container(
-                              child: placemarks1.isEmpty
-                                  ? Text('')
-                                  : Text(placemarks1[0].locality! +
-                                      ',' +
-                                      placemarks1[0].country!),
+                            Divider(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Purpose'),
+                                Text(_details.elementAt(0)['dealtype'])
+                              ],
+                            ),
+                            Divider(
+                              thickness: 1,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Price'),
+                                Text(_details.elementAt(0)['price'].toString() +
+                                    'Millions')
+                              ],
+                            ),
+                            Divider(
+                              thickness: 1,
+                            ),
+                            Text('Description'),
+                            SizedBox(
+                              height: devicedata.size.width * 0.03,
+                            ),
+                            ReadMoreText(
+                              _details.elementAt(0)['description'],
+                              trimLines: 4,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ).copyWith(color: Color(0xff94959b)),
                             )
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                  Divider(),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Details',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                          SizedBox(
-                            height: devicedata.size.width * 0.03,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Type'),
-                              Text(_details.elementAt(0)['propretytype'])
-                            ],
-                          ),
-                          Divider(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Purpose'),
-                              Text(_details.elementAt(0)['dealtype'])
-                            ],
-                          ),
-                          Divider(
-                            thickness: 1,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Price'),
-                              Text(_details.elementAt(0)['price'].toString() + 'Millions')
-                            ],
-                          ),
-                          Divider(
-                            thickness: 1,
-                          ),
-                          Text('Description'),
-                          SizedBox(
-                            height: devicedata.size.width * 0.03,
-                          ),
-                          ReadMoreText(
-                            _details.elementAt(0)['description'],
-                            trimLines: 4,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ).copyWith(color: Color(0xff94959b)),
-                          )
-                        ],
-                      ),
                     ),
-                  ),
-                  Divider(),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      child: Column(
-                        children: [
-                          Row(
-                            children: const [
-                              Text(
-                                'Comments',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: devicedata.size.width * 0.03,
-                          ),
-                          Container(child: comments.isEmpty? Text('no comment'):CommentWidget(comments: comments,),),
-                          
-                          Container(
-                            width: double.infinity,
-                            height: 50,
-                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.white, // Background color
-                              ),
-                              child: const Text('Add new comment +',
+                    Divider(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        child: Column(
+                          children: [
+                            Row(
+                              children: const [
+                                Text(
+                                  'Comments',
                                   style: TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  )),
-                              onPressed: () => comment_alert(context),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              height: devicedata.size.width * 0.03,
+                            ),
+                            Container(
+                              child: comments.isEmpty
+                                  ? Text('no comment')
+                                  : CommentWidget(
+                                      comments: comments,
+                                    ),
+                            ),
+                            Container(
+                              width: double.infinity,
+                              height: 50,
+                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.white, // Background color
+                                ),
+                                child: const Text('Add new comment +',
+                                    style: TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    )),
+                                onPressed: () async {
+                                  String? token =
+                                      await AuthController.checklogin();
+
+                                  if (token == null || token.isEmpty) {
+                                    _key.currentState!.openEndDrawer();
+                                    print('object');
+                                  } else {
+                                    comment_alert(context);
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  )
-                ],
-              ),
-            ),
+                    )
+                  ],
+                ),
+              );
+            }),
             bottomNavigationBar: Container(
               padding: EdgeInsets.all(0.0),
               height: 70,
               color: Color(0xfff8f9fa),
               child: ListTile(
                 leading: CircleAvatar(
-                  backgroundImage:
-                      NetworkImage(baseUrl + _details.elementAt(0)['agency']['image']),
+                  backgroundImage: NetworkImage(
+                      baseUrl + _details.elementAt(0)['agency']['image']),
                 ),
                 title: Text('Agency'),
                 subtitle: Text(_details.elementAt(0)['agency']['name']),
@@ -518,4 +558,26 @@ Widget announcemap(BuildContext context, Map place) {
       ),
     ],
   );
+}
+Widget customdrawer(BuildContext,Function()? closeEndDrawer){
+  return Container(
+              width: double.infinity,
+              child: Drawer(
+                child: Center(
+                  child: SafeArea(
+                    child: Scaffold(
+                      appBar: AppBar(
+                        elevation: 0,
+                        backgroundColor: Colors.white,
+                        leading: IconButton(
+                          icon: Icon(Icons.close_outlined,color: Colors.black,),
+                          onPressed: closeEndDrawer,
+                        ),
+                      ),
+                      body: LoginView()
+                    ),
+                  ),
+                ),
+              ),
+            );
 }

@@ -48,7 +48,7 @@ class AuthController {
   }
   //logout function
   static Future logout(String token) async {
-    var url = Uri.parse(baseUrl + 'api/logout');
+    var url = Uri.parse(baseUrl + 'api/user/logout');
     Map<String, String> headers = {
       'Content-Type': 'application/json;charset=UTF-8',
       'Authorization': 'Bearer $token',
@@ -59,5 +59,10 @@ class AuthController {
       headers: headers,
     );
     return response;
+  }
+  static Future<String?> checklogin()async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+  String?token =pref.getString("access token");
+    return token ;
   }
 }

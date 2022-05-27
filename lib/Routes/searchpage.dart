@@ -1,12 +1,15 @@
-// ignore_for_file: prefer_final_fields, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, unnecessary_null_comparison
+// ignore_for_file: prefer_final_fields, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, unnecessary_null_comparison, prefer_typing_uninitialized_variables
 
 import 'dart:async';
+// import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:projet_fin_etude/Widgets/filterannouncesheet.dart';
 import 'package:projet_fin_etude/Widgets/maploadingwidget.dart';
 import 'package:projet_fin_etude/custom_icon_icons.dart';
+// import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -128,7 +131,106 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   ),
                   IconButton(
-                      onPressed: () {}, icon: Icon(CustomIcon.settings , size: 18,)),
+                      onPressed: () {
+                        showModalBottomSheet(
+                            isDismissible: true,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            context: context,
+                            builder: (context) =>
+                                FilterAnnounce(context: context));
+                        // showMaterialModalBottomSheet(
+                        //   // backgroundColor: Colors.blue,
+                        //   shape: RoundedRectangleBorder(
+                        //       borderRadius: BorderRadius.circular(30)),
+                        //   context: context,
+                        //   builder: (context) => Container(
+                        //       decoration: BoxDecoration(
+                        //         // color: Colors.black,
+                        //         borderRadius: BorderRadius.circular(10),
+                        //       ),
+                        //       height: devicedata.size.height * 0.9,
+                        //       child: Column(
+                        //         children: [
+                        //           Padding(
+                        //             padding: EdgeInsets.only(left: 10, top: 5),
+                        //             child: Row(
+                        //               children: [
+                        //                 IconButton(
+                        //                     onPressed: () {
+                        //                       Navigator.pop(context);
+                        //                     },
+                        //                     icon: Icon(Icons.arrow_back)),
+                        //                 Text('Filters')
+                        //               ],
+                        //             ),
+                        //           ),
+                        //           ListView(
+                        //             padding: const EdgeInsets.all(8),
+                        //             children: <Widget>[
+                        //               Container(
+                        //                 height: 50,
+                        //                 color: Colors.amber[600],
+                        //                 child: const Center(
+                        //                     child: Text('Entry A')),
+                        //               ),
+                        //               Container(
+                        //                 height: 50,
+                        //                 color: Colors.amber[500],
+                        //                 child: const Center(
+                        //                     child: Text('Entry B')),
+                        //               ),
+                        //               Container(
+                        //                 height: 50,
+                        //                 color: Colors.amber[100],
+                        //                 child: const Center(
+                        //                     child: Text('Entry C')),
+                        //               ),
+                        //             ],
+                        //           )
+                        //           // SingleChildScrollView(
+                        //           //   child: Column(
+                        //           //     children: [
+                        //           //       Container(
+                        //           //         height:100,
+                        //           //         width: 200,
+                        //           //         color:Colors.black
+                        //           //       ),
+                        //           //       Container(
+                        //           //         height:100,
+                        //           //         width: 200,
+                        //           //         color:Colors.black
+                        //           //       ),
+                        //           //       Container(
+                        //           //         height:100,
+                        //           //         width: 200,
+                        //           //         color:Colors.black
+                        //           //       ),
+                        //           //       Container(
+                        //           //         height:100,
+                        //           //         width: 200,
+                        //           //         color:Colors.black
+                        //           //       ),Container(
+                        //           //         height:100,
+                        //           //         width: 200,
+                        //           //         color:Colors.black
+                        //           //       ),
+                        //           //       Container(
+                        //           //         height:500,
+                        //           //         width: 200,
+                        //           //         color:Colors.black
+                        //           //       ),
+                        //           //     ],
+                        //           //   ),
+                        //           // )
+                        //         ],
+                        //       )),
+                        // );
+                      },
+                      icon: Icon(
+                        CustomIcon.settings,
+                        size: 18,
+                      )),
                 ],
               ),
             ),
@@ -169,4 +271,63 @@ class _SearchPageState extends State<SearchPage> {
       ),
     );
   }
+
+  // Widget buildsheet() {
+  //   RangeValues values = RangeValues(1, 100);
+  //   RangeLabels labels = RangeLabels('1', "100");
+  //   return DraggableScrollableSheet(
+  //     initialChildSize: 0.8,
+  //     maxChildSize: 0.9,
+  //     minChildSize: 0.8,
+  //     builder: (_, controller) => Container(
+  //       decoration: BoxDecoration(
+  //           color: Colors.white,
+  //           borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+  //       padding: EdgeInsets.all(16),
+  //       child: ListView(
+  //         controller: controller,
+  //         children: [
+  //           Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             children: [
+  //               IconButton(
+  //                   onPressed: () {
+  //                     Navigator.pop(context);
+  //                   },
+  //                   icon: Icon(Icons.arrow_back)),
+  //               Text(
+  //                 'Filters',
+  //                 style: TextStyle(fontSize: 20),
+  //               ),
+  //               TextButton(onPressed: () {}, child: Text('apply'))
+  //             ],
+  //           ),
+  //           Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Text('Price Range'),
+  //               RangeSlider(
+  //                   divisions: 5,
+  //                   activeColor: Colors.red[700],
+  //                   inactiveColor: Colors.red[300],
+  //                   min: 1,
+  //                   max: 100,
+  //                   values: values,
+  //                   labels: labels,
+  //                   onChanged: (value) {
+  //                     print("START: ${value.start}, End: ${value.end}");
+  //                     setState(() {
+  //                       values = value;
+  //                       labels = RangeLabels(
+  //                           "${value.start.toInt().toString()}\$",
+  //                           "${value.start.toInt().toString()}\$");
+  //                     });
+  //                   }),
+  //             ],
+  //           )
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 }

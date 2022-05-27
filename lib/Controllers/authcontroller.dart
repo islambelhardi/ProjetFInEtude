@@ -36,7 +36,6 @@ class AuthController {
       headers: headers,
       body: body,
     );
-    print('object');
     return response;
   }
 

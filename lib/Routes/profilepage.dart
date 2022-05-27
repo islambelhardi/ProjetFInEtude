@@ -1,3 +1,4 @@
+// ignore_for_file: non_constant_identifier_names, await_only_futures, unused_local_variable, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -8,8 +9,8 @@ import 'package:projet_fin_etude/Widgets/editprofile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
-  final Map user ;
-  const ProfilePage({Key? key,required this.user}) : super(key: key);
+   Map user;
+   ProfilePage({Key? key, required this.user}) : super(key: key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -21,12 +22,15 @@ class _ProfilePageState extends State<ProfilePage> {
     String? token = await pref.getString("access token");
     http.Response response = await AuthController.logout(token!);
     bool cleared = await pref.clear();
-    pushNewScreen(
-      context,
-      screen: const LoginView(),
-      withNavBar: true, // OPTIONAL VALUE. True by default.
-      pageTransitionAnimation: PageTransitionAnimation.cupertino,
-    );
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) => LoginView()), (route) => false);
+    
+    // pushNewScreen(
+    //   context,
+    //   screen:LoginView(),
+    //   withNavBar: true, // OPTIONAL VALUE. True by default.
+    //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+    // );
   }
 
   @override
@@ -44,7 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     height: 100,
                     child: const Center(
                       child: CircleAvatar(
-                        backgroundImage:  AssetImage('Assets/images/user.png'),
+                        backgroundImage: AssetImage('Assets/images/user.png'),
                         minRadius: 12,
                         maxRadius: 36,
                       ),
@@ -65,9 +69,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: Colors.black26,
               ),
               _profilelist(Icons.person, ("Edit Profile"), () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> EditProfilePage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EditProfilePage()));
               }),
-              _profilelist(Icons.settings, ("Settings"), () {}),
+              _profilelist(Icons.password_outlined, ("Change Password"), () {}),
               _profilelist(
                   Icons.settings_input_antenna_sharp, ("E-Statement"), () {}),
               _profilelist(Icons.favorite, ("Favorite"), () {}),
@@ -83,9 +88,14 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-}
 
-Widget _profilelist(icon, text, press) {
+}
+Widget _agencyprofile(){
+  return const Scaffold(
+    
+  );
+}
+ Widget _profilelist(icon, text, press) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
     child: TextButton(

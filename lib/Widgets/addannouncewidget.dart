@@ -1,16 +1,18 @@
-// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, unused_element, prefer_const_literals_to_create_immutables, avoid_types_as_parameter_names
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, unused_element, prefer_const_literals_to_create_immutables, avoid_types_as_parameter_names, unused_import, camel_case_types, unused_field
 
+import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:projet_fin_etude/Constatnts/keys.dart';
+import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:map_location_picker/google_map_location_picker.dart';
+import 'package:map_location_picker/map_location_picker.dart';
 import 'package:projet_fin_etude/Controllers/announcecontroller.dart';
 import 'package:image_picker/image_picker.dart';
-
-import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart'
 import 'package:http/http.dart' as http;
-import 'package:projet_fin_etude/Widgets/placepicker.dart';
+import 'package:map_location_picker/generated/l10n.dart' as location_picker;
 
 class AddAnnounceWidget extends StatefulWidget {
   AddAnnounceWidget({Key? key}) : super(key: key);
@@ -55,6 +57,35 @@ class _First_page_publierState extends State<AddAnnounceWidget> {
   List<XFile>? imagefiles = [];
   List<XFile>? imagefilessaver;
   List<XFile>? imagefilessaver2;
+  String _platformVersion = 'Unknown';
+  static LocationResult? pickedLocation;
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlatformState() async {
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    // We also handle the message potentially returning null.
+    try {
+      platformVersion =
+          await MapLocationPicker.platformVersion ?? 'Unknown platform version';
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _platformVersion = platformVersion;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
 
   openImages() async {
     try {
@@ -68,10 +99,10 @@ class _First_page_publierState extends State<AddAnnounceWidget> {
           imagefiles;
         });
       } else {
-        print("No image is selected.");
+        // print("No image is selected.");
       }
     } catch (e) {
-      print("error while picking file.");
+      // print("error while picking file.");
     }
   }
 
@@ -87,6 +118,23 @@ class _First_page_publierState extends State<AddAnnounceWidget> {
         const SnackBar(content: Text('something went wrong ')),
       );
     }
+  }
+
+  List<Placemark> placemark = [];
+  String? place;
+  String ? coordinate;
+  getlocation(double lat, double lng) async {
+    placemark = await placemarkFromCoordinates(lat, lng);
+    coordinate= jsonEncode({'lat':'$lat','lng':'$lng'});
+    details['place']=coordinate!;
+    setState(() {
+      place = placemark[0].country! +
+          ',' +
+          placemark[0].locality! +
+          ',' +
+          placemark[0].name!;
+          details;
+    });
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -109,6 +157,11 @@ class _First_page_publierState extends State<AddAnnounceWidget> {
           child: SafeArea(
               child: ListView(
             children: [
+              ElevatedButton(onPressed: (){
+                // String test = jsonDecode(details['place']!);
+                // print(coordinate);
+                print(details['place']);
+              }, child: Text('data')),
               Container(
                   width: double.infinity,
                   height: 180,
@@ -129,26 +182,37 @@ class _First_page_publierState extends State<AddAnnounceWidget> {
               Divider(),
               imagefiles != null
                   ? Wrap(
+                      spacing: 12,
                       children: imagefiles!.map((imageone) {
                         return Stack(
-                          clipBehavior: Clip.none,
+                          fit: StackFit.loose,
+                          // clipBehavior: Clip.none,
                           alignment: AlignmentDirectional.topEnd,
                           children: [
-                            Card(
-                                child: Container(
-                              height: 100,
-                              width: 100,
-                              child: Image.file(File(imageone.path)),
-                            )),
-                            IconButton(
-                                onPressed: () {
-                                  imagefiles?.remove(imageone);
-                                  setState(() {});
-                                },
-                                icon: Icon(
-                                  Icons.close,
-                                  color: Colors.red,
-                                )),
+                           Container(
+                             margin: EdgeInsets.only(bottom: 10),
+                             width:120,
+                             height: 100,
+                              child:FittedBox(
+                                fit: BoxFit.fill,
+                                child: Image.file(
+                                 File(imageone.path),width:100,),
+                              ),
+                           ),
+                            Positioned(
+                              top:0,
+                              right: 0,
+                              child: IconButton(
+                                padding: EdgeInsets.all(0),
+                                  onPressed: () {
+                                    imagefiles?.remove(imageone);
+                                    setState(() {});
+                                  },
+                                  icon: Icon(
+                                    Icons.close,
+                                    color: Colors.red,
+                                  )),
+                            ),
                           ],
                         );
                       }).toList(),
@@ -194,68 +258,37 @@ class _First_page_publierState extends State<AddAnnounceWidget> {
                           },
                         ),
                       ),
-                      GestureDetector(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 255, 255, 255),
-                            borderRadius: BorderRadius.circular(6.0),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Icon(
-                              Icons.location_on,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PlacePicker(
-                                initialPosition: PickerDemo.kInitialPosition,
-                                apiKey: APIKeys.androidApiKey,
-
-                                onPlacePicked: (result) {
-                                  print(result.adrAddress);
-                                  Navigator.of(context).pop();
-                                },
-                                // initialPosition: HomePage.kInitialPosition,
-                                useCurrentLocation: true,
-                              ),
-                            ),
-                          );
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) {
-                          //       return PlacePicker(
-                          //         apiKey: APIKeys.androidApiKey,
-                          //         hintText: "Find a place ...",
-                          //         searchingText: "Please wait ...",
-                          //         selectText: "Select place",
-                          //         outsideOfPickAreaText: "Place not in area",
-                          //         initialPosition: PickerDemo.kInitialPosition,
-                          //         useCurrentLocation: true,
-                          //         selectInitialPosition: true,
-                          //         usePinPointingSearch: true,
-                          //         usePlaceDetailSearch: true,
-                          //         zoomGesturesEnabled: true,
-                          //         zoomControlsEnabled: true,
-                          //         onPlacePicked: (PickResult result) {
-                          //           print("==================");
-                          //           print(result.address);
-                          //           print("==================");
-                          //         },
-                          //         onMapTypeChanged: (MapType mapType) {
-                          //           print(
-                          //               "Map type changed to ${mapType.toString()}");
-                          //         },
-                          //       );
-                          //     },
-                          //   ),
-                          // );
-                        },
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(place ?? 'Your Proprety location!'),
+                          TextButton.icon(
+                              onPressed: () async {
+                                LocationResult? result =
+                                    await showLocationPicker(
+                                  context,
+                                  "AIzaSyD0MLw5kYq9egZ-e1JWF4NDRQjaaH1oHwc",
+                                  initialCenter:
+                                      const LatLng(31.1975844, 29.9598339),
+                                  myLocationButtonEnabled: true,
+                                  layersButtonEnabled: true,
+                                  desiredAccuracy:
+                                      LocationAccuracy.bestForNavigation,
+                                  countries: ['IN'],
+                                  language: 'en',
+                                  requiredGPS: true,
+                                );
+                                debugPrint("result = $result");
+                                setState(() {
+                                  pickedLocation = result;
+                                  place = getlocation(
+                                      pickedLocation!.latLng.latitude,
+                                      pickedLocation!.latLng.longitude);
+                                });
+                              },
+                              icon: Icon(Icons.location_on_rounded),
+                              label: Text('choose location')),
+                        ],
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8),
@@ -459,14 +492,7 @@ class _First_page_publierState extends State<AddAnnounceWidget> {
                                         fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                         color: Colors.red)),
-                                onPressed: () {
-                                  // for (var i = 0; i < details.length; i++) {
-                                  //   print(details[i]);
-                                  // }
-                                  details.forEach(
-                                      (k, v) => print("Key : $k, Value : $v"));
-                                  //  print(details['roomnumber']);
-                                },
+                                onPressed: () {},
                               )),
                           Spacer(
                             flex: 1,
@@ -490,24 +516,6 @@ class _First_page_publierState extends State<AddAnnounceWidget> {
                                 }
                               },
                               child: Text('Add Announce')),
-                          // Container(
-                          //     padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          //     child: ElevatedButton(
-                          //       style: ElevatedButton.styleFrom(
-                          //         primary:
-                          //             Colors.blue.shade900, // Background color
-                          //       ),
-                          //       child: const Text('ajouter',
-                          //           style: TextStyle(
-                          //               fontSize: 18,
-                          //               fontWeight: FontWeight.w600,
-                          //               color: Colors.white)),
-                          //       onPressed: () {
-                          //         Navigator.of(context).push(MaterialPageRoute(
-                          //             builder: (BuildContext context) =>
-                          //                 PickerDemo()));
-                          //       },
-                          //     )),
                         ],
                       ),
                       SizedBox(

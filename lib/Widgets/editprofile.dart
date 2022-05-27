@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, prefer_function_declarations_over_variables
+// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, prefer_function_declarations_over_variables, unnecessary_new, unused_field, prefer_collection_literals, unused_local_variable, prefer_if_null_operators
 
 import 'dart:convert';
 import 'dart:io';
@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:projet_fin_etude/Controllers/connection.dart';
 import 'package:projet_fin_etude/Controllers/usercontroller.dart';
-import 'package:projet_fin_etude/Routes/profilepage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,7 +44,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Map _details = {};
-  loaduserdetails() async {
+  var _formKey = GlobalKey<FormState>();
+  Future loaduserdetails() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String? token = pref.getString("access token");
     var url = Uri.parse(baseUrl + 'api/user/info');
@@ -54,7 +54,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
       url,
       headers: headers,
     );
-
     setState(() {
       _details = jsonDecode(response.body);
     });
@@ -63,32 +62,32 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String name = '';
   String email = '';
   String password = '';
-  TextEditingController nameController = new TextEditingController();
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passwordCotroller = new TextEditingController();
-  //email validator possible structure
-  String? Function(String email) emailValidator = (String email) {
-    if (email == null ||
-        email.isEmpty ||
-        EmailValidator.validate(email) == false) {
-      return 'email empty';
-    } else if (email.length < 3) {
-      return 'email short';
-    }
-    return null;
-  };
-  String? Function(String name) nameValidator = (String name) {
-    // if (name == null || name.isEmpty) {
-    //   this.name=name;
-    //   return 'email empty';
-    // } 
-    return null;
-  };
-
   modifyinfo(String name, String email, String password) async {
-    await UserController.modifyinfo(name, email, password);
+    var data = Map<String, String>();
+    data['name'] = name.isEmpty ? _details['name'] : name;
+    data['email'] = email.isEmpty ? _details['email'] : email;
+    data['password'] = password;
+    var response = await UserController.modifyinfo(data);
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(response.body)),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(response.body)),
+      );
+    }
   }
 
+  //set password visible/
+  bool passwordVisible = false;
+  void togglePassword() {
+    setState(() {
+      passwordVisible = !passwordVisible;
+    });
+  }
+
+  //set password visible/
   @override
   void initState() {
     // TODO: implement initState
@@ -96,122 +95,180 @@ class _EditProfilePageState extends State<EditProfilePage> {
     loaduserdetails();
   }
 
-  // @override
-  // void dispose() {
-  //   // TODO: implement dispose
-  //   super.dispose();
-  //   // widget.emailController.dispose();
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    print('closed');
+  }
 
-  // }
-
-  final _formKey = GlobalKey<FormState>();
   bool showPassword = false;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 1,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.green,
+    return _details.isEmpty
+        ? SafeArea(
+          child: Container(
+            color: Colors.white,
+            // child: Text('Something went wrong'),
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: Container(
-        padding: EdgeInsets.only(left: 16, top: 25, right: 16),
-        child: ListView(
-          children: [
-            Text(
-              "Edit Profile",
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Center(child: imageProfile()),
-            SizedBox(
-              height: 35,
-            ),
-            // Form(
-            //   key: _formKey,
-            //   child: Column(
-            //     children: [
-            //       buildTextField(
-            //         'name',
-            //         _details['name'] ?? '',
-            //         false,
-            //         nameController,
-            //         nameValidator
-            //       ),
-            //       buildTextField("E-mail", _details['email'] ?? '', false,
-            //           emailController, emailValidator),
-            //       buildTextField(
-            //           "Password", "********", true, passwordCotroller,nameValidator),
-            //       RaisedButton(
-            //         onPressed: () {
-            //           if ('email' == 'email') {
-            //             print(true);
-            //           } else {
-            //             print(false);
-            //           }
-            //           if (_formKey.currentState!.validate()) {
-            //             // If the form is valid, display a snackbar. In the real world,
-            //             // you'd often call a server or save the information in a database.
-            //             ScaffoldMessenger.of(context).showSnackBar(
-            //               const SnackBar(content: Text('Processing Data')),
-            //             );
-            //           }
-            //         },
-            //         color: Colors.blue.shade900,
-            //         padding: EdgeInsets.symmetric(horizontal: 50),
-            //         elevation: 2,
-            //         shape: RoundedRectangleBorder(
-            //             borderRadius: BorderRadius.circular(20)),
-            //         child: Text(
-            //           "SAVE",
-            //           style: TextStyle(
-            //               fontSize: 14,
-            //               letterSpacing: 2.2,
-            //               color: Colors.white),
-            //         ),
-            //       )
-            //     ],
-            //   ),
-            // ),
-            SizedBox(
-              height: 25,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                OutlineButton(
-                  padding: EdgeInsets.symmetric(horizontal: 50),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text("CANCEL",
-                      style: TextStyle(
-                          fontSize: 14,
-                          letterSpacing: 2.2,
-                          color: Colors.black)),
+        )
+        : Scaffold(
+            resizeToAvoidBottomInset: true,
+            appBar: AppBar(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              elevation: 1,
+              leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.green,
                 ),
-              ],
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
             ),
-            SizedBox(
-              height: 25,
-            )
-          ],
-        ),
-      ),
-    );
+            body: Container(
+              padding: EdgeInsets.only(left: 16, top: 25, right: 16),
+              child: ListView(
+                children: [
+                  Text(
+                    "Edit Profile",
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Center(child: imageProfile()),
+                  SizedBox(
+                    height: 35,
+                  ),
+                  Form(
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          initialValue:
+                              _details.isEmpty ? 'username' : _details['name'],
+                          onChanged: (value) => name = value,
+                        ),
+                        TextFormField(
+                          initialValue:
+                              _details.isEmpty ? 'email' : _details['email'],
+                          onChanged: (value) => email = value,
+                          validator: (value) {
+                            if (value == null ||
+                                value.isEmpty ||
+                                EmailValidator.validate(value) == false) {
+                              return 'Please enter a valid email';
+                            }
+                            return null;
+                          },
+                        ),
+                        TextFormField(
+                          obscureText: !passwordVisible,
+                          decoration: InputDecoration(
+                            hintText: 'Password',
+                            hintStyle: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ).copyWith(color: Color(0xff94959b)),
+                            suffixIcon: IconButton(
+                              color: Color(0xff94959b),
+                              splashRadius: 1,
+                              icon: Icon(passwordVisible
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined),
+                              onPressed: togglePassword,
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                          onChanged: (value) => password = value,
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Form(
+                  //   key: _formKey,
+                  //   child: Column(
+                  //     children: [
+                  //       buildTextField(
+                  //         'name',
+                  //         _details['name'] ?? '',
+                  //         false,
+                  //         nameController,
+                  //         nameValidator
+                  //       ),
+                  //       buildTextField("E-mail", _details['email'] ?? '', false,
+                  //           emailController, emailValidator),
+                  //       buildTextField(
+                  //           "Password", "********", true, passwordCotroller,nameValidator),
+                  //       RaisedButton(
+                  //         onPressed: () {
+                  //           if ('email' == 'email') {
+                  //             print(true);
+                  //           } else {
+                  //             print(false);
+                  //           }
+                  //           if (_formKey.currentState!.validate()) {
+                  //             // If the form is valid, display a snackbar. In the real world,
+                  //             // you'd often call a server or save the information in a database.
+                  //             ScaffoldMessenger.of(context).showSnackBar(
+                  //               const SnackBar(content: Text('Processing Data')),
+                  //             );
+                  //           }
+                  //         },
+                  //         color: Colors.blue.shade900,
+                  //         padding: EdgeInsets.symmetric(horizontal: 50),
+                  //         elevation: 2,
+                  //         shape: RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.circular(20)),
+                  //         child: Text(
+                  //           "SAVE",
+                  //           style: TextStyle(
+                  //               fontSize: 14,
+                  //               letterSpacing: 2.2,
+                  //               color: Colors.white),
+                  //         ),
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("CANCEL",
+                            style: TextStyle(
+                                fontSize: 14,
+                                letterSpacing: 2.2,
+                                color: Colors.black)),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          modifyinfo(name, email, password);
+                        },
+                        child: Text("Save",
+                            style: TextStyle(
+                                fontSize: 14,
+                                letterSpacing: 2.2,
+                                color: Colors.black)),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 25,
+                  )
+                ],
+              ),
+            ),
+          );
   }
 
   Widget buildTextField(
@@ -219,7 +276,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       String placeholder,
       bool isPasswordTextField,
       TextEditingController mycontroller,
-     String? Function(String?)? validator) {
+      String? Function(String?)? validator) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Padding(
         padding: const EdgeInsets.all(8),
@@ -313,9 +370,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         CircleAvatar(
             radius: 60.0,
             backgroundImage: _imageFile == null
-                ? NetworkImage(
-                        'https://scontent.fogx1-1.fna.fbcdn.net/v/t1.6435-9/80389008_464366174489481_380651642795589632_n.jpg?_nc_cat=104&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeE-ASAJ3WrGoRMsG1fMdE2qDD6YTYl6PVMMPphNiXo9UznoV1VEB_WJPVV2Ugw3wnb3YqlK7KkjgpnvwRhlyPDi&_nc_ohc=Ez67yqI-_qsAX_0uz8q&_nc_ht=scontent.fogx1-1.fna&oh=00_AT_WW1siVeEO_a4WEC56NWJ2nYRoYYYgHmb9CYDl1hFUQg&oe=62895683')
-                    as ImageProvider
+                ? AssetImage('Assets/images/user.png')as ImageProvider
                 : FileImage(
                     File(_imageFile!.path),
                   )),

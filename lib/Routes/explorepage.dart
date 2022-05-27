@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
       try {
         rentinglist = list.map((model) => Announce.fromJson(model)).toList();
       } catch (e) {
-        print(e);
+        // print(e);
       }
       setState(() {});
     });
@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
       try {
         sellinglist = list.map((model) => Announce.fromJson(model)).toList();
       } catch (e) {
-        print(e);
+        // print(e);
       }
 
       setState(() {});
@@ -71,10 +71,10 @@ class _HomePageState extends State<HomePage> {
                 SliverAppBar(
                   // backgroundColor: Colors.black,
                   backgroundColor: Color(0xfff8f9fa),
-                  expandedHeight: 295,
+                  expandedHeight: 270,
                   toolbarHeight: 80,
                   flexibleSpace: FlexibleSpaceBar(
-                    background: Image.asset('Assets/images/Discover.png'),
+                    background: Image.asset('Assets/images/Discover.png',fit: BoxFit.fill,),
                   ),
                   pinned: true,
                   elevation: 0,

@@ -1,9 +1,28 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
 
+import '../Controllers/connection.dart';
+
 class AnnounceHview extends StatefulWidget {
-  const AnnounceHview({Key? key}) : super(key: key);
+  final AnnounceId;
+  final String title;
+  final String img;
+  final String roomnumber;
+  final String surface;
+  final String dealtype;
+  final String price;
+  final  String propretytype;
+  AnnounceHview(
+      {Key? key,
+      required this.AnnounceId,
+      required this.title,
+      required this.img,
+      required this.roomnumber,
+      required this.surface,
+      required this.dealtype,
+      required this.price,required this.propretytype})
+      : super(key: key);
 
   @override
   State<AnnounceHview> createState() => _AnnounceHviewState();
@@ -41,12 +60,14 @@ class _AnnounceHviewState extends State<AnnounceHview> {
               Stack(
                 alignment: AlignmentDirectional.topEnd,
                 children: [
-                  Image.asset(
-                    'Assets/images/house.jpeg',
-                    fit: BoxFit.cover,
-                    height: 150,
-                    width: double.maxFinite,
-                  ),
+                  Image.network(
+                    baseUrl + widget.img,fit: BoxFit.contain, height: 150,width: double.maxFinite,),
+                  // Image.asset(
+                  //   'Assets/images/house.jpeg',
+                  //   fit: BoxFit.cover,
+                  //   height: 150,
+                  //   width: double.maxFinite,
+                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +82,7 @@ class _AnnounceHviewState extends State<AnnounceHview> {
                               borderRadius: BorderRadius.circular(8),
                               color: Colors.grey.withOpacity(0.6)),
                           child: Text(
-                            'For Rent',
+                            widget.dealtype,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Color(0xff023e8a),
@@ -113,7 +134,7 @@ class _AnnounceHviewState extends State<AnnounceHview> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                'House in Le Toquet-Paris Plage',
+                                widget.title,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 softWrap: true,
@@ -125,7 +146,7 @@ class _AnnounceHviewState extends State<AnnounceHview> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              'DZD 300 Million',
+                              widget.price+'\$',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),
@@ -161,13 +182,13 @@ class _AnnounceHviewState extends State<AnnounceHview> {
                               spacing: 10,
                               children: [
                                 Row(
-                                  children: const [
+                                  children: [
                                     Icon(
                                       Icons.house_outlined,
                                       color: Colors.black45,
                                     ),
                                     Text(
-                                      'Appartement',
+                                      widget.propretytype,
                                       style: TextStyle(color: Colors.black45),
                                     ),
                                   ],
@@ -181,7 +202,7 @@ class _AnnounceHviewState extends State<AnnounceHview> {
                                       color: Colors.black45,
                                     ),
                                     Text(
-                                      '4 Bedrooms',
+                                      widget.roomnumber+' Bedroom',
                                       style: TextStyle(color: Colors.black45),
                                     )
                                   ],
@@ -195,7 +216,7 @@ class _AnnounceHviewState extends State<AnnounceHview> {
                                       color: Colors.black45,
                                     ),
                                     Text(
-                                      '200 sqft',
+                                      widget.surface+'m²',
                                       style: TextStyle(color: Colors.black45),
                                     )
                                   ],

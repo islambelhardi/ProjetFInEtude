@@ -56,6 +56,10 @@ dependencies:
   path_provider: ^2.0.10
   place_picker: ^0.9.20-nullsafety
   google_maps_place_picker_mb: ^2.0.0-mb.18
+  map_location_picker: ^0.0.2
+  flutter_localizations:
+    sdk: flutter
+  modal_bottom_sheet: ^2.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

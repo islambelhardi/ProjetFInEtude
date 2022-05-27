@@ -4,14 +4,9 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'connection.dart';
 class UserController{
-  static Future <http.Response> modifyinfo(String name , String email ,String password)async{
+  static Future <http.Response> modifyinfo(Map data)async{
     SharedPreferences pref = await SharedPreferences.getInstance();
     String?token =pref.getString("access token");
-    Map data = {
-      "name": name,
-      "email": email,
-      "password": password,
-    };
     Map<String, String> headers = {
       'Content-Type': 'application/json;charset=UTF-8',
       'Authorization': 'Bearer $token',

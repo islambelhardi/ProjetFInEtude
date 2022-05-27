@@ -68,6 +68,23 @@ class _AnnounceloadingState extends State<Announceloading> {
             baseColor: Colors.grey[400]!,
             highlightColor: Colors.grey[300]!,
           ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: const [
+              CircleAvatar(
+                backgroundColor: Colors.grey,
+              ),
+              CircleAvatar(
+                backgroundColor: Colors.grey,
+              ),
+              CircleAvatar(
+                backgroundColor: Colors.grey,
+              )
+            ],
+          )
         ],
       ),
       bottomNavigationBar: Container(

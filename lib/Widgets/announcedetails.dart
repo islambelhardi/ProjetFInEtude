@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 import 'package:projet_fin_etude/Controllers/announcecontroller.dart';
 import 'package:projet_fin_etude/Controllers/authcontroller.dart';
 import 'package:projet_fin_etude/Controllers/connection.dart';
+import 'package:projet_fin_etude/Controllers/usercontroller.dart';
 import 'package:projet_fin_etude/Models/comment.dart';
 import 'package:projet_fin_etude/Views/loginview.dart';
 import 'package:projet_fin_etude/Widgets/announceloading.dart';
@@ -31,7 +32,7 @@ class AnnounceDetails extends StatefulWidget {
 }
 
 class _AnnounceDetailsState extends State<AnnounceDetails> {
-  late Iterable _details;
+  Iterable _details = [];
   String _phone = '';
   List announceImages = [];
   List<Placemark> placemarks1 = [];
@@ -47,7 +48,8 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
     _phone = _details.elementAt(0)['agency']['phone_number'].toString();
     place = (jsonDecode(_details.elementAt(0)['place']));
     placemarks1 = await placemarkFromCoordinates(
-        double.parse(place['lat']), double.parse(place['lng']));
+        double.parse(place['lat']), double.parse(place['lng']),
+        localeIdentifier: "en");
     // add the images form response to show it later
     List images = _details.elementAt(0)['images'].toList();
     for (int i = 0; i < images.length; i++) {
@@ -150,6 +152,11 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
     loadComments();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   Completer<GoogleMapController> _controller = Completer();
   //======================
   // end map thing
@@ -157,7 +164,8 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
   //alert dialog function
   TextEditingController _textFieldController = TextEditingController();
 
-  comment_alert(BuildContext context) async {
+  comment_alert(BuildContext context) {
+    late String content;
     return showDialog(
         context: context,
         builder: (context) {
@@ -165,14 +173,29 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
             title: Text('Add comment'),
             content: TextField(
               decoration: InputDecoration(hintText: "Add new comment"),
+              onChanged: (value) => content = value,
             ),
             actions: <Widget>[
               ElevatedButton(
                 child: const Text('Add'),
-                onPressed: () {},
+                onPressed: () async {
+                  SharedPreferences pref =
+                      await SharedPreferences.getInstance();
+                  String? token = pref.getString("access token");
+                  UserController.comment(content, widget.announce_id, token!);
+                  Navigator.pop(context, () {
+                    setState() {
+                      loadComments();
+                    }
+                  });
+                  //  Navigator.pop(context);
+                },
               ),
-              ElevatedButton(
-                child: const Text('Cancel'),
+              TextButton(
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(color: Colors.red),
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -183,7 +206,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
   }
 
 //end allert dialog function
-  
+
   void _closeEndDrawer() {
     Navigator.of(context).pop();
   }
@@ -193,14 +216,16 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
   @override
   Widget build(BuildContext context) {
     var devicedata = MediaQuery.of(context);
-    return _details == null
+    return _details.isEmpty
         ? Announceloading()
         : Scaffold(
-            drawerEnableOpenDragGesture: false,
+            // drawerEnableOpenDragGesture: false,
+            endDrawerEnableOpenDragGesture: false,
             endDrawer: customdrawer(BuildContext, _closeEndDrawer),
             key: _key,
             backgroundColor: Colors.white,
             appBar: AppBar(
+              automaticallyImplyLeading: false,
               backgroundColor: Colors.white,
               elevation: 0,
               centerTitle: true,
@@ -210,6 +235,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                   color: Colors.black,
                 ),
               ),
+              actions: <Widget>[Container()],
               leading: Builder(
                 builder: (BuildContext context) {
                   return IconButton(
@@ -256,12 +282,6 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                                 );
                               }),
                         ),
-                        ElevatedButton(
-                            onPressed: () async {
-                              String? token = await AuthController.checklogin();
-                              print(token);
-                            },
-                            child: Text('location')),
                         SmoothPageIndicator(
                           controller: controller,
                           count: announceImages.length,
@@ -308,20 +328,20 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                                           'Bedroom'),
                                     ],
                                   ),
-                                  Column(
-                                    children: const [
-                                      CircleAvatar(
-                                        backgroundColor: Colors.black12,
-                                        radius: 20,
-                                        child: Icon(
-                                          Icons.bathtub_outlined,
-                                          color: Colors.black54,
-                                          size: 30,
-                                        ),
-                                      ),
-                                      Text('1 Bathroom'),
-                                    ],
-                                  ),
+                                  // Column(
+                                  //   children: const [
+                                  //     CircleAvatar(
+                                  //       backgroundColor: Colors.black12,
+                                  //       radius: 20,
+                                  //       child: Icon(
+                                  //         Icons.bathtub_outlined,
+                                  //         color: Colors.black54,
+                                  //         size: 30,
+                                  //       ),
+                                  //     ),
+                                  //     Text('1 Bathroom'),
+                                  //   ],
+                                  // ),
                                   Column(
                                     children: [
                                       CircleAvatar(
@@ -476,10 +496,8 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                                 onPressed: () async {
                                   String? token =
                                       await AuthController.checklogin();
-
                                   if (token == null || token.isEmpty) {
                                     _key.currentState!.openEndDrawer();
-                                    print('object');
                                   } else {
                                     comment_alert(context);
                                   }
@@ -535,10 +553,10 @@ Widget announcemap(BuildContext context, Map place) {
         nonRotatedLayers: [
           fluttermap.TileLayerOptions(
               urlTemplate:
-                  'https://api.mapbox.com/styles/v1/islambelhardi/cl2mhadco004j14l42s8et3dg/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiaXNsYW1iZWxoYXJkaSIsImEiOiJjbDJtaDFzbnowbjIzM2luazQ4bWd6eDVkIn0.7UfDUhS-W8wqpmjeThO-6Q',
+                  'https://api.mapbox.com/styles/v1/islambelhardi/cl2mhadco004j14l42s8et3dg/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiaXNsYW1iZWxoYXJkaSIsImEiOiJjbDNtM2tqMTMwMHppM3BueTM2NHRoMnowIn0.4JvkXzrjgdzbFrvIEdCnTg',
               additionalOptions: {
                 'accessToken':
-                    'pk.eyJ1IjoiaXNsYW1iZWxoYXJkaSIsImEiOiJjbDJtaDFzbnowbjIzM2luazQ4bWd6eDVkIn0.7UfDUhS-W8wqpmjeThO-6Q',
+                    'pk.eyJ1IjoiaXNsYW1iZWxoYXJkaSIsImEiOiJjbDNtM2tqMTMwMHppM3BueTM2NHRoMnowIn0.4JvkXzrjgdzbFrvIEdCnTg',
                 'id': 'mapbox.mapbox-streets-v8',
               }),
           fluttermap.MarkerLayerOptions(
@@ -559,25 +577,30 @@ Widget announcemap(BuildContext context, Map place) {
     ],
   );
 }
-Widget customdrawer(BuildContext,Function()? closeEndDrawer){
+
+Widget customdrawer(BuildContext, Function()? closeEndDrawer) {
   return Container(
-              width: double.infinity,
-              child: Drawer(
-                child: Center(
-                  child: SafeArea(
-                    child: Scaffold(
-                      appBar: AppBar(
-                        elevation: 0,
-                        backgroundColor: Colors.white,
-                        leading: IconButton(
-                          icon: Icon(Icons.close_outlined,color: Colors.black,),
-                          onPressed: closeEndDrawer,
-                        ),
-                      ),
-                      body: LoginView()
-                    ),
+    width: double.infinity,
+    child: Drawer(
+      child: Center(
+        child: SafeArea(
+          child: Scaffold(
+              appBar: AppBar(
+                elevation: 0,
+                backgroundColor: Colors.white,
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.close_outlined,
+                    color: Colors.black,
                   ),
+                  onPressed: closeEndDrawer,
                 ),
               ),
-            );
+              body: LoginView(
+                redirect: false,
+              )),
+        ),
+      ),
+    ),
+  );
 }

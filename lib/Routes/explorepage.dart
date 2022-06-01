@@ -34,8 +34,9 @@ class _HomePageState extends State<HomePage> {
       try {
         rentinglist = list.map((model) => Announce.fromJson(model)).toList();
       } catch (e) {
-        // print(e);
+        print(e);
       }
+      print(response.body);
       setState(() {});
     });
   }

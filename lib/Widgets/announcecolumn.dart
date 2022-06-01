@@ -4,7 +4,8 @@ import 'package:projet_fin_etude/Views/announceHview.dart';
 
 class AnnounceColumn extends StatelessWidget {
   final List<Announce> announces;
-  const AnnounceColumn({Key? key, required this.announces}) : super(key: key);
+  bool? redirect;
+  AnnounceColumn({Key? key, required this.announces, this.redirect}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -23,6 +24,7 @@ class AnnounceColumn extends StatelessWidget {
                   dealtype: announces[index].dealtype,
                   price: announces[index].price.toString(),
                   propretytype: announces[index].propretytype,
+                  redirect: redirect,
                 );
               }),
       ),

@@ -1,22 +1,41 @@
-// ignore_for_file: non_constant_identifier_names, await_only_futures, unused_local_variable, sized_box_for_whitespace
+import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:flutter/material.dart';
 import 'package:projet_fin_etude/Controllers/authcontroller.dart';
+import 'package:projet_fin_etude/Controllers/usercontroller.dart';
+import 'package:projet_fin_etude/Routes/profilepage.dart';
 import 'package:projet_fin_etude/Views/loginview.dart';
-import 'package:projet_fin_etude/Widgets/editprofile.dart';
+import 'package:projet_fin_etude/Widgets/addannouncewidget.dart';
+import 'package:projet_fin_etude/Widgets/announcecolumn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfilePage extends StatefulWidget {
-   Map user;
-   ProfilePage({Key? key, required this.user}) : super(key: key);
+import '../Controllers/connection.dart';
+import '../Models/announce.dart';
+import '../Widgets/editprofile.dart';
+class AgencyProfilePage extends StatefulWidget {
+  Map agency;
+  AgencyProfilePage({Key? key,required this.agency}) : super(key: key);
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  State<AgencyProfilePage> createState() => _AgencyProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _AgencyProfilePageState extends State<AgencyProfilePage> {
+  var announcelist = <Announce>[];
+  loadagencyannounces()async{
+    http.Response response = await UserController.myannounces();
+    if (response.statusCode == 200) {
+      Iterable list = json.decode(response.body);
+      try {
+        announcelist = list.map((model) => Announce.fromJson(model)).toList();
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      print(response.body);
+    }
+  }
   Logout() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String? token = await pref.getString("access token");
@@ -25,7 +44,6 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(builder: (context) => LoginView()), (route) => false);
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,9 +57,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   Container(
                     width: 100,
                     height: 100,
-                    child: const Center(
+                    child: Center(
                       child: CircleAvatar(
-                        backgroundImage: AssetImage('Assets/images/user.png'),
+                        backgroundImage: NetworkImage(baseUrl+widget.agency['image']),
                         minRadius: 12,
                         maxRadius: 36,
                       ),
@@ -51,7 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       height: 100,
                       child: Center(
                         child: Text(
-                          widget.user['name'],
+                          widget.agency['name'],
                           style: const TextStyle(
                               fontSize: 22, fontWeight: FontWeight.bold),
                         ),
@@ -65,14 +83,26 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => EditProfilePage()));
               }),
-              _profilelist(Icons.password_outlined, ("Change Password"), () {}),
+              _profilelist(Icons.password_outlined, ("Change Password"), () {
+                 
+              }),
               _profilelist(
-                  Icons.settings_input_antenna_sharp, ("E-Statement"), () {}),
-              _profilelist(Icons.favorite, ("Favorite"), () {}),
+                  Icons.add_circle, ("Add Announce"), () {
+                    Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AddAnnounceWidget()));
+                  }),
+              _profilelist(Icons.list_outlined, ("My Announces"), () async{
+                await loadagencyannounces();
+                print(announcelist.length);
+                  Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AnnounceColumn(announces: announcelist,redirect: true,)));
+              }),
               const Divider(
                 color: Colors.black38,
               ),
-              _profilelist(Icons.language, ("Language"), () {}),
+              _profilelist(Icons.language, ("Language"), () {
+                print(widget.agency['image']);
+              }),
               _profilelist(Icons.comment_outlined, ("Our Handbook"), () {}),
               _profilelist(Icons.logout, ("Log Out"), () => Logout()),
             ],
@@ -81,12 +111,6 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-
-}
-Widget _agencyprofile(){
-  return const Scaffold(
-    
-  );
 }
  Widget _profilelist(icon, text, press) {
   return Padding(

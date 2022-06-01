@@ -50,17 +50,18 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
     placemarks1 = await placemarkFromCoordinates(
         double.parse(place['lat']), double.parse(place['lng']),
         localeIdentifier: "en");
-    // add the images form response to show it later
-    List images = _details.elementAt(0)['images'].toList();
-    for (int i = 0; i < images.length; i++) {
-      announceImages.add(images[i]);
-    }
-    setState(() {});
+    
+    
+    // for (int i = 0; i < images.length; i++) {
+    //   
+    // }
+    // setState(() {});
+    // print( _details.elementAt(0)['images'].toList());
   }
 
   var comments = [];
-  loadComments() async {
-    await LoadDetails();
+  loadComments()async {
+   await LoadDetails();
     try {
       comments = _details
           .elementAt(0)['comments']
@@ -69,10 +70,16 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
     } catch (e) {
       print(e);
     }
-    // print(_details.elementAt(0)['comments']);
-    for (var comment in comments) {
-      print(comment.username);
+    // add the images form response to show it later
+    List images = _details.elementAt(0)['images'];
+    for (var image in images) {
+      announceImages.add(image);
+      
     }
+    // print(_details.elementAt(0)['comments']);
+    setState(() {
+      
+    });
   }
 
   int index = 0;
@@ -155,6 +162,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
   @override
   void dispose() {
     super.dispose();
+    print('closed');
   }
 
   Completer<GoogleMapController> _controller = Completer();
@@ -262,6 +270,9 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                         SizedBox(
                           height: 20,
                         ),
+                        ElevatedButton(onPressed: (){
+                          print(comments.length);
+                        }, child: Text('data')),
                         Container(
                           width: double.infinity,
                           height: devicedata.size.height * 0.5,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:projet_fin_etude/Routes/agencyprofile.dart';
 import 'package:projet_fin_etude/Routes/mainpage.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:projet_fin_etude/Routes/searchpage.dart';
@@ -25,6 +26,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             
             useMaterial3: true),
-        home: MainPage());
+        home: SearchPage());
   }
 }

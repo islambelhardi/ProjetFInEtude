@@ -212,8 +212,7 @@ class _SignupViewState extends State<SignupView> {
                           }
                           return null;
                         },
-                      ),
-                      
+                      ),  
                     ),
                     SizedBox(
                       height: 12,

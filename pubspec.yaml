@@ -60,6 +60,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   modal_bottom_sheet: ^2.0.1
+  custom_info_window: ^1.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -40,4 +40,19 @@ class UserController{
     );
     return response;
   }
+  static Future<http.Response>myannounces()async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String?token =pref.getString("access token");
+    Map<String, String> headers = {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Authorization': 'Bearer $token',
+      'Charset': 'utf-8'
+    };
+    var url = Uri.parse(baseUrl + 'api/announce/myannounces');http.Response response = await http.get(
+      url,
+      headers: headers,
+    );
+    print(response.body);
+     return response;
+  }
 }

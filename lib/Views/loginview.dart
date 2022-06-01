@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:projet_fin_etude/Routes/agencyprofile.dart';
 import 'package:projet_fin_etude/Routes/profilepage.dart';
 import 'package:projet_fin_etude/Views/sigupview.dart';
 import 'package:projet_fin_etude/Controllers/authcontroller.dart';
@@ -34,6 +35,7 @@ class _LoginViewState extends State<LoginView> {
   bool isChecked = false;
   Map user = {};
   String userdetails = '';
+  String ? type;
   // the login function
   Login() async {
     http.Response response = await AuthController.login(_email, _password);
@@ -48,6 +50,13 @@ class _LoginViewState extends State<LoginView> {
         pref.setString('user', userdetails);
         //get the user data
         AuthController.savetoken(responsebody['access token']);
+        if(user['type']=='user'){
+          pref.setString('type', 'user');
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(user: user)),);
+        }else{
+          pref.setString('type', 'agency');
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => AgencyProfilePage(agency: user)),);
+        }
         // Navigator.pushReplacement<void, void>(
         //   context,
         //   MaterialPageRoute<void>(
@@ -56,7 +65,7 @@ class _LoginViewState extends State<LoginView> {
         //     ),
         //   ),
         // );
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(user: user)),);
+        
         // Navigator.pushAndRemoveUntil(
         //   context,
         //   MaterialPageRoute(builder: (context) => ProfilePage(user: user)),
@@ -93,6 +102,13 @@ class _LoginViewState extends State<LoginView> {
         pref.setString('user', userdetails);
         //get the user data
         AuthController.savetoken(responsebody['access token']);
+        if(user['type']=='user'){
+          pref.setString('type', 'user');
+          // Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(user: user)),);
+        }else{
+          pref.setString('type', 'agency');
+          // Navigator.of(context).push(MaterialPageRoute(builder: (context) => AgencyProfilePage(agency: user)),);
+        }
         Navigator.pop(context);
       } else {
         showDialog(
@@ -112,6 +128,7 @@ class _LoginViewState extends State<LoginView> {
             });
       }
     }
+    type= pref.getString('type');
   }
 
   bool isloged = false;
@@ -123,6 +140,7 @@ class _LoginViewState extends State<LoginView> {
       String? encodedMap = pref.getString('user');
       user = jsonDecode(encodedMap!);
       isloged = true;
+      type =pref.getString('type');
       setState(() {});
       // Navigator.pushAndRemoveUntil(
       //     context,
@@ -138,7 +156,6 @@ class _LoginViewState extends State<LoginView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // var box = Hive.box('localbox');
     checklogin();
   }
 
@@ -151,9 +168,13 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     var devicedata = MediaQuery.of(context);
-    return isloged
-        ? ProfilePage(user: user)
-        : Scaffold(
+    if(isloged && type=='user'){
+      return ProfilePage(user: user);
+    }else{
+      if(isloged && type == 'agency'){
+        return AgencyProfilePage(agency: user);
+      }else{
+        return  Scaffold(
             resizeToAvoidBottomInset: true,
             body: SafeArea(
                 child: Padding(
@@ -180,7 +201,11 @@ class _LoginViewState extends State<LoginView> {
                   height: 48,
                 ),
                 ElevatedButton(
-                    onPressed: () => print(widget.redirect),
+                    onPressed: ()async{
+                      SharedPreferences pref = await SharedPreferences.getInstance();
+                    String ? type = pref.getString('type');
+                    print(type);
+                    },
                     child: Text('data')),
                 Form(
                   key: _formKey,
@@ -382,5 +407,8 @@ class _LoginViewState extends State<LoginView> {
               ]),
             )),
           );
+      }
+    };
+    
   }
 }

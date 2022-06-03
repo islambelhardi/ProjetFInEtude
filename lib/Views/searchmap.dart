@@ -52,7 +52,7 @@ class _mapSearchState extends State<mapSearch> {
 
   void setCustomMarker() async {
     mapMarker = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(), 'assets/images/pin2.png');
+        const ImageConfiguration(), 'assets/images/pin2.png');
   }
 
   @override
@@ -106,8 +106,8 @@ class _mapSearchState extends State<mapSearch> {
                       height: 45,
                       width: 45,
                       child: Container(
-                        child: Center(
-                          child: Icon(
+                        child: const Center(
+                          child: const Icon(
                             Icons.arrow_back_ios,
                             color: Colors.black,
                             size: 27,
@@ -121,7 +121,7 @@ class _mapSearchState extends State<mapSearch> {
                               color: const Color(0xFF605F5F).withOpacity(0.1),
                               spreadRadius: 2,
                               blurRadius: 1,
-                              offset: Offset(2, 1),
+                              offset: const Offset(2, 1),
                             ),
                           ],
                         ),
@@ -215,12 +215,12 @@ Map<String, dynamic> ?place;
                                     Container(
                                       child: Row(
                                         children:  [
-                                          CircleAvatar(
+                                          const CircleAvatar(
                                             backgroundColor: Colors.white,
                                             radius: 15,
                                             child: Icon(Icons.bed_rounded,color: Colors.black,),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: 5,
                                           ),
                                           Text(
@@ -231,22 +231,19 @@ Map<String, dynamic> ?place;
                                           const SizedBox(
                                             width: 5,
                                           ),
-                                          // const CircleAvatar(
-                                          //   backgroundColor: Colors.white,
-                                          //   radius: 13,
-                                          //   child: Image(
-                                          //     image: AssetImage(
-                                          //         'assets/images/area.png'),
-                                          //   ),
-                                          // ),
-                                          SizedBox(
+                                          const CircleAvatar(
+                                            backgroundColor: Colors.white,
+                                            radius: 13,
+                                            child: Icon(Icons.fullscreen)
+                                          ),
+                                          const SizedBox(
                                             width: 5,
                                           ),
-                                          // Text(
-                                          //   _offerData[i]['size'],
-                                          //   style: TextStyle(
-                                          //       fontWeight: FontWeight.bold),
-                                          // ),
+                                          Text(
+                                            _offerData[i]['surface'].toString()+'m²',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -275,7 +272,7 @@ Map<String, dynamic> ?place;
                               color: const Color(0xFF605F5F).withOpacity(0.1),
                               spreadRadius: 2,
                               blurRadius: 1,
-                              offset: Offset(2, 1),
+                              offset: const Offset(2, 1),
                             ),
                           ],
                         ),

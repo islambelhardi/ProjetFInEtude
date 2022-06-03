@@ -14,13 +14,11 @@ import 'package:projet_fin_etude/Widgets/announceloading.dart';
 import 'package:projet_fin_etude/Widgets/commentwidget.dart';
 import 'package:readmore/readmore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_map/flutter_map.dart' as fluttermap;
 import 'package:latlong2/latlong.dart' as latLng;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
 class AnnounceDetails extends StatefulWidget {
@@ -50,18 +48,17 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
     placemarks1 = await placemarkFromCoordinates(
         double.parse(place['lat']), double.parse(place['lng']),
         localeIdentifier: "en");
-    
-    
+
     // for (int i = 0; i < images.length; i++) {
-    //   
+    //
     // }
     // setState(() {});
     // print( _details.elementAt(0)['images'].toList());
   }
 
   var comments = [];
-  loadComments()async {
-   await LoadDetails();
+  loadComments() async {
+    await LoadDetails();
     try {
       comments = _details
           .elementAt(0)['comments']
@@ -74,12 +71,9 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
     List images = _details.elementAt(0)['images'];
     for (var image in images) {
       announceImages.add(image);
-      
     }
     // print(_details.elementAt(0)['comments']);
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   int index = 0;
@@ -270,9 +264,6 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                         SizedBox(
                           height: 20,
                         ),
-                        ElevatedButton(onPressed: (){
-                          print(comments.length);
-                        }, child: Text('data')),
                         Container(
                           width: double.infinity,
                           height: devicedata.size.height * 0.5,

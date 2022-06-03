@@ -118,138 +118,138 @@ class _SearchPageState extends State<SearchPage> {
                 ],
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: Row(
-            //     children: [
-            //       Flexible(
-            //         child: TextField(
-            //           decoration: InputDecoration(
-            //             border: OutlineInputBorder(),
-            //             prefixIcon: Icon(Icons.search),
-            //             labelText: 'what are you looking for ? ',
-            //           ),
-            //         ),
-            //       ),
-            //       IconButton(
-            //           onPressed: () {
-            //             showModalBottomSheet(
-            //                 isDismissible: true,
-            //                 isScrollControlled: true,
-            //                 backgroundColor: Colors.transparent,
-            //                 context: context,
-            //                 builder: (context) =>
-            //                     FilterAnnounce(context: context));
-            //             // showMaterialModalBottomSheet(
-            //             //   // backgroundColor: Colors.blue,
-            //             //   shape: RoundedRectangleBorder(
-            //             //       borderRadius: BorderRadius.circular(30)),
-            //             //   context: context,
-            //             //   builder: (context) => Container(
-            //             //       decoration: BoxDecoration(
-            //             //         // color: Colors.black,
-            //             //         borderRadius: BorderRadius.circular(10),
-            //             //       ),
-            //             //       height: devicedata.size.height * 0.9,
-            //             //       child: Column(
-            //             //         children: [
-            //             //           Padding(
-            //             //             padding: EdgeInsets.only(left: 10, top: 5),
-            //             //             child: Row(
-            //             //               children: [
-            //             //                 IconButton(
-            //             //                     onPressed: () {
-            //             //                       Navigator.pop(context);
-            //             //                     },
-            //             //                     icon: Icon(Icons.arrow_back)),
-            //             //                 Text('Filters')
-            //             //               ],
-            //             //             ),
-            //             //           ),
-            //             //           ListView(
-            //             //             padding: const EdgeInsets.all(8),
-            //             //             children: <Widget>[
-            //             //               Container(
-            //             //                 height: 50,
-            //             //                 color: Colors.amber[600],
-            //             //                 child: const Center(
-            //             //                     child: Text('Entry A')),
-            //             //               ),
-            //             //               Container(
-            //             //                 height: 50,
-            //             //                 color: Colors.amber[500],
-            //             //                 child: const Center(
-            //             //                     child: Text('Entry B')),
-            //             //               ),
-            //             //               Container(
-            //             //                 height: 50,
-            //             //                 color: Colors.amber[100],
-            //             //                 child: const Center(
-            //             //                     child: Text('Entry C')),
-            //             //               ),
-            //             //             ],
-            //             //           )
-            //             //           // SingleChildScrollView(
-            //             //           //   child: Column(
-            //             //           //     children: [
-            //             //           //       Container(
-            //             //           //         height:100,
-            //             //           //         width: 200,
-            //             //           //         color:Colors.black
-            //             //           //       ),
-            //             //           //       Container(
-            //             //           //         height:100,
-            //             //           //         width: 200,
-            //             //           //         color:Colors.black
-            //             //           //       ),
-            //             //           //       Container(
-            //             //           //         height:100,
-            //             //           //         width: 200,
-            //             //           //         color:Colors.black
-            //             //           //       ),
-            //             //           //       Container(
-            //             //           //         height:100,
-            //             //           //         width: 200,
-            //             //           //         color:Colors.black
-            //             //           //       ),Container(
-            //             //           //         height:100,
-            //             //           //         width: 200,
-            //             //           //         color:Colors.black
-            //             //           //       ),
-            //             //           //       Container(
-            //             //           //         height:500,
-            //             //           //         width: 200,
-            //             //           //         color:Colors.black
-            //             //           //       ),
-            //             //           //     ],
-            //             //           //   ),
-            //             //           // )
-            //             //         ],
-            //             //       )),
-            //             // );
-            //           },
-            //           icon: Icon(
-            //             CustomIcon.settings,
-            //             size: 18,
-            //           )),
-            //     ],
-            //   ),
-            // ),
-            // Container(
-            //     height: 50,
-            //     child: ListView.builder(
-            //         padding: EdgeInsets.symmetric(horizontal: 10),
-            //         scrollDirection: Axis.horizontal,
-            //         itemCount: ButtonList.length,
-            //         itemBuilder: (BuildContext ctxt, int index) {
-            //           return Padding(
-            //             padding: const EdgeInsets.all(4.0),
-            //             child: OutlinedButton(
-            //                 style: OutlinedButton.styleFrom(),
-            //                 onPressed: () {},
-            //                 child: Text(ButtonList[index])),
-            //           );
-            //         })),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.search),
+                        labelText: 'what are you looking for ? ',
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        showModalBottomSheet(
+                            isDismissible: true,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            context: context,
+                            builder: (context) =>
+                                FilterAnnounce(context: context));
+                        // showMaterialModalBottomSheet(
+                        //   // backgroundColor: Colors.blue,
+                        //   shape: RoundedRectangleBorder(
+                        //       borderRadius: BorderRadius.circular(30)),
+                        //   context: context,
+                        //   builder: (context) => Container(
+                        //       decoration: BoxDecoration(
+                        //         // color: Colors.black,
+                        //         borderRadius: BorderRadius.circular(10),
+                        //       ),
+                        //       height: devicedata.size.height * 0.9,
+                        //       child: Column(
+                        //         children: [
+                        //           Padding(
+                        //             padding: EdgeInsets.only(left: 10, top: 5),
+                        //             child: Row(
+                        //               children: [
+                        //                 IconButton(
+                        //                     onPressed: () {
+                        //                       Navigator.pop(context);
+                        //                     },
+                        //                     icon: Icon(Icons.arrow_back)),
+                        //                 Text('Filters')
+                        //               ],
+                        //             ),
+                        //           ),
+                        //           ListView(
+                        //             padding: const EdgeInsets.all(8),
+                        //             children: <Widget>[
+                        //               Container(
+                        //                 height: 50,
+                        //                 color: Colors.amber[600],
+                        //                 child: const Center(
+                        //                     child: Text('Entry A')),
+                        //               ),
+                        //               Container(
+                        //                 height: 50,
+                        //                 color: Colors.amber[500],
+                        //                 child: const Center(
+                        //                     child: Text('Entry B')),
+                        //               ),
+                        //               Container(
+                        //                 height: 50,
+                        //                 color: Colors.amber[100],
+                        //                 child: const Center(
+                        //                     child: Text('Entry C')),
+                        //               ),
+                        //             ],
+                        //           )
+                        //           // SingleChildScrollView(
+                        //           //   child: Column(
+                        //           //     children: [
+                        //           //       Container(
+                        //           //         height:100,
+                        //           //         width: 200,
+                        //           //         color:Colors.black
+                        //           //       ),
+                        //           //       Container(
+                        //           //         height:100,
+                        //           //         width: 200,
+                        //           //         color:Colors.black
+                        //           //       ),
+                        //           //       Container(
+                        //           //         height:100,
+                        //           //         width: 200,
+                        //           //         color:Colors.black
+                        //           //       ),
+                        //           //       Container(
+                        //           //         height:100,
+                        //           //         width: 200,
+                        //           //         color:Colors.black
+                        //           //       ),Container(
+                        //           //         height:100,
+                        //           //         width: 200,
+                        //           //         color:Colors.black
+                        //           //       ),
+                        //           //       Container(
+                        //           //         height:500,
+                        //           //         width: 200,
+                        //           //         color:Colors.black
+                        //           //       ),
+                        //           //     ],
+                        //           //   ),
+                        //           // )
+                        //         ],
+                        //       )),
+                        // );
+                      },
+                      icon: Icon(
+                        CustomIcon.settings,
+                        size: 18,
+                      )),
+                ],
+              ),
+            ),
+            Container(
+                height: 50,
+                child: ListView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: ButtonList.length,
+                    itemBuilder: (BuildContext ctxt, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(),
+                            onPressed: () {},
+                            child: Text(ButtonList[index])),
+                      );
+                    })),
             Expanded(
               child: isloading
                   ? MapLoadingWidget()

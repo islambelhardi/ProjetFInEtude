@@ -79,4 +79,17 @@ class AnnounceController {
     http.Response response = await http.delete(url, headers: headers);
     return response;
   }
+  static Future modifyannounce(Map changes)async{
+    String?token =await AuthController.checklogin();
+    Map<String, String> headers = {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Authorization': 'Bearer $token',
+      'Charset': 'utf-8'
+    };
+    var url = Uri.parse(baseUrl + 'api/announce/modify');
+    var body = json.encode(changes);
+    print(body);
+    http.Response response = await http.post(url,body: body, headers: headers);
+    return response;
+  }
 }

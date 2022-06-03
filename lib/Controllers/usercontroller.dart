@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'connection.dart';
@@ -52,7 +51,6 @@ class UserController{
       url,
       headers: headers,
     );
-    print(response.body);
      return response;
   }
 }

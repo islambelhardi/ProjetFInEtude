@@ -157,11 +157,6 @@ class _First_page_publierState extends State<AddAnnounceWidget> {
           child: SafeArea(
               child: ListView(
             children: [
-              ElevatedButton(onPressed: (){
-                // String test = jsonDecode(details['place']!);
-                // print(coordinate);
-                print(details['place']);
-              }, child: Text('data')),
               Container(
                   width: double.infinity,
                   height: 180,

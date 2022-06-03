@@ -69,7 +69,7 @@ class _MainPageState extends State<MainPage> {
       backgroundColor: Color.fromRGBO(20, 33, 61, 1),
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: true,
-      stateManagement: false,
+      stateManagement: true,
       hideNavigationBarWhenKeyboardShows: true,
       decoration: NavBarDecoration(
         borderRadius: BorderRadius.circular(10.0),

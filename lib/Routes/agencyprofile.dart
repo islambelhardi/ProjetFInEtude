@@ -30,10 +30,9 @@ class _AgencyProfilePageState extends State<AgencyProfilePage> {
       try {
         announcelist = list.map((model) => Announce.fromJson(model)).toList();
       } catch (e) {
-        print(e);
       }
     } else {
-      print(response.body);
+      
     }
   }
   Logout() async {

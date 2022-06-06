@@ -5,11 +5,12 @@ import 'connection.dart';
 
 class AuthController {
   // signup function
-  static Future<http.Response> register(String name, String email, String password) async {
+  static Future<http.Response> register(String name, String email, String password,String type) async {
     Map data = {
       "name": name,
       "email": email,
       "password": password,
+      "type":type,
       //"password_confirmation":passwordConfirmation,
     };
     var body = json.encode(data);
@@ -23,7 +24,7 @@ class AuthController {
     // print(response.body);
     return response;
   }
-  // login function
+  // login function of the authcontroller
   static Future<http.Response> login(String email, String password) async {
     Map data = {
       "email": email,

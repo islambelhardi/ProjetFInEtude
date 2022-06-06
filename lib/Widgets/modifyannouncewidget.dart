@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, prefer_typing_uninitialized_variables, must_be_immutable, prefer_collection_literals, unused_local_variable
 
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart';
@@ -77,16 +78,6 @@ class _ModifyAnnounceWidgetState extends State<ModifyAnnounceWidget> {
     return menuItems2;
   }
 
-  // Map<String, dynamic> changes = {
-  //   'title': 'null',
-  //   'description': 'null',
-  //   'dealtype': 'null',
-  //   'propretytype': 'null',
-  //   'roomnumber': 'null',
-  //   'surface': 'null',
-  //   'price': 'null',
-  //   'place': 'null'
-  // };
   String title = '';
   String description = '';
   String dealtype = '';
@@ -95,7 +86,8 @@ class _ModifyAnnounceWidgetState extends State<ModifyAnnounceWidget> {
   String surface = '';
   String price = '';
   String selectedplace = '';
-  List<XFile>? imagefiles = [];
+  List<XFile> uploaded_images = [];
+  List<String> todeleteimages = [];
   modifyannounce(
       String title,
       String description,
@@ -104,9 +96,11 @@ class _ModifyAnnounceWidgetState extends State<ModifyAnnounceWidget> {
       String roomnumber,
       String surface,
       String price,
-      String selectedplace) async {
-    var changes = Map();
-    changes['id'] = widget.announce_id;
+      String selectedplace,
+      List<String>? todeleteimages,
+      List<XFile>? uploaded_images) async {
+    var changes = Map<String, String>();
+    changes['id'] = widget.announce_id.toString();
     changes['title'] = title.isEmpty ? details.elementAt(0)['title'] : title;
     changes['description'] =
         description.isEmpty ? details.elementAt(0)['description'] : description;
@@ -114,20 +108,24 @@ class _ModifyAnnounceWidgetState extends State<ModifyAnnounceWidget> {
         dealtype.isEmpty ? details.elementAt(0)['dealtype'] : dealtype;
     changes['propretytype'] =
         dealtype.isEmpty ? details.elementAt(0)['propretytype'] : propretytype;
-    changes['roomnumber'] =
-        roomnumber.isEmpty ? details.elementAt(0)['roomnumber'] : roomnumber;
+    changes['roomnumber'] = roomnumber.isEmpty
+        ? details.elementAt(0)['roomnumber'].toString()
+        : roomnumber;
     changes['surface'] =
-        surface.isEmpty ? details.elementAt(0)['surface'] : surface;
-    changes['price'] = price.isEmpty ? details.elementAt(0)['price'] : price;
+        surface.isEmpty ? details.elementAt(0)['surface'].toString() : surface;
+    changes['price'] =
+        price.isEmpty ? details.elementAt(0)['price'].toString() : price;
     changes['place'] =
         selectedplace.isEmpty ? details.elementAt(0)['place'] : selectedplace;
-    http.Response response = await AnnounceController.modifyannounce(changes);
+    var response = await AnnounceController.modifyannounce(
+        changes, todeleteimages, uploaded_images);
     if (response.statusCode == 200) {
       showDialog(
           context: context,
           builder: (BuildContext dialogcontext) {
             return AlertDialog(
               title: const Text('Announce Updated'),
+              content: Image.asset('Assets/images/success.gif'),
               actions: <Widget>[
                 TextButton(
                   child: const Text('Ok'),
@@ -138,6 +136,42 @@ class _ModifyAnnounceWidgetState extends State<ModifyAnnounceWidget> {
               ],
             );
           });
+    }else{
+      showDialog(
+          context: context,
+          builder: (BuildContext dialogcontext) {
+            return AlertDialog(
+              title: const Text('Something went wrong'),
+              content: Image.asset('Assets/images/warning.gif',height: 60,width: 60,),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Retry'),
+                  onPressed: () {
+                    Navigator.of(dialogcontext).pop();
+                  },
+                ),
+              ],
+            );
+          });
+    }
+  }
+  final ImagePicker imgpicker = ImagePicker();
+  openImages() async {
+    try {
+      var pickedfiles = await imgpicker.pickMultiImage();
+      //you can use ImageCourse.camera for Camera capture
+      if (pickedfiles != null) {
+        for (var file in pickedfiles) {
+          uploaded_images.add(file);
+        }
+        setState(() {
+          uploaded_images;
+        });
+      } else {
+        // print("No image is selected.");
+      }
+    } catch (e) {
+      // print("error while picking file.");
     }
   }
 
@@ -202,16 +236,25 @@ class _ModifyAnnounceWidgetState extends State<ModifyAnnounceWidget> {
                     itemBuilder: ((context, index) {
                       if (index >= 1) {
                         return Container(
+                          padding: EdgeInsets.symmetric(horizontal: 5),
                           height: 300,
                           width: 200,
+                          // color: Colors.black,
                           child: Stack(
                             alignment: AlignmentDirectional.topEnd,
                             children: [
-                              Image.network(baseUrl +
-                                  images!.elementAt(index - 1)['url']),
+                              Container(
+                                height: 200,
+                                child: Image.network(
+                                  baseUrl + images!.elementAt(index - 1)['url'],
+                                  fit: BoxFit.fitHeight,
+                                ),
+                              ),
                               IconButton(
                                   padding: const EdgeInsets.all(0),
                                   onPressed: () {
+                                    todeleteimages.add(
+                                        images!.elementAt(index - 1)['url']);
                                     images!.removeAt(index - 1);
                                     setState(() {
                                       images;
@@ -225,10 +268,70 @@ class _ModifyAnnounceWidgetState extends State<ModifyAnnounceWidget> {
                           ),
                         );
                       }
-                      return ElevatedButton(
-                          onPressed: () {}, child: const Text('Add photo'));
+                      if (index == 0) {
+                        return OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(
+                                  style: BorderStyle.solid,
+                                  width: 1,
+                                  color: Colors.black),
+                              fixedSize: const Size(200, 200),
+                              elevation: 0,
+                              backgroundColor: Colors.grey[350],
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                            ),
+                            onPressed: () {
+                              openImages();
+                            },
+                            label: const Text('Add photo'),
+                            icon: Icon(Icons.add),
+                            );
+                      }
+                      return Container();
                     })),
               ),
+              Text('images to added '),
+              uploaded_images != null
+                  ? Wrap(
+                      spacing: 12,
+                      children: uploaded_images.map((imageone) {
+                        return Stack(
+                          fit: StackFit.loose,
+                          // clipBehavior: Clip.none,
+                          alignment: AlignmentDirectional.topEnd,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 10),
+                              width: 120,
+                              height: 100,
+                              child: FittedBox(
+                                fit: BoxFit.fill,
+                                child: Image.file(
+                                  File(imageone.path),
+                                  width: 100,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: IconButton(
+                                  padding: EdgeInsets.all(0),
+                                  onPressed: () {
+                                    uploaded_images.remove(imageone);
+                                    setState(() {});
+                                  },
+                                  icon: const Icon(
+                                    Icons.close,
+                                    color: Colors.red,
+                                  )),
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                    )
+                  : const Text('no images uploaded'),
               TextFormField(
                 decoration: const InputDecoration(
                   label: Text('title'),
@@ -352,10 +455,17 @@ class _ModifyAnnounceWidgetState extends State<ModifyAnnounceWidget> {
                 String lng = pickedLocation!.latLng.latitude.toString();
                 selectedplace = jsonEncode({'lat': '$lat', 'lng': '$lng'});
               }
-
-              // print(details.elementAt(0)['place']);
-              modifyannounce(title, description, dealtype, propretytype,
-                  roomnumber, surface, price, selectedplace);
+              modifyannounce(
+                  title,
+                  description,
+                  dealtype,
+                  propretytype,
+                  roomnumber,
+                  surface,
+                  price,
+                  selectedplace,
+                  todeleteimages,
+                  uploaded_images);
             },
             label: const Text('Save')),
       );

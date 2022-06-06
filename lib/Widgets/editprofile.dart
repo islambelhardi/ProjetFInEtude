@@ -87,6 +87,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
   }
 
+  setbackground() {
+    if (_details['image'] != null && _imageFile == null) {
+      return NetworkImage(baseUrl + _details['image']);
+    }
+    if (_imageFile != null) {
+      return FileImage(
+        File(_imageFile!.path),
+      );
+    }
+    return AssetImage('Assets/images/user.png') as ImageProvider;
+  }
+
   //set password visible/
   @override
   void initState() {
@@ -107,11 +119,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     return _details.isEmpty
         ? SafeArea(
-          child: Container(
-            color: Colors.white,
-            // child: Text('Something went wrong'),
-          ),
-        )
+            child: Container(
+              color: Colors.white,
+              // child: Text('Something went wrong'),
+            ),
+          )
         : Scaffold(
             resizeToAvoidBottomInset: true,
             appBar: AppBar(
@@ -164,6 +176,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           },
                         ),
                         TextFormField(
+                          initialValue: _details.isEmpty
+                              ? 'your phone number here '
+                              : _details['phone_number'].toString(),
+                          onChanged: (value) => email = value,
+                          validator: (value) {
+                            if (value == null ||
+                                value.isEmpty ||
+                                EmailValidator.validate(value) == false) {
+                              return 'Please enter a valid email';
+                            }
+                            return null;
+                          },
+                        ),
+                        TextFormField(
                           obscureText: !passwordVisible,
                           decoration: InputDecoration(
                             hintText: 'Password',
@@ -188,52 +214,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       ],
                     ),
                   ),
-                  // Form(
-                  //   key: _formKey,
-                  //   child: Column(
-                  //     children: [
-                  //       buildTextField(
-                  //         'name',
-                  //         _details['name'] ?? '',
-                  //         false,
-                  //         nameController,
-                  //         nameValidator
-                  //       ),
-                  //       buildTextField("E-mail", _details['email'] ?? '', false,
-                  //           emailController, emailValidator),
-                  //       buildTextField(
-                  //           "Password", "********", true, passwordCotroller,nameValidator),
-                  //       RaisedButton(
-                  //         onPressed: () {
-                  //           if ('email' == 'email') {
-                  //             print(true);
-                  //           } else {
-                  //             print(false);
-                  //           }
-                  //           if (_formKey.currentState!.validate()) {
-                  //             // If the form is valid, display a snackbar. In the real world,
-                  //             // you'd often call a server or save the information in a database.
-                  //             ScaffoldMessenger.of(context).showSnackBar(
-                  //               const SnackBar(content: Text('Processing Data')),
-                  //             );
-                  //           }
-                  //         },
-                  //         color: Colors.blue.shade900,
-                  //         padding: EdgeInsets.symmetric(horizontal: 50),
-                  //         elevation: 2,
-                  //         shape: RoundedRectangleBorder(
-                  //             borderRadius: BorderRadius.circular(20)),
-                  //         child: Text(
-                  //           "SAVE",
-                  //           style: TextStyle(
-                  //               fontSize: 14,
-                  //               letterSpacing: 2.2,
-                  //               color: Colors.white),
-                  //         ),
-                  //       )
-                  //     ],
-                  //   ),
-                  // ),
                   SizedBox(
                     height: 25,
                   ),
@@ -367,13 +347,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget imageProfile() {
     return Center(
       child: Stack(children: <Widget>[
-        CircleAvatar(
-            radius: 60.0,
-            backgroundImage: _imageFile == null
-                ? AssetImage('Assets/images/user.png')as ImageProvider
-                : FileImage(
-                    File(_imageFile!.path),
-                  )),
+        CircleAvatar(radius: 60.0, backgroundImage: setbackground()
+            // _imageFile == null
+            //     ? AssetImage('Assets/images/user.png') as ImageProvider
+            //     : FileImage(
+            //         File(_imageFile!.path),
+            //       )
+            ),
         Positioned(
           bottom: 20.0,
           right: 20.0,

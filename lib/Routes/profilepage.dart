@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:projet_fin_etude/Controllers/authcontroller.dart';
+import 'package:projet_fin_etude/Controllers/connection.dart';
 import 'package:projet_fin_etude/Views/loginview.dart';
 import 'package:projet_fin_etude/Widgets/editprofile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
-   Map user;
-   ProfilePage({Key? key, required this.user}) : super(key: key);
+  Map user;
+  ProfilePage({Key? key, required this.user}) : super(key: key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -39,9 +40,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   Container(
                     width: 100,
                     height: 100,
-                    child: const Center(
+                    child:  Center(
                       child: CircleAvatar(
-                        backgroundImage: AssetImage('Assets/images/user.png'),
+                        backgroundImage: widget.user['image']==null? const AssetImage('Assets/images/user.png'):NetworkImage(baseUrl+widget.user['image'])as ImageProvider,
                         minRadius: 12,
                         maxRadius: 36,
                       ),
@@ -81,14 +82,13 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+}
 
+Widget _agencyprofile() {
+  return const Scaffold();
 }
-Widget _agencyprofile(){
-  return const Scaffold(
-    
-  );
-}
- Widget _profilelist(icon, text, press) {
+
+Widget _profilelist(icon, text, press) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
     child: TextButton(

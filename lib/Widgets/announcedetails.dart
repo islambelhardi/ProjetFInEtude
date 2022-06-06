@@ -92,51 +92,6 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
     await launch(launchUri.toString());
   }
 
-  //=================
-  //map things
-  //==============
-  // late Position cl;
-  // late CameraPosition _kGooglePlex;
-  // late Set<Marker> mymarker;
-  // var lat;
-  // var lang;
-  // var place;
-  // var country;
-  // late List<Placemark> placemarks;
-
-  // Future getposition() async {
-  //   bool services;
-  //   LocationPermission per;
-
-  //   services = await Geolocator.isLocationServiceEnabled();
-  //   per = await Geolocator.checkPermission();
-  //   if (per == LocationPermission.denied) {
-  //     per = await Geolocator.requestPermission();
-  //   }
-  //   return per;
-  // }
-
-  // Future<void> getLatAndLang() async {
-  //   cl = await Geolocator.getCurrentPosition().then((value) => value);
-
-  //   lat = cl.latitude;
-  //   lang = cl.longitude;
-
-  //   _kGooglePlex = CameraPosition(
-  //     target: LatLng(lat, lang),
-  //     zoom: 14.4746,
-  //   );
-  //   mymarker = {
-  //     Marker(
-  //       markerId: MarkerId('1'),
-  //       position: LatLng(lat, lang),
-  //     )
-  //   };
-  //   placemarks = await placemarkFromCoordinates(lat, lang);
-  //   place = placemarks[0].locality;
-  //   country = placemarks[0].country;
-  //   setState(() {});
-  // }
 
   @override
   void initState() {
@@ -159,12 +114,8 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
     print('closed');
   }
 
-  Completer<GoogleMapController> _controller = Completer();
-  //======================
-  // end map thing
-  //=======================
   //alert dialog function
-  TextEditingController _textFieldController = TextEditingController();
+
 
   comment_alert(BuildContext context) {
     late String content;
@@ -330,20 +281,6 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                                           'Bedroom'),
                                     ],
                                   ),
-                                  // Column(
-                                  //   children: const [
-                                  //     CircleAvatar(
-                                  //       backgroundColor: Colors.black12,
-                                  //       radius: 20,
-                                  //       child: Icon(
-                                  //         Icons.bathtub_outlined,
-                                  //         color: Colors.black54,
-                                  //         size: 30,
-                                  //       ),
-                                  //     ),
-                                  //     Text('1 Bathroom'),
-                                  //   ],
-                                  // ),
                                   Column(
                                     children: [
                                       CircleAvatar(
@@ -408,7 +345,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                                   fontWeight: FontWeight.bold, fontSize: 20),
                             ),
                             SizedBox(
-                              height: devicedata.size.width * 0.03,
+                              height: devicedata.size.width * 0.06,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -417,7 +354,10 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                                 Text(_details.elementAt(0)['propretytype'])
                               ],
                             ),
-                            Divider(),
+                            Divider(
+                              thickness: 1,
+                              height: 30,
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -427,6 +367,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                             ),
                             Divider(
                               thickness: 1,
+                              height: 30,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -438,6 +379,20 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                             ),
                             Divider(
                               thickness: 1,
+                              height: 30,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Rooms'),
+                                Text(_details
+                                    .elementAt(0)['roomnumber']
+                                    .toString())
+                              ],
+                            ),
+                             Divider(
+                              thickness: 1,
+                              height: 30,
                             ),
                             Text('Description'),
                             SizedBox(

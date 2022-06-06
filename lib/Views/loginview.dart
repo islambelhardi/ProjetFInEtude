@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -52,29 +52,13 @@ class _LoginViewState extends State<LoginView> {
         AuthController.savetoken(responsebody['access token']);
         if(user['type']=='user'){
           pref.setString('type', 'user');
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(user: user)),);
+          pushNewScreen(context, screen: ProfilePage(user: user),withNavBar: true);
+          //Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(user: user)),);
         }else{
           pref.setString('type', 'agency');
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => AgencyProfilePage(agency: user)),);
+          pushNewScreen(context, screen: AgencyProfilePage(agency: user), withNavBar: true);
+          // Navigator.of(context).push(MaterialPageRoute(builder: (context) => AgencyProfilePage(agency: user)),);
         }
-        // Navigator.pushReplacement<void, void>(
-        //   context,
-        //   MaterialPageRoute<void>(
-        //     builder: (BuildContext context) => ProfilePage(
-        //       user: user,
-        //     ),
-        //   ),
-        // );
-        
-        // Navigator.pushAndRemoveUntil(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => ProfilePage(user: user)),
-        //   (Route<dynamic> route) => false,
-        // );
-        // Navigator.of(context).pushReplacement(MaterialPageRoute(
-        //   maintainState: true,
-        //   builder: (BuildContext context) => ProfilePage(user: user)));
-        // pushNewScreen(
       } else {
         showDialog(
             context: context,
@@ -103,11 +87,9 @@ class _LoginViewState extends State<LoginView> {
         //get the user data
         AuthController.savetoken(responsebody['access token']);
         if(user['type']=='user'){
-          pref.setString('type', 'user');
-          // Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(user: user)),);
+          pref.setString('type', 'user'); 
         }else{
           pref.setString('type', 'agency');
-          // Navigator.of(context).push(MaterialPageRoute(builder: (context) => AgencyProfilePage(agency: user)),);
         }
         Navigator.pop(context);
       } else {
@@ -200,13 +182,6 @@ class _LoginViewState extends State<LoginView> {
                 SizedBox(
                   height: 48,
                 ),
-                ElevatedButton(
-                    onPressed: ()async{
-                      SharedPreferences pref = await SharedPreferences.getInstance();
-                    String ? type = pref.getString('type');
-                    print(type);
-                    },
-                    child: Text('data')),
                 Form(
                   key: _formKey,
                   child: Column(

@@ -2,8 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:projet_fin_etude/Controllers/authcontroller.dart';
 import 'package:projet_fin_etude/Controllers/connection.dart';
+import 'package:projet_fin_etude/Controllers/usercontroller.dart';
 import 'package:projet_fin_etude/Widgets/announcedetails.dart';
+import 'package:http/http.dart' as http;
 
 class AnnounceWidget extends StatefulWidget {
   final AnnounceId;
@@ -32,7 +35,7 @@ class AnnounceWidget extends StatefulWidget {
 class _AnnounceWidgetState extends State<AnnounceWidget> {
   bool isfavorite = false;
   Icon favorite = Icon(
-    Icons.favorite_rounded,
+    Icons.favorite_border_outlined,
     color: Colors.white,
   );
 
@@ -44,8 +47,42 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
         announce_id: widget.AnnounceId,
       ),
       withNavBar: false, // OPTIONAL VALUE. True by default.
-     pageTransitionAnimation: PageTransitionAnimation.cupertino,
+      pageTransitionAnimation: PageTransitionAnimation.cupertino,
     );
+  }
+
+  like() async {
+    String? token = await AuthController.checklogin();
+    if (token == null) {
+      showDialog(context: context, builder: (_){
+        return AlertDialog(
+              content: Text('You have to login to like this announce'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Ok'),
+                  onPressed: () {
+                    Navigator.of(_).pop();
+                  },
+                ),
+              ],
+            );
+      });
+    } else {
+      http.Response response = await UserController.like(widget.AnnounceId);
+      if (response.statusCode == 200) {
+        setState(() {
+          isfavorite = true;
+          favorite = Icon(
+            Icons.favorite,
+            color: Colors.red,
+          );
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('you already like this announce')),
+        );
+      }
+    }
   }
 
   @override
@@ -80,9 +117,13 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                   Stack(
                     alignment: AlignmentDirectional.topCenter,
                     children: [
-                      Padding(
+                      Container(
+                        height: 200,
                         padding: const EdgeInsets.all(6.0),
-                        child: Image.network(baseUrl + widget.img),
+                        child: Image.network(
+                          baseUrl + widget.img,
+                          fit: BoxFit.fill,
+                        ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,7 +139,7 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                                   borderRadius: BorderRadius.circular(8),
                                   color: Colors.grey.withOpacity(0.5)),
                               child: Text(
-                                'For' + widget.dealtype,
+                                'For ' + widget.dealtype,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Color(0xff023e8a),
@@ -107,28 +148,32 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(0),
-                            child: IconButton(
-                              icon: favorite,
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              color: Colors.grey,
-                              onPressed: () {
-                                // to change the icon if u liked it or dislike it
-                                setState(() {
-                                  if (isfavorite == true) {
-                                    isfavorite = false;
-                                    favorite =
-                                        Icon(Icons.favorite_border_outlined);
-                                  } else {
-                                    isfavorite = true;
-                                    favorite = Icon(
-                                      Icons.favorite,
-                                      color: Colors.red,
-                                    );
-                                  }
-                                });
-                              },
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                              backgroundColor:
+                                  Color.fromARGB(255, 175, 175, 175),
+                              radius: 16,
+                              child: IconButton(
+                                iconSize: 26,
+                                padding: EdgeInsets.zero,
+                                icon: favorite,
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                color: Colors.grey,
+                                onPressed: () {
+                                  // to change the icon if u liked it or dislike it
+                                  setState(() {
+                                    if (isfavorite == true) {
+                                      isfavorite = false;
+                                      favorite = Icon(
+                                        Icons.favorite_border_outlined,
+                                        color: Colors.white,
+                                      );
+                                    }
+                                    like();
+                                  });
+                                },
+                              ),
                             ),
                           ),
                         ],
@@ -171,7 +216,7 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                           color: Colors.black45,
                         ),
                         Text(
-                          'Newcastle,Calofornia',
+                          'Tipaza,Algeria',
                           style: TextStyle(color: Colors.black87),
                         ),
                       ],

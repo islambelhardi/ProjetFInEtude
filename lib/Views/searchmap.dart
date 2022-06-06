@@ -5,7 +5,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:projet_fin_etude/Controllers/announcecontroller.dart';
 import 'package:http/http.dart' as http;
+import 'package:projet_fin_etude/Controllers/connection.dart';
 import 'package:projet_fin_etude/Widgets/announcedetails.dart';
+
 class mapSearch extends StatefulWidget {
   static const Marker _offermarker = Marker(
       markerId: MarkerId('_offermarker'),
@@ -90,67 +92,20 @@ class _mapSearchState extends State<mapSearch> {
               width: 380,
               offset: 35,
             ),
-            Positioned(
-                left: 20,
-                top: 30,
-                child: GestureDetector(
-                  child: Padding(
-                    padding: const EdgeInsets.all(0.0),
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                        border: Border.all(color: Colors.white),
-                      ),
-                      height: 45,
-                      width: 45,
-                      child: Container(
-                        child: const Center(
-                          child: const Icon(
-                            Icons.arrow_back_ios,
-                            color: Colors.black,
-                            size: 27,
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6.0),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFF605F5F).withOpacity(0.1),
-                              spreadRadius: 2,
-                              blurRadius: 1,
-                              offset: const Offset(2, 1),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    for (var i = 0; i < _offerData.length; i++) {
-                      // Map<String, dynamic> place =json.decode(_offerData[i]['place']);
-                      print(_offerData[i]['title']);
-                      //print(jsondecode(_offerData[i]['place']));
-                    }
-                  },
-                ),
-              ),
           ],
         ),
       ),
     );
   }
-Map<String, dynamic> ?place;
+
+  Map<String, dynamic>? place;
   _loadData() async {
     http.Response response = await AnnounceController.getall();
     if (response.statusCode == 200) {
       setState(() {
         _offerData = json.decode(response.body);
         for (int i = 0; i < _offerData.length; i++) {
-            place =json.decode(_offerData[i]['place']);
-            print(place!['lat']);
+          place = json.decode(_offerData[i]['place']);
           allMarkers.add(
             Marker(
               markerId: MarkerId(_offerData[i]['id'].toString()),
@@ -163,36 +118,39 @@ Map<String, dynamic> ?place;
               ),
               // icon: mapMarker,
               onTap: () {
-                print('taoed');
-                _customInfoWindowController.addInfoWindow!(  
-                   GestureDetector(onTap: (){
-                     print('gesture detevtor');
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AnnounceDetails(announce_id:_offerData[i]['id'])),
-                    );
-                  },
+                _customInfoWindowController.addInfoWindow!(
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AnnounceDetails(
+                                announce_id: _offerData[i]['id'])),
+                      );
+                    },
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(10, 07, 10, 7),
                       child: Container(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            // Flexible(
-                            //   flex: 10,
-                            //   child: SizedBox(
-                            //     child: SmallHouseImage(_offerData[i]['id']),
-                            //     width: 100,
-                            //   ),
-                            // ),
+                            Flexible(
+                              flex: 10,
+                              child: SizedBox(
+                                child: Image.network(
+                                  baseUrl + _offerData[i]['img'],
+                                  fit: BoxFit.fill,
+                                ),
+                                width: 100,
+                              ),
+                            ),
                             Flexible(
                               flex: 16,
                               child: Container(
                                 color: Colors.white,
                                 padding:
-                                // EdgeInsets.fromLTRB(left, top, right, bottom)
-                                const EdgeInsets.fromLTRB(10, 1, 0, 5),
+                                    // EdgeInsets.fromLTRB(left, top, right, bottom)
+                                    const EdgeInsets.fromLTRB(10, 1, 0, 5),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -214,33 +172,39 @@ Map<String, dynamic> ?place;
                                     ),
                                     Container(
                                       child: Row(
-                                        children:  [
+                                        children: [
                                           const CircleAvatar(
                                             backgroundColor: Colors.white,
                                             radius: 15,
-                                            child: Icon(Icons.bed_rounded,color: Colors.black,),
+                                            child: Icon(
+                                              Icons.bed_rounded,
+                                              color: Colors.black,
+                                            ),
                                           ),
                                           const SizedBox(
                                             width: 5,
                                           ),
                                           Text(
-                                            _offerData[i]['roomnumber'].toString(),
+                                            _offerData[i]['roomnumber']
+                                                .toString(),
                                             style: const TextStyle(
-                                                fontWeight: FontWeight.bold,fontSize: 18),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18),
                                           ),
                                           const SizedBox(
                                             width: 5,
                                           ),
                                           const CircleAvatar(
-                                            backgroundColor: Colors.white,
-                                            radius: 13,
-                                            child: Icon(Icons.fullscreen)
-                                          ),
+                                              backgroundColor: Colors.white,
+                                              radius: 13,
+                                              child: Icon(Icons.fullscreen)),
                                           const SizedBox(
                                             width: 5,
                                           ),
                                           Text(
-                                            _offerData[i]['surface'].toString()+'m²',
+                                            _offerData[i]['surface']
+                                                    .toString() +
+                                                'm²',
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.bold),
                                           ),
@@ -250,10 +214,45 @@ Map<String, dynamic> ?place;
                                     const SizedBox(
                                       height: 5,
                                     ),
-                                    // Text(
-                                    //   '\$ ${_offerData[i]['price'].toString()} / day',
-                                    //   style: TextStyle(fontWeight: FontWeight.bold),
-                                    // ),
+                                    Text(
+                                      _offerData[i]['propretytype'],
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'DZD' +
+                                              _offerData[i]['price']
+                                                  .toString() +
+                                              'Millions',
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Container(
+                                          height: 20,
+                                          width: 60,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              color:
+                                                  Colors.grey.withOpacity(0.5)),
+                                          child: Text(
+                                            'For ' + _offerData[i]['dealtype'],
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Color(0xff023e8a),
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),

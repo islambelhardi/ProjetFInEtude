@@ -112,7 +112,7 @@ class _SearchPageState extends State<SearchPage> {
                     color: Colors.lightBlue[300],
                   ),
                   Text(
-                    'Algeria , ',
+                    placemarks.isEmpty?'Unknown': placemarks[0].locality!+','+placemarks[0].country!,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   )
                 ],
@@ -253,7 +253,10 @@ class _SearchPageState extends State<SearchPage> {
             Expanded(
               child: isloading
                   ? MapLoadingWidget()
-                  : mapSearch()
+                  : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: mapSearch(),
+                  )
                   // previous map
                   // Container(
                   //     margin: EdgeInsets.all(10),

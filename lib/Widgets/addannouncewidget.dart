@@ -111,7 +111,7 @@ class _First_page_publierState extends State<AddAnnounceWidget> {
         await AnnounceController.addannounce(imagefiles, details);
     if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('announce added successfully ')),
+        const SnackBar(backgroundColor: Color.fromRGBO(255, 75, 181, 67), content: Text('announce added successfully ')),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

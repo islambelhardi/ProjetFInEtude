@@ -26,7 +26,7 @@ class _SearchPageState extends State<SearchPage> {
   late var lat;
   late var lang;
   // late var place;
-  late List<Placemark> placemarks;
+  List<Placemark> placemarks=[];
   Future getposition() async {
     bool services;
     LocationPermission per;
@@ -61,6 +61,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
+     WidgetsBinding.instance.addPostFrameCallback((_) => getposition());
     getposition();
     loadmap();
   }
@@ -140,93 +141,6 @@ class _SearchPageState extends State<SearchPage> {
                             context: context,
                             builder: (context) =>
                                 FilterAnnounce(context: context));
-                        // showMaterialModalBottomSheet(
-                        //   // backgroundColor: Colors.blue,
-                        //   shape: RoundedRectangleBorder(
-                        //       borderRadius: BorderRadius.circular(30)),
-                        //   context: context,
-                        //   builder: (context) => Container(
-                        //       decoration: BoxDecoration(
-                        //         // color: Colors.black,
-                        //         borderRadius: BorderRadius.circular(10),
-                        //       ),
-                        //       height: devicedata.size.height * 0.9,
-                        //       child: Column(
-                        //         children: [
-                        //           Padding(
-                        //             padding: EdgeInsets.only(left: 10, top: 5),
-                        //             child: Row(
-                        //               children: [
-                        //                 IconButton(
-                        //                     onPressed: () {
-                        //                       Navigator.pop(context);
-                        //                     },
-                        //                     icon: Icon(Icons.arrow_back)),
-                        //                 Text('Filters')
-                        //               ],
-                        //             ),
-                        //           ),
-                        //           ListView(
-                        //             padding: const EdgeInsets.all(8),
-                        //             children: <Widget>[
-                        //               Container(
-                        //                 height: 50,
-                        //                 color: Colors.amber[600],
-                        //                 child: const Center(
-                        //                     child: Text('Entry A')),
-                        //               ),
-                        //               Container(
-                        //                 height: 50,
-                        //                 color: Colors.amber[500],
-                        //                 child: const Center(
-                        //                     child: Text('Entry B')),
-                        //               ),
-                        //               Container(
-                        //                 height: 50,
-                        //                 color: Colors.amber[100],
-                        //                 child: const Center(
-                        //                     child: Text('Entry C')),
-                        //               ),
-                        //             ],
-                        //           )
-                        //           // SingleChildScrollView(
-                        //           //   child: Column(
-                        //           //     children: [
-                        //           //       Container(
-                        //           //         height:100,
-                        //           //         width: 200,
-                        //           //         color:Colors.black
-                        //           //       ),
-                        //           //       Container(
-                        //           //         height:100,
-                        //           //         width: 200,
-                        //           //         color:Colors.black
-                        //           //       ),
-                        //           //       Container(
-                        //           //         height:100,
-                        //           //         width: 200,
-                        //           //         color:Colors.black
-                        //           //       ),
-                        //           //       Container(
-                        //           //         height:100,
-                        //           //         width: 200,
-                        //           //         color:Colors.black
-                        //           //       ),Container(
-                        //           //         height:100,
-                        //           //         width: 200,
-                        //           //         color:Colors.black
-                        //           //       ),
-                        //           //       Container(
-                        //           //         height:500,
-                        //           //         width: 200,
-                        //           //         color:Colors.black
-                        //           //       ),
-                        //           //     ],
-                        //           //   ),
-                        //           // )
-                        //         ],
-                        //       )),
-                        // );
                       },
                       icon: Icon(
                         CustomIcon.settings,
@@ -257,20 +171,6 @@ class _SearchPageState extends State<SearchPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: mapSearch(),
                   )
-                  // previous map
-                  // Container(
-                  //     margin: EdgeInsets.all(10),
-                  //     width: double.infinity,
-                  //     height: devicedata.size.height * 0.3,
-                  //     child: GoogleMap(
-                  //       markers: mymarker,
-                  //       mapType: MapType.normal,
-                  //       initialCameraPosition: _kGooglePlex,
-                  //       onMapCreated: (GoogleMapController controller) {
-                  //         _controller.complete(controller);
-                  //       },
-                  //     ),
-                  //   ),
             ),
           ],
         ),

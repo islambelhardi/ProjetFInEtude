@@ -52,12 +52,13 @@ class _LoginViewState extends State<LoginView> {
         AuthController.savetoken(responsebody['access token']);
         if(user['type']=='user'){
           pref.setString('type', 'user');
-          pushNewScreen(context, screen: ProfilePage(user: user),withNavBar: true);
-          //Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(user: user)),);
+          
+          // pushNewScreen(context, screen: ProfilePage(user: user),withNavBar: true);
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(user: user)),);
         }else{
           pref.setString('type', 'agency');
-          pushNewScreen(context, screen: AgencyProfilePage(agency: user), withNavBar: true);
-          // Navigator.of(context).push(MaterialPageRoute(builder: (context) => AgencyProfilePage(agency: user)),);
+          // pushNewScreen(context, screen: AgencyProfilePage(agency: user), withNavBar: true);
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => AgencyProfilePage(agency: user)),);
         }
       } else {
         showDialog(

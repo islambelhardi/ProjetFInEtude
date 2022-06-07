@@ -26,6 +26,7 @@ class AnnouncesRow extends StatelessWidget {
                 surface: announces[index].surface.toString(),
                 dealtype: announces[index].dealtype,
                 price: announces[index].price.toString(),
+                viewnumber: announces[index].viewsnumber,
               );
             }));
   }

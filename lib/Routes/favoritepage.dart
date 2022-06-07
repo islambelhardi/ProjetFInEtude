@@ -48,14 +48,20 @@ class _FavoritePageState extends State<FavoritePage> {
         url,
         headers: headers,
       );
-      Iterable list = json.decode(response.body);
-      try {
-        likedlist = list.map((model) => Announce.fromJson(model)).toList();
+      if (response.statusCode == 200) {
+        Iterable list = json.decode(response.body);
+        try {
+          likedlist = list.map((model) => Announce.fromJson(model)).toList();
+          setState(() {
+            likedlist;
+          });
+        } catch (e) {
+          print(e);
+        }
+      } else {
         setState(() {
-          likedlist;
+          likedlist = [];
         });
-      } catch (e) {
-        print(e);
       }
     } else {
       return null;
@@ -67,21 +73,23 @@ class _FavoritePageState extends State<FavoritePage> {
     await checklogin();
     await getlikedannounces();
     if (isloged == false) {
-      body = Column(
-        children: [
-          const Text('Log in to view your wishlists'),
-          const Text('You can create, view, or edit Wishlists once you'
-              've logged in'),
-          ElevatedButton(
-              onPressed: () {
-                _key.currentState!.openEndDrawer();
-              },
-              child: Text('Log in')),
-        ],
+      body = Center(
+        child: Column(
+          children: [
+            const Text('Log in to view your wishlists'),
+            const Text('You can create, view, or edit Wishlists once you'
+                've logged in'),
+            ElevatedButton(
+                onPressed: () {
+                  _key.currentState!.openEndDrawer();
+                },
+                child: Text('Log in')),
+          ],
+        ),
       );
     } else {
-      if (likedlist.length==0) {
-        body = Text('No liked Announces');
+      if (likedlist.length == 0) {
+        body = Center(child: Text('No liked Announces'));
       } else {
         body = AnnounceColumn(announces: likedlist);
       }
@@ -118,24 +126,18 @@ class _FavoritePageState extends State<FavoritePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        endDrawerEnableOpenDragGesture: false,
         key: _key,
         endDrawer: customdrawer(BuildContext, _closeEndDrawer),
         backgroundColor: Color(0xfff8f9fa),
         appBar: AppBar(
+          actions: <Widget>[Container()],
           backgroundColor: Color(0xfff8f9fa),
           elevation: 0,
           title: Text(
             'Wishlists',
             style: TextStyle(color: Colors.black),
           ),
-          actions: [
-            IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.sort_outlined,
-                  color: Colors.black,
-                )),
-          ],
         ),
         // check if the user is logged if not list of instruction and button of login shows
         body: body == null

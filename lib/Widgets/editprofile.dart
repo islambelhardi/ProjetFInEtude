@@ -1,8 +1,7 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, prefer_function_declarations_over_variables, unnecessary_new, unused_field, prefer_collection_literals, unused_local_variable, prefer_if_null_operators
+// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, prefer_function_declarations_over_variables, unnecessary_new, unused_field, prefer_collection_literals, unused_local_variable, prefer_if_null_operators, use_key_in_widget_constructors, deprecated_member_use
 
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -144,7 +143,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               child: ListView(
                 children: [
                   Text(
-                    "Edit Profile",
+                    "Paramétre de profil",
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(

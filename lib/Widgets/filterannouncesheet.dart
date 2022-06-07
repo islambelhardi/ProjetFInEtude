@@ -84,7 +84,7 @@ class _FilterAnnounceState extends State<FilterAnnounce> {
                           backgroundColor: Colors.transparent,
                           context: context,
                           builder: (context) =>
-                              AnnounceColumn(announces: announcelist));
+                              SafeArea(child: AnnounceColumn(announces: announcelist)));
                     },
                     child: const Text('apply'))
               ],

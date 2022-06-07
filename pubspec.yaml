@@ -61,6 +61,8 @@ dependencies:
     sdk: flutter
   modal_bottom_sheet: ^2.0.1
   custom_info_window: ^1.0.1
+  flutter_native_splash: ^2.1.6
+  easy_localization: ^3.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

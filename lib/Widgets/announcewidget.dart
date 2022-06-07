@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:projet_fin_etude/Controllers/authcontroller.dart';
@@ -7,6 +8,8 @@ import 'package:projet_fin_etude/Controllers/connection.dart';
 import 'package:projet_fin_etude/Controllers/usercontroller.dart';
 import 'package:projet_fin_etude/Widgets/announcedetails.dart';
 import 'package:http/http.dart' as http;
+
+import '../translations/local_keys.g.dart';
 
 class AnnounceWidget extends StatefulWidget {
   final AnnounceId;
@@ -16,6 +19,7 @@ class AnnounceWidget extends StatefulWidget {
   final String surface;
   final String dealtype;
   final String price;
+  final int viewnumber;
   AnnounceWidget(
       {Key? key,
       required this.AnnounceId,
@@ -24,7 +28,8 @@ class AnnounceWidget extends StatefulWidget {
       required this.roomnumber,
       required this.surface,
       required this.dealtype,
-      required this.price})
+      required this.price,
+      required this.viewnumber})
       : super(key: key);
 
   late String herotag;
@@ -54,8 +59,10 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
   like() async {
     String? token = await AuthController.checklogin();
     if (token == null) {
-      showDialog(context: context, builder: (_){
-        return AlertDialog(
+      showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
               content: Text('You have to login to like this announce'),
               actions: <Widget>[
                 TextButton(
@@ -66,7 +73,7 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                 ),
               ],
             );
-      });
+          });
     } else {
       http.Response response = await UserController.like(widget.AnnounceId);
       if (response.statusCode == 200) {
@@ -206,22 +213,25 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.location_on,
-                          color: Colors.black45,
-                        ),
-                        Text(
-                          'Tipaza,Algeria',
-                          style: TextStyle(color: Colors.black87),
-                        ),
-                      ],
-                    ),
+                  SizedBox(
+                    height: 10,
                   ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.start,
+                  //     children: [
+                  //       Icon(
+                  //         Icons.location_on,
+                  //         color: Colors.black45,
+                  //       ),
+                  //       Text(
+                  //         'Tipaza,Algeria',
+                  //         style: TextStyle(color: Colors.black87),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   Container(
                     height: 20,
                     child: Row(
@@ -238,7 +248,7 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                                   color: Colors.black45,
                                 ),
                                 Text(
-                                  widget.roomnumber + 'Bedrooms',
+                                  widget.roomnumber + (LocaleKeys.Badroom.tr()),
                                   style: TextStyle(color: Colors.black45),
                                 )
                               ],
@@ -261,6 +271,24 @@ class _AnnounceWidgetState extends State<AnnounceWidget> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Expanded(child: Container()),
+                        Row(
+                          children: [
+                            Icon(Icons.visibility_outlined,color: Colors.black45),
+                            Text(widget.viewnumber.toString(),style: TextStyle(color: Colors.black45),)
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),

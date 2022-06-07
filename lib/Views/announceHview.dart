@@ -97,7 +97,7 @@ class _AnnounceHviewState extends State<AnnounceHview> {
                   children: [
                     Image.network(
                       baseUrl + widget.img,
-                      fit: BoxFit.contain,
+                      fit: BoxFit.fill,
                       height: 150,
                       width: double.maxFinite,
                     ),
@@ -200,19 +200,19 @@ class _AnnounceHviewState extends State<AnnounceHview> {
                         //     fontWeight: FontWeight.bold,
                         //   ),
                         // ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.location_on,
-                              color: Colors.black45,
-                            ),
-                            Text(
-                              '34353 Newcastle, Calabasas, Calofornia',
-                              style: TextStyle(color: Colors.black87),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.start,
+                        //   children: [
+                        //     Icon(
+                        //       Icons.location_on,
+                        //       color: Colors.black45,
+                        //     ),
+                        //     Text(
+                        //       '34353 Newcastle, Calabasas, Calofornia',
+                        //       style: TextStyle(color: Colors.black87),
+                        //     ),
+                        //   ],
+                        // ),
 
                         Container(
                           height: 20,

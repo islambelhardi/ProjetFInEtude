@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'dart:convert';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:projet_fin_etude/Controllers/announcecontroller.dart';
 import 'package:projet_fin_etude/Models/announce.dart';
@@ -9,6 +10,7 @@ import 'package:projet_fin_etude/Routes/searchpage.dart';
 import 'package:projet_fin_etude/Widgets/announcesrow.dart';
 
 import 'package:projet_fin_etude/Widgets/sectiontitle.dart';
+import 'package:projet_fin_etude/translations/local_keys.g.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -89,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                           color: Colors.black,
                         ),
                         label: Text(
-                          'What are you looking for ?',
+                          LocaleKeys.What.tr(),
                           style: TextStyle(color: Colors.black),
                         ),
                         style: ElevatedButton.styleFrom(
@@ -112,12 +114,16 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SliverList(
                     delegate: SliverChildListDelegate([
+                      ElevatedButton(onPressed: ()async {
+                                await context.setLocale(Locale('ar'));
+                                print('object');
+                              }, child: Text('changelangage')),
                   sectiontitle(
-                    'For Rent',
+                    LocaleKeys.For_rent.tr()
                   ),
                   AnnouncesRow(announces: rentinglist),
                   sectiontitle(
-                    'For Sale',
+                    LocaleKeys.For_exemple4.tr()
                   ),
                   AnnouncesRow(announces: sellinglist),
                 ]))

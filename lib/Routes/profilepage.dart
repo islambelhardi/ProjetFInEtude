@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, await_only_futures, unused_local_variable, sized_box_for_whitespace
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -7,6 +8,7 @@ import 'package:projet_fin_etude/Controllers/authcontroller.dart';
 import 'package:projet_fin_etude/Controllers/connection.dart';
 import 'package:projet_fin_etude/Views/loginview.dart';
 import 'package:projet_fin_etude/Widgets/editprofile.dart';
+import 'package:projet_fin_etude/translations/local_keys.g.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -69,13 +71,13 @@ class _ProfilePageState extends State<ProfilePage> {
               _profilelist(Icons.password_outlined, ("Change Password"), () {}),
               _profilelist(
                   Icons.settings_input_antenna_sharp, ("E-Statement"), () {}),
-              _profilelist(Icons.favorite, ("Favorite"), () {}),
+              _profilelist(Icons.favorite, (LocaleKeys.Favorite.tr()), () {}),
               const Divider(
                 color: Colors.black38,
               ),
-              _profilelist(Icons.language, ("Language"), () {}),
-              _profilelist(Icons.comment_outlined, ("Our Handbook"), () {}),
-              _profilelist(Icons.logout, ("Log Out"), () => Logout()),
+              _profilelist(Icons.language, (LocaleKeys.Language.tr()), () {}),
+              _profilelist(Icons.comment_outlined, (LocaleKeys.Our_Handbook.tr()), () {}),
+              _profilelist(Icons.logout, (LocaleKeys.Log_out.tr()), () => Logout()),
             ],
           ),
         ),

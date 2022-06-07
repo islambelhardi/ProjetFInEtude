@@ -498,7 +498,7 @@ class _First_page_publierState extends State<AddAnnounceWidget> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content: Text(
-                                            'please choose your announce pictures')),
+                                            ' ')),
                                   );
                                 }
                                 if (_formKey.currentState!.validate() &&

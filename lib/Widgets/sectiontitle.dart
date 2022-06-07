@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
           ),
           GestureDetector(
               onTap: () {
-                print('taped');
+                
               },
               child: Text(
                 'more',

@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:projet_fin_etude/Routes/favoritepage.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:projet_fin_etude/Views/loginview.dart';
-
+import 'package:projet_fin_etude/translations/local_keys.g.dart';
 import 'explorepage.dart';
 
 class MainPage extends StatefulWidget {
@@ -33,14 +33,14 @@ class _MainPageState extends State<MainPage> {
         icon: Icon(
           Icons.home_rounded,
         ),
-        title: ("Explorer"),
+        title: (LocaleKeys.Home.tr()),
         activeColorPrimary: Color.fromRGBO(255, 255, 255, 1),
         inactiveColorPrimary: Color.fromRGBO(204, 219, 220, 1),
       ),
       PersistentBottomNavBarItem(
         inactiveIcon: Icon(Icons.favorite_outline_rounded),
         icon: Icon(Icons.favorite_rounded),
-        title: ("Favorite"),
+        title: (LocaleKeys.Favorite.tr()),
         activeColorPrimary: Color.fromRGBO(255, 255, 255, 1),
         inactiveColorPrimary: Color.fromRGBO(204, 219, 220, 1),
       ),
@@ -51,7 +51,7 @@ class _MainPageState extends State<MainPage> {
           size: 28,
         ),
         icon: Icon(Icons.person_rounded),
-        title: ("Profile"),
+        title: (LocaleKeys.Personal_data.tr()),
         activeColorPrimary: Color.fromRGBO(255, 255, 255, 1),
         inactiveColorPrimary: Color.fromRGBO(204, 219, 220, 1),
       ),
@@ -69,7 +69,7 @@ class _MainPageState extends State<MainPage> {
       backgroundColor: Color.fromRGBO(20, 33, 61, 1),
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: true,
-      stateManagement: true,
+      stateManagement: false,
       hideNavigationBarWhenKeyboardShows: true,
       decoration: NavBarDecoration(
         borderRadius: BorderRadius.circular(10.0),

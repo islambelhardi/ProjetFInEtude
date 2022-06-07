@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:projet_fin_etude/Controllers/announcecontroller.dart';
@@ -12,6 +13,7 @@ import 'package:projet_fin_etude/Models/comment.dart';
 import 'package:projet_fin_etude/Views/loginview.dart';
 import 'package:projet_fin_etude/Widgets/announceloading.dart';
 import 'package:projet_fin_etude/Widgets/commentwidget.dart';
+import 'package:projet_fin_etude/translations/local_keys.g.dart';
 import 'package:readmore/readmore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -42,6 +44,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
     setState(() {
       _details = json.decode(response.body);
     });
+    print(_details);
     // add agency phone number
     _phone = _details.elementAt(0)['agency']['phone_number'].toString();
     place = (jsonDecode(_details.elementAt(0)['place']));
@@ -52,7 +55,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
     // for (int i = 0; i < images.length; i++) {
     //
     // }
-    // setState(() {});
+    setState(() {});
     // print( _details.elementAt(0)['images'].toList());
   }
 
@@ -130,7 +133,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
             ),
             actions: <Widget>[
               ElevatedButton(
-                child: const Text('Add'),
+                child: Text(LocaleKeys.Add.tr()),
                 onPressed: () async {
                   SharedPreferences pref =
                       await SharedPreferences.getInstance();
@@ -145,8 +148,8 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                 },
               ),
               TextButton(
-                child: const Text(
-                  'Cancel',
+                child: Text(
+                  LocaleKeys.Cancel.tr(),
                   style: TextStyle(color: Colors.red),
                 ),
                 onPressed: () {
@@ -278,7 +281,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                                       Text(_details
                                               .elementAt(0)['roomnumber']
                                               .toString() +
-                                          'Bedroom'),
+                                          LocaleKeys.Badroom.tr()),
                                     ],
                                   ),
                                   Column(
@@ -308,7 +311,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Location',
+                              Text(LocaleKeys.Place.tr(),
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20)),
@@ -340,7 +343,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Details',
+                              'details',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 20),
                             ),
@@ -350,7 +353,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Type'),
+                                Text('LocaleKeys.'),
                                 Text(_details.elementAt(0)['propretytype'])
                               ],
                             ),

@@ -54,7 +54,7 @@ class _MainPageState extends State<MainPage> {
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.message_outlined),
-        title: (LocaleKeys.message.tr()),
+        title: (LocaleKeys.Message.tr()),
         // activeColorPrimary: CupertinoColors.activeBlue,
         // inactiveColorPrimary: CupertinoColors.systemGrey,
       ),

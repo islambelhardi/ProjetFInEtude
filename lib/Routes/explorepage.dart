@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
                         color: Colors.black,
                       ),
                       label: Text(
-                        LocaleKeys.what.tr(),
+                        LocaleKeys.What.tr(),
                         style: TextStyle(color: Colors.black),
                       ),
                       style: ElevatedButton.styleFrom(

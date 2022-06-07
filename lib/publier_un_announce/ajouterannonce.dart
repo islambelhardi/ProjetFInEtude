@@ -13,9 +13,7 @@ import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:io' show Platform;
 
-// Your api key storage.
-
-import '../Widgets/state_picker.dart';
+import 'package:projet_fin_etude/translations/local_keys.g.dart';
 
 class First_page_publier extends StatefulWidget {
   First_page_publier({Key? key}) : super(key: key);
@@ -38,26 +36,10 @@ class _First_page_publierState extends State<First_page_publier> {
   String selectedValue = "Villa";
   String selectedValue2 = "1";
   final ImagePicker imgpicker = ImagePicker();
-  List<XFile>? imagefiles;
-  List<XFile>? imagefilessaver;
-  List<XFile>? imagefilessaver2;
+  List<XFile> images = [];
+  ImagePicker _picker = ImagePicker();
 
-  openImages() async {
-    try {
-      var pickedfiles = await imgpicker.pickMultiImage();
-      //you can use ImageCourse.camera for Camera capture
-      if (pickedfiles != null) {
-        imagefiles = pickedfiles;
-
-        setState(() {});
-      } else {
-        print("No image is selected.");
-      }
-    } catch (e) {
-      print("error while picking file.");
-    }
-  }
-
+  late File _image;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,24 +73,11 @@ class _First_page_publierState extends State<First_page_publier> {
                           fontWeight: FontWeight.w600,
                         )),
                     onPressed: () {
-                      openImages();
+                      _pickImages();
                     },
                   )),
               Divider(),
-              imagefiles != null
-                  ? Wrap(
-                      children: imagefiles!.map((imageone) {
-                        return Container(
-                            child: Card(
-                          child: Container(
-                            height: 100,
-                            width: 100,
-                            child: Image.file(File(imageone.path)),
-                          ),
-                        ));
-                      }).toList(),
-                    )
-                  : Container(),
+              images != null ? _pickmultiimages() : Container(),
               Container(
                 padding: EdgeInsets.all(8),
                 child: Column(
@@ -364,12 +333,14 @@ class _First_page_publierState extends State<First_page_publier> {
                               style: ElevatedButton.styleFrom(
                                 primary: Colors.white, // Background color
                               ),
-                              child: const Text('Cancel',
+                              child: Text(LocaleKeys.Cancel.tr(),
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.red)),
-                              onPressed: () {},
+                              onPressed: () async {
+                                await context.setLocale(Locale('en'));
+                              },
                             )),
                         Spacer(
                           flex: 1,
@@ -381,7 +352,7 @@ class _First_page_publierState extends State<First_page_publier> {
                                 primary:
                                     Colors.blue.shade900, // Background color
                               ),
-                              child: const Text('ajouter',
+                              child: Text(LocaleKeys.Add.tr(),
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
@@ -401,5 +372,73 @@ class _First_page_publierState extends State<First_page_publier> {
             ],
           )),
         ));
+  }
+
+  Widget _buildImage() {
+    if (_image == null) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(1, 1, 1, 1),
+        child: Icon(
+          Icons.add,
+          color: Colors.grey,
+        ),
+      );
+    } else {
+      return Image.file(File(_image.path));
+    }
+  }
+
+  Future getImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  _pickImages() async {
+    List<XFile>? res = await _picker.pickMultiImage();
+    setState(() {
+      images.addAll(res!);
+    });
+  }
+
+  Widget _pickmultiimages() {
+    return Wrap(
+      children: images.map((imageone) {
+        return Container(
+            child: Card(
+          clipBehavior: Clip.antiAlias,
+          child: Stack(
+            children: <Widget>[
+              Image.file(
+                File(imageone.path),
+                width: 100,
+                height: 100,
+              ),
+              Positioned(
+                right: 5,
+                top: 5,
+                child: InkWell(
+                  child: Icon(
+                    Icons.remove_circle,
+                    size: 30,
+                    color: Colors.red,
+                  ),
+                  onTap: () {
+                    setState(() {
+                      images.removeAt(0);
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+        ));
+      }).toList(),
+    );
   }
 }

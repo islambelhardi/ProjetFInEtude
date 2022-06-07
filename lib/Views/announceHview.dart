@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:projet_fin_etude/Widgets/modifyannouncewidget.dart';
+import 'package:projet_fin_etude/translations/local_keys.g.dart';
 
 import '../Controllers/connection.dart';
 import '../Widgets/announcedetails.dart';
@@ -243,7 +245,7 @@ class _AnnounceHviewState extends State<AnnounceHview> {
                                         color: Colors.black45,
                                       ),
                                       Text(
-                                        widget.roomnumber + ' Bedroom',
+                                        widget.roomnumber + LocaleKeys.Rooms.tr(),
                                         style: TextStyle(color: Colors.black45),
                                       )
                                     ],
@@ -257,7 +259,7 @@ class _AnnounceHviewState extends State<AnnounceHview> {
                                         color: Colors.black45,
                                       ),
                                       Text(
-                                        widget.surface + 'm²',
+                                        widget.surface + LocaleKeys.m.tr(),
                                         style: TextStyle(color: Colors.black45),
                                       )
                                     ],

@@ -1,4 +1,5 @@
 {
+  "change_password":"change password",
   "Popular": "Popular",
   "More": "More",
   "What are you looking for?": "What are you looking for?",
@@ -8,7 +9,7 @@
   "Favorite": "Favorite",
   "For rent": "For rent",
   "messages": "message",
-  "Personal_data": "Personal Data",
+  "Personal_data": "Profile",
   "Statment": "E-Statement",
   "Language": "Language",
   "Our_Handbook": "Our Handbook",

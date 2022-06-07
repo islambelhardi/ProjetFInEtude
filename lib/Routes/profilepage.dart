@@ -64,18 +64,51 @@ class _ProfilePageState extends State<ProfilePage> {
               const Divider(
                 color: Colors.black26,
               ),
-              _profilelist(Icons.person, ("Edit Profile"), () {
+              _profilelist(Icons.person, (LocaleKeys.Modifier_profil.tr()), () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => EditProfilePage()));
               }),
-              _profilelist(Icons.password_outlined, ("Change Password"), () {}),
+              _profilelist(Icons.password_outlined, (LocaleKeys.change_password.tr()), () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EditProfilePage()));
+              }),
               _profilelist(
                   Icons.settings_input_antenna_sharp, ("E-Statement"), () {}),
-              _profilelist(Icons.favorite, (LocaleKeys.Favorite.tr()), () {}),
+              // _profilelist(Icons.favorite, (LocaleKeys.Favorite.tr()), () {}),
               const Divider(
                 color: Colors.black38,
               ),
-              _profilelist(Icons.language, (LocaleKeys.Language.tr()), () {}),
+              _profilelist(Icons.language, (LocaleKeys.Language.tr()), () {
+                 showDialog(
+                    context: context,
+                    builder: (BuildContext dialogcontext) {
+                      return AlertDialog(
+                        title: Text('choose a language'),
+                        content: Container(
+                          height: 200,
+                          child: Column(
+                            children: [
+                              TextButton(
+                                  onPressed: () async {
+                                    await context.setLocale(const Locale('ar'));
+                                  },
+                                  child: Text('العريبة Arabic')),
+                              TextButton(
+                                  onPressed: () async {
+                                    await context.setLocale(Locale('en'));
+                                  },
+                                  child: Text('English')),
+                              TextButton(
+                                  onPressed: () async {
+                                    await context.setLocale(Locale('fr'));
+                                  },
+                                  child: Text('Francais')),
+                            ],
+                          ),
+                        ),
+                      );
+                    });
+              }),
               _profilelist(Icons.comment_outlined, (LocaleKeys.Our_Handbook.tr()), () {}),
               _profilelist(Icons.logout, (LocaleKeys.Log_out.tr()), () => Logout()),
             ],

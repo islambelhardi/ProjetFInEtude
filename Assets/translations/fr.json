@@ -2,7 +2,7 @@
   "Popular": "Populaire",
   "More": "Suite",
   "What are you looking for?": "Que cherchez-vous?",
-  "Badroom": "salle de bains",
+  "Badroom": "Chambres",
   "Home": "accueil",
   "Setting": "Paramètre",
   "Favorite": "Favorit",
@@ -73,5 +73,6 @@
   "Filtres": "Filtres",
   "Appliquer": "Appliquer",
   "Intervalle de prix": "Intervale de prix",
-  "Nombre des chambres": "Nombres des chambres"
+  "Nombre des chambres": "Nombres des chambres",
+  "change_password":"modifier mot de passe"
 }

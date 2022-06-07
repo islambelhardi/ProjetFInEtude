@@ -1,11 +1,9 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-// ignore_for_file: constant_identifier_names
-
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const Popular = 'Popular';
   static const More = 'More';
-  static const What = 'What are you looking for?';
+  static const What_are_you_looking_for = 'What are you looking for?';
   static const Badroom = 'Badroom';
   static const Home = 'Home';
   static const Setting = 'Setting';
@@ -26,6 +24,57 @@ abstract class LocaleKeys {
   static const Add = 'Add';
   static const Da_pernight = 'Da_pernight';
   static const For_exemple4 = 'For_exemple4';
-  static const Dubai_easten_SaudiaArabia = 'Dubai_easten_Saudia Arabia';
+  static const Dubai_easten_Saudia_Arabia = 'Dubai_easten_Saudia Arabia';
   static const Villa_on_palm = 'Villa_on_palm';
+  static const Details = 'Details';
+  static const Type = 'Type';
+  static const Purpose = 'Purpose';
+  static const Price = 'Price';
+  static const Rooms = 'Rooms';
+  static const Description = 'Description';
+  static const Comments = 'Comments';
+  static const Add_new_comment = 'Add new comment';
+  static const no_comment = 'no comment';
+  static const Agency = 'Agency';
+  static const m = 'm²';
+  static const Millions = 'Millions';
+  static const Villa = 'Villa';
+  static const Studio = 'Studio';
+  static const Logment = 'Logment';
+  static const Appartement = 'Appartement';
+  static const A_vendre = 'A vendre';
+  static const A_louer = 'A louer';
+  static const exchange = 'exchange';
+  static const Annonce_ajoute_avec_succ = 'Annonce ajoutée avec succé';
+  static const Erreur = 'Erreur';
+  static const enter_your_announce_title = 'enter your announce title';
+  static const Entre_le_titre_d_annonce = 'Entrée le titre d_annonce';
+  static const Entrer_localisation_dannonce = 'Entrer localisation d_annonce';
+  static const Choisir_la_localisation = 'Choisir la localisation';
+  static const Dubai_easten_saudi_arabie = 'Dubai easten saudi arabie';
+  static const Entrer_une_description = 'Entrer une description';
+  static const DA_La_nuit = '800DA La nuit';
+  static const Entrer_un_prix_estime = 'Entrer un prix estimé';
+  static const Ctegorie = 'Ctégorie';
+  static const Mesures = 'Mésures';
+  static const Entrer_la_surface = 'Entrer la surface';
+  static const Entrer_le_nombre_des_chambres = 'Entrer le nombre des chambres';
+  static const Choisir_des_photos = 'Choisir des photos';
+  static const Ajouter_lannonce = 'Ajouter l_annonce';
+  static const Fer = 'Fermé';
+  static const Modifier_profil = 'Modifier profil';
+  static const Entrer_une_adresse_valide = 'Entrer une adresse valide';
+  static const Votre_numero_de_telephone = 'Votre numéro de téléphone';
+  static const Mot_de_passe = 'Mot de passe';
+  static const Annuler = 'Annuler';
+  static const Enregitrer = 'Enregitrer';
+  static const Choisir_une_photo_de_profil = 'Choisir une photo de profil';
+  static const Camera = 'Caméra';
+  static const Galerie = 'Galerie';
+  static const Filtres = 'Filtres';
+  static const Appliquer = 'Appliquer';
+  static const Intervalle_de_prix = 'Intervalle de prix';
+  static const Nombre_des_chambres = 'Nombre des chambres';
+  static const change_password ='change password';
+
 }

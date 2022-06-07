@@ -40,8 +40,8 @@
   "Studio": "Studio",
   "Logment": "سكن",
   "Appartement": "شقة",
-  "A vendre": "للبيع",
-  "A louer": "للكراء",
+  "A_vendre": "للبيع",
+  "A_louer": "للكراء",
   "exchange": "للتبادل",
   "Annonce ajoutée avec succé": "تم الاضافة",
   "Erreur": "هناك خلل",
@@ -73,5 +73,6 @@
   "Filtres": "فلترة",
   "Appliquer": "تطبيق",
   "Intervalle de prix": "نطاق السعر",
-  "Nombre des chambres": "عدد الغرف"
+  "Nombre des chambres": "عدد الغرف",
+  "change_password":"تغيير كلمة المرور"
 }

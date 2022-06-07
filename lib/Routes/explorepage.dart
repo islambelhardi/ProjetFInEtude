@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                           color: Colors.black,
                         ),
                         label: Text(
-                          LocaleKeys.What.tr(),
+                          LocaleKeys.What_are_you_looking_for.tr(),
                           style: TextStyle(color: Colors.black),
                         ),
                         style: ElevatedButton.styleFrom(
@@ -114,16 +114,13 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SliverList(
                     delegate: SliverChildListDelegate([
-                      ElevatedButton(onPressed: ()async {
-                                await context.setLocale(Locale('ar'));
-                                print('object');
-                              }, child: Text('changelangage')),
+                     
                   sectiontitle(
                     LocaleKeys.For_rent.tr()
                   ),
                   AnnouncesRow(announces: rentinglist),
                   sectiontitle(
-                    LocaleKeys.For_exemple4.tr()
+                    LocaleKeys.A_vendre.tr()
                   ),
                   AnnouncesRow(announces: sellinglist),
                 ]))

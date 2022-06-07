@@ -128,7 +128,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
           return AlertDialog(
             title: Text('Add comment'),
             content: TextField(
-              decoration: InputDecoration(hintText: "Add new comment"),
+              decoration: InputDecoration(hintText: LocaleKeys.Add_new_comment.tr()),
               onChanged: (value) => content = value,
             ),
             actions: <Widget>[
@@ -343,7 +343,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'details',
+                            LocaleKeys.Details.tr(),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 20),
                             ),
@@ -353,7 +353,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('LocaleKeys.'),
+                                Text(LocaleKeys.category.tr()),
                                 Text(_details.elementAt(0)['propretytype'])
                               ],
                             ),
@@ -364,7 +364,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Purpose'),
+                                Text(LocaleKeys.Purpose.tr()),
                                 Text(_details.elementAt(0)['dealtype'])
                               ],
                             ),
@@ -375,7 +375,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Price'),
+                                Text(LocaleKeys.Price.tr()),
                                 Text(_details.elementAt(0)['price'].toString() +
                                     'Millions')
                               ],
@@ -387,7 +387,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Rooms'),
+                                Text(LocaleKeys.nbr_rooms.tr()),
                                 Text(_details
                                     .elementAt(0)['roomnumber']
                                     .toString())
@@ -397,7 +397,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                               thickness: 1,
                               height: 30,
                             ),
-                            Text('Description'),
+                            Text(LocaleKeys.Description.tr()),
                             SizedBox(
                               height: devicedata.size.width * 0.03,
                             ),
@@ -420,9 +420,9 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                         child: Column(
                           children: [
                             Row(
-                              children: const [
+                              children:  [
                                 Text(
-                                  'Comments',
+                                  LocaleKeys.Comments.tr(),
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20),
@@ -434,7 +434,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                             ),
                             Container(
                               child: comments.isEmpty
-                                  ? Text('no comment')
+                                  ? Text(LocaleKeys.no_comment.tr())
                                   : CommentWidget(
                                       comments: comments,
                                     ),
@@ -447,7 +447,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                                 style: ElevatedButton.styleFrom(
                                   primary: Colors.white, // Background color
                                 ),
-                                child: const Text('Add new comment +',
+                                child: Text(LocaleKeys.Add_new_comment.tr(),
                                     style: TextStyle(
                                       color: Colors.black87,
                                       fontSize: 18,
@@ -481,7 +481,7 @@ class _AnnounceDetailsState extends State<AnnounceDetails> {
                   backgroundImage: NetworkImage(
                       baseUrl + _details.elementAt(0)['agency']['image']),
                 ),
-                title: Text('Agency'),
+                title: Text(LocaleKeys.Agency.tr()),
                 subtitle: Text(_details.elementAt(0)['agency']['name']),
                 trailing: IconButton(
                   iconSize: 30,

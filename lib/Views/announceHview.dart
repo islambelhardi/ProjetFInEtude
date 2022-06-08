@@ -74,7 +74,7 @@ class _AnnounceHviewState extends State<AnnounceHview> {
         }
       } ,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
         child: Container(
           decoration: BoxDecoration(
             boxShadow: [

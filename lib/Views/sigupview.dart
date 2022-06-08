@@ -29,9 +29,13 @@ class _SignupViewState extends State<SignupView> {
   String _name = "";
   String _type="user";
   signup() async {
+    print(_type);
+    print(_email);
+    print(_name);
+    print(isChecked);
     http.Response response =
         await AuthController.register(_name, _email, _password,_type);
-    // print(json.decode(response.body));
+    print(json.decode(response.body));
     showDialog(
         context: context,
         builder: (BuildContext dialogcontext) {
@@ -229,7 +233,11 @@ class _SignupViewState extends State<SignupView> {
                           onChanged: (bool? value) {
                             setState(() {
                               isChecked = value!;
-                              _type="agency";
+                              if (isChecked) {
+                                _type="agency";
+                              } else {
+                                _type="user";
+                              }
                             });
                           },
                         ),

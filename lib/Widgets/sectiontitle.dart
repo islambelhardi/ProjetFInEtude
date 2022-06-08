@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:projet_fin_etude/translations/local_keys.g.dart';
 
   Widget sectiontitle(title) {
     return Padding(
@@ -20,7 +22,7 @@ import 'package:flutter/material.dart';
                 
               },
               child: Text(
-                'more',
+                LocaleKeys.More.tr(),
                 style: TextStyle(
                     color: Color(0xff9E6945), fontWeight: FontWeight.bold),
               )),

@@ -9,6 +9,7 @@ import 'package:projet_fin_etude/Routes/profilepage.dart';
 import 'package:projet_fin_etude/Views/loginview.dart';
 import 'package:projet_fin_etude/Widgets/addannouncewidget.dart';
 import 'package:projet_fin_etude/Widgets/announcecolumn.dart';
+import 'package:projet_fin_etude/Widgets/editpassword.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Controllers/connection.dart';
@@ -61,7 +62,7 @@ class _AgencyProfilePageState extends State<AgencyProfilePage> {
                     child: Center(
                       child: CircleAvatar(
                         backgroundImage:
-                            NetworkImage(baseUrl + widget.agency['image']),
+                            widget.agency['image']==null? const AssetImage('Assets/images/user.png'):NetworkImage(baseUrl+widget.agency['image'])as ImageProvider,
                         minRadius: 12,
                         maxRadius: 36,
                       ),
@@ -85,7 +86,10 @@ class _AgencyProfilePageState extends State<AgencyProfilePage> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => EditProfilePage()));
               }),
-              _profilelist(Icons.password_outlined, ("Change Password"), () {}),
+              _profilelist(Icons.password_outlined, ("Change Password"), () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EditPassword()));
+              }),
               _profilelist(Icons.add_circle, ("Add Announce"), () {
                 Navigator.push(
                     context,
@@ -134,8 +138,8 @@ class _AgencyProfilePageState extends State<AgencyProfilePage> {
                       );
                     });
               }),
-              _profilelist(Icons.comment_outlined, ("Our Handbook"), () {}),
-              _profilelist(Icons.logout, ("Log Out"), () => Logout()),
+              _profilelist(Icons.comment_outlined, (LocaleKeys.Our_Handbook.tr()), () {}),
+              _profilelist(Icons.logout, (LocaleKeys.Log_out.tr()), () => Logout()),
             ],
           ),
         ),

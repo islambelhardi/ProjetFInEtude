@@ -6,6 +6,7 @@ import 'connection.dart';
 class AuthController {
   // signup function
   static Future<http.Response> register(String name, String email, String password,String type) async {
+    print('furture type'+type);
     Map data = {
       "name": name,
       "email": email,
@@ -21,7 +22,7 @@ class AuthController {
       headers: headers,
       body: body,
     );
-    // print(response.body);
+    print(response.body);
     return response;
   }
   // login function of the authcontroller
